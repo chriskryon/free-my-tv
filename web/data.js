@@ -248,6 +248,12 @@ var Data = (function () {
     return null;
   }
 
+  /** The service key for an app's display name ("Netflix" -> "netflix"). */
+  function serviceKey(display) {
+    for (var i = 0; i < SERVICES.length; i++) if (SERVICES[i][4] === display) return SERVICES[i][1];
+    return '';
+  }
+
   function service(providerName) {
     var n = (providerName || '').toLowerCase();
     for (var i = 0; i < SERVICES.length; i++) {
@@ -264,10 +270,12 @@ var Data = (function () {
   }
 
   var cache = stored('recs') || {};
+  var providers = cache.providers || {};   // an app's name -> its TMDB provider id, for the TV's apps
+  var extraPage = {};                       // pages of extra titles already pulled, per category
   var picks = cache.picks || [], listAt = cache.listAt || 0, period = cache.period, listLang = cache.lang || '', stamp = cache.stamp || '';
   var fetchingRecs = false, failedAt = 0, recsError = '';
 
-  function saveRecs() { store('recs', {picks: picks, listAt: listAt, period: period, lang: listLang, stamp: stamp}); }
+  function saveRecs() { store('recs', {picks: picks, providers: providers, listAt: listAt, period: period, lang: listLang, stamp: stamp}); }
 
   function hourPeriod(d) {
     var h = d.getHours();
@@ -429,7 +437,7 @@ var Data = (function () {
       var ids = [];
       for (var i = 0; res.results && i < res.results.length; i++) {
         var s = service(res.results[i].provider_name);
-        if (s && appFor(s[1])) ids.push(res.results[i].provider_id);
+        if (s && appFor(s[1])) { ids.push(res.results[i].provider_id); providers[s[4]] = res.results[i].provider_id; }
       }
       if (!ids.length) { done(new Error("none of the TV's streaming apps are on TMDB")); return; }
       var common = '&language=' + lang() + '&watch_region=' + REGION + '&with_watch_monetization_types=flatrate&include_adult=false'
@@ -455,6 +463,7 @@ var Data = (function () {
             alternate(list, seen, fresh.movie, fresh.tv, 24);
             if (!list.length) { done(new Error('TMDB returned no recommendations')); return; }
             picks = list;
+            extraPage = {};
             done(null);
           });
         });
@@ -496,31 +505,86 @@ var Data = (function () {
     }
   }
 
-  /** "See more": up to 48 picks that are on an app of this TV, apart from the ones on the home screen. */
-  var MORE_MAX = 48;
+  /** "See more": up to 200 picks that are on an app of this TV, apart from the ones on the home screen. */
+  var MORE_MAX = 200;
 
-  function moreOf(kind, playable) {
+  /** Playable picks (or, with playable false, candidates still to look up), optionally only those `test` accepts. */
+  function moreOf(kind, playable, test) {
     var cur = {}, shown = all(), out = [];
     for (var i = 0; i < shown.length; i++) cur[keyOf(shown[i])] = true;
     for (var j = 0; j < picks.length && out.length < (playable ? MORE_MAX : 16); j++) {
       var p = picks[j];
-      if ((kind === null || kind === p.kind) && !cur[keyOf(p)] && (playable ? p.detailed && p.app && appFor(p.app) : !p.detailed)) out.push(p);
+      if ((kind === null || kind === p.kind) && !cur[keyOf(p)] && (playable ? p.detailed && p.app && appFor(p.app) : !p.detailed && !p.tried) && (!test || test(p))) out.push(p);
     }
     return out;
   }
 
+  /** The next page of popular titles for a kind (and one app), so no category of "See more" runs dry; 5 pages at most per category. */
+  var providersTried = false;
+
+  /** The TMDB provider ids of the TV's apps (a list saved by an older version may not have them yet). */
+  function fetchProviders(done) {
+    providersTried = true;
+    tmdb('/watch/providers/movie?language=' + lang() + '&watch_region=' + REGION, function (err, res) {
+      for (var i = 0; !err && res.results && i < res.results.length; i++) {
+        var s = service(res.results[i].provider_name);
+        if (s && appFor(s[1])) providers[s[4]] = res.results[i].provider_id;
+      }
+      done();
+    });
+  }
+
+  function moreFrom(kind, svc, done) {
+    var any = false, name;
+    for (name in providers) any = true;
+    if (!any) {
+      if (providersTried) { done(false); return; }
+      fetchProviders(function () { moreFrom(kind, svc, done); });
+      return;
+    }
+    var key = (kind || 'any') + ':' + (svc || 'all'), page = (extraPage[key] || 0) + 1, ids = [], k, i;
+    if (svc) { if (providers[svc]) ids.push(providers[svc]); } else for (k in providers) ids.push(providers[k]);
+    if (!ids.length || page > 5) { done(false); return; }
+    var have = {}, added = 0;
+    for (i = 0; i < picks.length; i++) have[keyOf(picks[i])] = true;
+    extraPage[key] = page;
+    each(kind ? [kind] : ['movie', 'tv'], function (kd, next) {
+      tmdb('/discover/' + kd + '?page=' + page + '&language=' + lang() + '&watch_region=' + REGION + '&with_watch_monetization_types=flatrate&include_adult=false&sort_by=popularity.desc'
+          + '&with_watch_providers=' + encodeURIComponent(ids.join('|')) + (CONFIG.hideAnimation ? '&without_genres=' + ANIMATION : ''), function (e, r) {
+        var fresh = [];
+        for (var j = 0; !e && r.results && j < r.results.length; j++) addPick(fresh, r.results[j], kd);
+        fresh.forEach(function (x) { if (!have[keyOf(x)]) { have[keyOf(x)] = true; picks.push(x); added++; } });
+        next();
+      });
+    }, function () { done(added > 0 || page < 5); });
+  }
+
   var loadingMore = false;
 
-  /** Fetches the details of the next candidates one by one, only until `want` picks are playable, calling update as each arrives. */
-  function loadMore(kind, want, update) {
+  function matches(p, f) { return !f || ((!f.kind || p.kind === f.kind) && (!f.service || p.service === f.service)); }
+
+  /**
+   * Looks up details until `want` picks of the category (`filter`: a kind and/or an app) are playable: first the candidates already
+   * in the list, then further pages of that category. update() runs as each arrives, update(true) when it stops.
+   */
+  function loadMore(kind, want, update, filter) {
     if (!KEY || loadingMore) return;
-    var todo = moreOf(kind, false);
-    if (!todo.length) return;
     loadingMore = true;
-    each(todo, function (x, next) {
-      if (moreOf(kind, true).length >= want) { next(); return; }
-      details(x, function () { update(); next(); });
-    }, function () { loadingMore = false; saveRecs(); update(); });
+    function count() { return moreOf(null, true).filter(function (p) { return matches(p, filter); }).length; }
+    function finish() { loadingMore = false; saveRecs(); update(true); }
+    (function round() {
+      if (count() >= want) { finish(); return; }
+      var todo = moreOf(null, false, function (p) { return !filter || !filter.kind || p.kind === filter.kind; });
+      if (!todo.length) {
+        moreFrom(filter && filter.kind, filter && filter.service, function (more) { if (more) round(); else finish(); });
+        return;
+      }
+      each(todo, function (x, next) {
+        if (count() >= want) { next(); return; }
+        x.tried = true;
+        details(x, function () { update(); next(); });
+      }, round);
+    })();
   }
 
   /** This hour's picks for the three tabs, without repeats (the screensaver shows them too). */
@@ -561,6 +625,7 @@ var Data = (function () {
     picks: now,
     more: function (kind) { return moreOf(kind, true); },
     loadMore: loadMore,
+    providerNames: function () { var out = []; for (var k in providers) if (appFor(serviceKey(k))) out.push(k); return out; },
     showcase: all,
     image: function (path, size) { return path ? 'https://image.tmdb.org/t/p/' + (size || 'w1280') + path : ''; },
 

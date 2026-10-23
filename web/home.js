@@ -43,16 +43,25 @@
              rects: [[120, 480], [720, 480], [1320, 380]], moreLeft: 1760, moreWidth: 80},
     pixel: {light: true, names: true, tile: 104, gap: 24, barTop: 790, barH: 220, barLeft: 96, barWidth: 1728,
             rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    military: {dark: true, names: true, tile: 112, gap: 26, barTop: 770, barH: 200, barLeft: 96, barWidth: 1728,
+               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
+               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    glass: {light: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
+            rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission', 'hacker', 'noir', 'vhs', 'contrast', 'zen', 'lounge', 'pixel'];
+  // Grouped: the essentials, dark and cinematic, warm, light and soft, techy and retro; High contrast stays last.
+  var MODE_IDS = ['default', 'hero', 'bar', 'focus', 'calm', 'editorial', 'noir', 'hoku', 'orbital', 'aurora', 'material', 'lounge', 'zen', 'glass',
+    'mission', 'military', 'hacker', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
   function modeNames() {
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
       orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
+      military: tr('Military'), material: tr('Material dark'), glass: tr('Glass'),
       noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
@@ -834,13 +843,16 @@
         count[p.service]++;
       }
     }
-    order.sort(function (a, b) { return count[b] - count[a]; });
     moreChips = [
-      {label: tr('All'), test: function () { return true; }},
-      {label: tr('Movies'), test: function (x) { return x.kind === 'movie'; }},
-      {label: tr('Shows'), test: function (x) { return x.kind === 'tv'; }}
+      {label: tr('All'), filter: null, test: function () { return true; }},
+      {label: tr('Movies'), filter: {kind: 'movie'}, test: function (x) { return x.kind === 'movie'; }},
+      {label: tr('Shows'), filter: {kind: 'tv'}, test: function (x) { return x.kind === 'tv'; }}
     ];
-    order.forEach(function (name) { moreChips.push({label: name, test: function (x) { return x.service === name; }}); });
+    // every app of the TV with a provider id gets a chip, the ones with picks first (more can be pulled for it)
+    var known = Data.providerNames();
+    known.forEach(function (name) { if (!count[name]) { count[name] = 0; order.push(name); } });
+    order.sort(function (a, b) { return count[b] - count[a]; });
+    order.forEach(function (name) { moreChips.push({label: name, filter: {service: name}, test: function (x) { return x.service === name; }}); });
     st.mchip = 0;
     for (i = 0; i < moreChips.length; i++) if (moreChips[i].label === moreChipLabel) st.mchip = i;
   }
@@ -864,6 +876,7 @@
     st.more = 0;
     refreshMore();
     updateFocus();
+    wantMore();
   }
 
   /** The grid draws only the rows near the one on screen (the others are dropped, photos and all), so it stays light with 48 picks. */
@@ -910,14 +923,18 @@
     renderMoreChips();
   }
 
-  /** More picks are looked up only when the focus gets near the end of the grid. */
+  function moreFilter() { var chip = moreChips[st.mchip] || moreChips[0]; return chip.filter; }
+
+  /** More picks of the category are looked up only when the focus gets near the end of the grid. */
   function wantMore() {
-    if (moreAll.length >= 48 || moreList.length - st.more > 8) return;
-    Data.loadMore(null, moreAll.length + 12, function () {
+    if (moreAll.length >= 200 || moreList.length - st.more > 8) return;
+    var start = moreList.length;
+    Data.loadMore(null, start + 12, function (final) {
       if (st.zone !== Z.MORE) return;
       refreshMore();
       updateFocus();
-    });
+      if (final && moreList.length > start) wantMore();
+    }, moreFilter());
   }
 
   function openMore() {
@@ -929,11 +946,7 @@
     moreRows = null;
     refreshMore();
     setClass($('more'), 'open', true);
-    Data.loadMore(null, 16, function () {
-      if (st.zone !== Z.MORE) return;
-      refreshMore();
-      updateFocus();
-    });
+    wantMore();
     updateFocus();
   }
 
@@ -976,6 +989,8 @@
       hacker: tr('A terminal on a black screen: green text and scanlines'),
       noir: tr('Gold on black, film strips and marquee lights'), vhs: tr('A video recorder menu: blue screen, channel numbers'),
       contrast: tr('Large white text on black, easy to read from far away'), zen: tr('Quiet paper, ink and one red dot'),
+      military: tr('Olive drab, stencil type and hazard stripes'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
+      glass: tr('Soft light, rounded widgets, a segmented control and a frosted dock'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
 

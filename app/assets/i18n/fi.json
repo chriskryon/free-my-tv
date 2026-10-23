@@ -240,5 +240,11 @@
  "Large white text on black, easy to read from far away": "Suuri valkoinen teksti mustalla, helppo lukea kaukaa",
  "Quiet paper, ink and one red dot": "Hiljaista paperia, mustetta ja yksi punainen piste",
  "Warm lamp light, wood and framed pictures": "Lämmin lampun valo, puuta ja kehystettyjä kuvia",
- "An 8-bit world: sky, grass and chunky borders": "Kahdeksanbittinen maailma: taivas, ruoho ja paksut reunat"
+ "An 8-bit world: sky, grass and chunky borders": "Kahdeksanbittinen maailma: taivas, ruoho ja paksut reunat",
+ "Military": "Sotilas",
+ "Material dark": "Material tumma",
+ "Glass": "Lasi",
+ "Olive drab, stencil type and hazard stripes": "Oliivinvihreä, sapluunakirjasin ja varoitusraidat",
+ "A dark phone-style theme: gray surfaces and a soft blue accent": "Tumma puhelinteema: harmaat pinnat ja pehmeä sininen",
+ "Soft light, rounded widgets, a segmented control and a frosted dock": "Pehmeä valo, pyöreät widgetit, segmenttiohjain ja himmeä dokki"
 }
