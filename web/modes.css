@@ -1811,3 +1811,13 @@ body.m-hyperos #more .mchip.focus { background: #3D8BFF; color: #FFF; }
 .m-chameleon .sidebtn::before, .m-chameleon .tile::before { display: none; }
 .m-chameleon #hint { top: 1030px; }
 .m-chameleon.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
+
+/* Camaleão's dock: two floating capsules, the option buttons in a row on the left, the apps with their names on the right. */
+.m-chameleon #platter { border-radius: 40px; }
+.m-chameleon .sidepanel { position: absolute; left: 96px; top: 844px; width: 296px; height: 92px; border-radius: 46px; }
+.m-chameleon .sidebtn { width: 56px; height: 56px; }
+.m-chameleon .sidebtn .sym { left: 13px; top: 13px; width: 30px; height: 30px; }
+.m-chameleon .sidebtn.focus { -webkit-transform: scale(1.08); transform: scale(1.08); }
+.m-chameleon .tile { border-radius: 30px; }
+.m-chameleon .tile .nm { position: absolute; left: -16px; right: -16px; top: 100%; margin-top: 12px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 1; font-size: 18px; font-weight: 600; }
+.m-chameleon.drawer-open #side { opacity: 0; }

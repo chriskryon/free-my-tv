@@ -47,7 +47,7 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
-    chameleon: {dark: true, chameleon: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
+    chameleon: {dark: true, chameleon: true, names: true, dockRow: true, dockLeft: 96, tile: 112, gap: 28, barTop: 790, barH: 200, barLeft: 416, barWidth: 1408,
                 rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     hyperos: {dark: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
@@ -521,6 +521,8 @@
       '.tile.focus{box-shadow:0 0 0 4px ' + A + ',0 14px 30px rgba(0,0,0,0.5)}',
       '.sidebtn{background:' + hs(s * 0.5, 24) + ';color:' + hs(s * 0.6, 86) + '}', '.sidebtn.focus{background:' + A + ';color:' + INK + '}',
       // the apps take the color too, like themed icons: one tint for all, the focused one in the accent
+      '.sidepanel{background:' + hs(s * 0.35, 16, 0.78) + ';box-shadow:inset 0 0 0 1px ' + hs(s, 70, 0.18) + '}',
+      '.tile .nm{color:' + M + '}', '.tile.focus .nm,.sidebtn .tip{color:' + A + '}',
       '.tile,.cell .face{background:' + hs(s * 0.5, 24) + ' !important}', '.tile .word,.cell .face .word{color:' + hs(s * 0.6, 90) + '}',
       '.tile.focus,.cell.focus .face{background:' + A + ' !important}', '.tile.focus .word,.cell.focus .face .word{color:' + INK + '}',
       '.glass{background:' + hs(s * 0.35, 14, 0.9) + '}', '.key{background-color:' + hs(s * 0.4, 70, 0.1) + '}', '.key.focus{background:' + A + ';color:' + INK + '}',
@@ -576,12 +578,12 @@
   /** The bar: a side panel (Live TV, inputs, All Apps, Settings) on the left, the apps after it. */
   function renderShelf() {
     var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
-    if (V.rail) { panelW = 0; lead = 0; }
+    if (V.rail || V.dockRow) { panelW = 0; lead = 0; }
     var avail = (V.barWidth || 1760) - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
     var tw = Math.min(V.tile || 140, (avail - Math.max(0, (V.cols || n) - 1) * gap) / Math.max(1, V.cols || n)), th = V.ratio ? Math.round(tw * V.ratio) : tw;
     var cols = V.cols || n, rows = Math.max(1, Math.ceil(n / cols)), rowGap = V.rowGap || 0;
-    var left = (V.barLeft || 80) + pad + panelW + lead + (V.rail && !V.cols ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
+    var left = (V.barLeft || 80) + pad + panelW + lead + ((V.rail || V.dockRow) && !V.cols ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = (V.barLeft || 80) + 'px';
     platter.style.width = (V.barWidth || 1760) + 'px';
@@ -590,12 +592,12 @@
     $('quotes').style.right = '80px';
     var side = $('side');
     side.innerHTML = '';
-    if (V.sidebar) el('div', 'sidepanel', side);
+    if (V.sidebar || V.dockRow) el('div', 'sidepanel', side);
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
-      var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
-      r.style.left = (V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.sidebar ? (V.sideTop !== undefined ? V.sideTop : V.barTop + 15) + b * (V.sidePitch || 66) : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      var r = el('button', 'sidebtn r' + (V.rail ? 'a' : V.dockRow ? 0 : Math.floor(b / 2)), side);
+      r.style.left = (V.dockRow ? V.dockLeft + 18 + b * 68 : V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.dockRow ? mid - 28 : V.sidebar ? (V.sideTop !== undefined ? V.sideTop : V.barTop + 15) + b * (V.sidePitch || 66) : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -1474,7 +1476,7 @@
     switch (st.zone) {
       case Z.SHELF:
         var cols = V.cols || shelf.length || 1, srow = Math.floor(st.shelf / cols), rowEnd = Math.min(shelf.length - 1, srow * cols + cols - 1);
-        if (dx < 0 && st.shelf % cols === 0) { st.zone = Z.SIDE; st.side = V.rail ? 3 : 1; break; }
+        if (dx < 0 && st.shelf % cols === 0) { st.zone = Z.SIDE; st.side = V.rail || V.dockRow ? 3 : 1; break; }
         if (dx) st.shelf = Math.max(srow * cols, Math.min(rowEnd, st.shelf + dx));
         else if (dy > 0) {
           if (st.shelf + cols < shelf.length) st.shelf += cols;
@@ -1487,6 +1489,16 @@
         }
         break;
       case Z.SIDE:
+        if (V.dockRow) {   // the four option buttons in one row, left of the apps
+          if (dx > 0 && st.side === 3) { if (shelf.length) { st.zone = Z.SHELF; st.shelf = 0; } }
+          else if (dx) st.side = Math.max(0, Math.min(3, st.side + dx));
+          else if (dy > 0) { openDrawer(); return; }
+          else if (dy < 0) {
+            if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
+            else { st.zone = Z.TOP; st.top = st.tab; }
+          }
+          break;
+        }
         if (V.rail) {
           if (dy > 0 && st.side === 3) { openDrawer(); return; }
           if (dy) st.side = Math.max(0, Math.min(3, st.side + dy));
