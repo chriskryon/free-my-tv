@@ -31,16 +31,29 @@
               rects: [[96, 520], [656, 520], [1216, 520]], moreLeft: 1760, moreWidth: 64},
     hacker: {dark: true, tile: 112, gap: 26, names: true, barTop: 740, barH: 220, barLeft: 96, barWidth: 1728,
              rects: [[96, 540], [646, 540], [1196, 540]], moreLeft: 1746, moreWidth: 78},
+    noir: {dark: true, tile: 112, gap: 28, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
+           rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    vhs: {dark: true, names: true, tile: 112, gap: 28, barTop: 760, barH: 210, barLeft: 96, barWidth: 1728,
+          rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    contrast: {dark: true, names: true, tile: 150, gap: 30, barTop: 720, barH: 270, barLeft: 96, barWidth: 1728,
+               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    zen: {light: true, names: true, tile: 96, gap: 40, barTop: 800, barH: 190, barLeft: 200, barWidth: 1520,
+          rects: [[200, 440], [690, 440], [1180, 440]], moreLeft: 1670, moreWidth: 50},
+    lounge: {dark: true, names: true, tile: 110, gap: 30, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
+             rects: [[120, 480], [720, 480], [1320, 380]], moreLeft: 1760, moreWidth: 80},
+    pixel: {light: true, names: true, tile: 104, gap: 24, barTop: 790, barH: 220, barLeft: 96, barWidth: 1728,
+            rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission', 'hacker'];
+  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission', 'hacker', 'noir', 'vhs', 'contrast', 'zen', 'lounge', 'pixel'];
   var V = {};
 
   function modeNames() {
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
-      orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker'};
+      orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
+      noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
   /** The saved mode, or ?mode=hero in the address (to preview one). */
@@ -176,7 +189,7 @@
   // MARK: - Focus
 
   var Z = {TOP: 'top', CARDS: 'cards', SIDE: 'side', SHELF: 'shelf', DRAWER: 'drawer', APPS: 'apps', MORE: 'more', SETTINGS: 'settings', EDIT: 'edit', LANG: 'lang', MODEPICK: 'modepick'};
-  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, side: 0, shelf: 0, drawer: 0, grid: 0, more: 0, row: 0, edit: 0, lang: 0, mp: 0};
+  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, side: 0, shelf: 0, drawer: 0, grid: 0, more: 0, row: 0, edit: 0, lang: 0, mp: 0, mchip: 0, moreTop: false};
   var cards = [];
 
   function sheetOpen() { return st.zone === Z.APPS || st.zone === Z.MORE || st.zone === Z.SETTINGS || st.zone === Z.EDIT || st.zone === Z.LANG || st.zone === Z.MODEPICK; }
@@ -199,8 +212,14 @@
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.DRAWER && st.drawer === i);
     list = document.querySelectorAll('#apps .cell');
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.APPS && st.grid === i);
+    syncMore();
+    list = document.querySelectorAll('#more .mchip');
+    for (i = 0; i < list.length; i++) {
+      setClass(list[i], 'selected', st.mchip === i);
+      setClass(list[i], 'focus', st.zone === Z.MORE && st.moreTop && st.mchip === i);
+    }
     list = document.querySelectorAll('#more .mcell');
-    for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.MORE && st.more === i);
+    for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.MORE && !st.moreTop && st.more === +list[i].getAttribute('data-i'));
     var rows = Math.max(1, Math.ceil(others.length / 5)), r = Math.floor(st.grid / 5), first = Math.max(0, Math.min(rows - 3, r - 1));
     $('apps').lastChild.style.webkitTransform = $('apps').lastChild.style.transform = 'translateY(' + (-first * 239) + 'px)';
     focusSettings();
@@ -791,35 +810,131 @@
 
   // MARK: - See more: a grid of more picks, loaded when it opens
 
-  var moreList = [];
+  var moreList = [], moreAll = [], moreChips = [], moreChipLabel = '', moreKeys = [], moreRows = null, moreCells = {};
+  var MORE_ROW = 270;
+
+  function moreKey(p) { return p.kind + ':' + p.id; }
+
+  /** A photo as a background; if it can't be loaded the node gets a plain tile (class noimg) instead of an empty box. */
+  function setPhoto(node, url) {
+    setClass(node, 'noimg', false);
+    node.style.backgroundImage = 'url(' + url + ')';
+    var probe = new Image();
+    probe.onerror = function () { node.style.backgroundImage = ''; setClass(node, 'noimg', true); };
+    probe.src = url;
+  }
+
+  /** The chips above the grid: All, Movies, Shows, then each streaming app that has picks (the most picks first). */
+  function buildMoreChips() {
+    var count = {}, order = [], i, p;
+    for (i = 0; i < moreAll.length; i++) {
+      p = moreAll[i];
+      if (p.service) {
+        if (!count[p.service]) { count[p.service] = 0; order.push(p.service); }
+        count[p.service]++;
+      }
+    }
+    order.sort(function (a, b) { return count[b] - count[a]; });
+    moreChips = [
+      {label: tr('All'), test: function () { return true; }},
+      {label: tr('Movies'), test: function (x) { return x.kind === 'movie'; }},
+      {label: tr('Shows'), test: function (x) { return x.kind === 'tv'; }}
+    ];
+    order.forEach(function (name) { moreChips.push({label: name, test: function (x) { return x.service === name; }}); });
+    st.mchip = 0;
+    for (i = 0; i < moreChips.length; i++) if (moreChips[i].label === moreChipLabel) st.mchip = i;
+  }
+
+  function renderMoreChips() {
+    var sheet = $('more'), box = sheet.querySelector('.mchips');
+    if (!box) { box = el('div', 'mchips', null); sheet.insertBefore(box, sheet.querySelector('.grid')); }
+    box.innerHTML = '';
+    for (var i = 0; i < moreChips.length; i++) {
+      (function (index) {
+        var chip = el('div', 'mchip', box, moreChips[index].label);
+        chip.onmouseover = function () { st.zone = Z.MORE; st.moreTop = true; st.mchip = index; updateFocus(); };
+        chip.onclick = function () { selectMoreChip(index); };
+      })(i);
+    }
+  }
+
+  function selectMoreChip(i) {
+    st.mchip = i;
+    moreChipLabel = moreChips[i].label;
+    st.more = 0;
+    refreshMore();
+    updateFocus();
+  }
+
+  /** The grid draws only the rows near the one on screen (the others are dropped, photos and all), so it stays light with 48 picks. */
+  function syncMore() {
+    var grid = $('more').querySelector('.grid');
+    if (!moreRows || !grid) return;
+    var total = Math.max(1, Math.ceil(moreList.length / 4)), row = st.moreTop ? 0 : Math.floor(st.more / 4);
+    var first = Math.max(0, Math.min(total - 3, row - 1)), lo = Math.max(0, first - 1) * 4, hi = Math.min(moreList.length, (first + 5) * 4), k, i;
+    for (k in moreCells) {
+      if (+k < lo || +k >= hi) { moreRows.removeChild(moreCells[k]); delete moreCells[k]; }
+    }
+    for (i = lo; i < hi; i++) if (!moreCells[i]) addMoreCell(i);
+    moreRows.style.webkitTransform = moreRows.style.transform = 'translateY(' + (-first * MORE_ROW) + 'px)';
+  }
+
+  function addMoreCell(i) {
+    var cell = el('div', 'mcell', moreRows), img = el('div', 'img', cell), size = Prefs.photos() === 'fhd' ? 'w780' : 'w300';
+    cell.setAttribute('data-i', i);
+    cell.style.left = (140 + (i % 4) * 420) + 'px';
+    cell.style.top = (10 + Math.floor(i / 4) * MORE_ROW) + 'px';
+    setPhoto(img, Data.image(moreList[i].backdrop, size));
+    el('div', 'name', cell, moreList[i].title);
+    hover(cell, Z.MORE, i);
+    moreCells[i] = cell;
+  }
+
+  /** Re-reads the picks and the chip, then draws only what changed (new picks arriving append to the grid). */
+  function refreshMore() {
+    var sheet = $('more'), grid = sheet.querySelector('.grid');
+    sheet.firstChild.textContent = tr('See more');
+    moreAll = Data.more(null);
+    buildMoreChips();
+    var chip = moreChips[st.mchip] || moreChips[0];
+    moreList = moreAll.filter(chip.test);
+    var keys = moreList.map(moreKey), same = keys.length >= moreKeys.length;
+    for (var i = 0; same && i < moreKeys.length; i++) same = keys[i] === moreKeys[i];
+    if (!moreRows || !same) {
+      grid.innerHTML = '';
+      moreRows = el('div', 'mrows', grid);
+      moreCells = {};
+    }
+    moreKeys = keys;
+    st.more = Math.min(st.more, Math.max(0, moreList.length - 1));
+    renderMoreChips();
+  }
+
+  /** More picks are looked up only when the focus gets near the end of the grid. */
+  function wantMore() {
+    if (moreAll.length >= 48 || moreList.length - st.more > 8) return;
+    Data.loadMore(null, moreAll.length + 12, function () {
+      if (st.zone !== Z.MORE) return;
+      refreshMore();
+      updateFocus();
+    });
+  }
 
   function openMore() {
     st.zone = Z.MORE;
     st.more = 0;
-    renderMore();
+    st.moreTop = false;
+    moreChipLabel = [tr('All'), tr('Movies'), tr('Shows')][st.tab] || tr('All');
+    moreKeys = [];
+    moreRows = null;
+    refreshMore();
     setClass($('more'), 'open', true);
-    Data.loadMore(TAB_KIND[st.tab], function () {
+    Data.loadMore(null, 16, function () {
       if (st.zone !== Z.MORE) return;
-      renderMore();
+      refreshMore();
       updateFocus();
     });
     updateFocus();
-  }
-
-  function renderMore() {
-    var sheet = $('more'), grid = sheet.lastChild, size = Prefs.photos() === 'fhd' ? 'w780' : 'w300';
-    sheet.firstChild.textContent = tr('See more');
-    grid.innerHTML = '';
-    moreList = Data.more(TAB_KIND[st.tab]);
-    st.more = Math.min(st.more, Math.max(0, moreList.length - 1));
-    for (var i = 0; i < moreList.length; i++) {
-      var cell = el('div', 'mcell', grid), img = el('div', 'img', cell);
-      cell.style.left = (140 + (i % 4) * 420) + 'px';
-      cell.style.top = (190 + Math.floor(i / 4) * 270) + 'px';
-      img.style.backgroundImage = 'url(' + Data.image(moreList[i].backdrop, size) + ')';
-      el('div', 'name', cell, moreList[i].title);
-      hover(cell, Z.MORE, i);
-    }
   }
 
   function closeSheets() {
@@ -829,6 +944,7 @@
     setClass($('shelfedit'), 'open', false);
     setClass($('langpick'), 'open', false);
     setClass($('modepick'), 'open', false);
+    st.moreTop = false;
     langHint = null;
     st.zone = Z.SHELF;
     updateFocus();
@@ -857,7 +973,10 @@
       orbital: tr('A cinematic mission-control view'),
       aurora: tr('Northern lights over a quiet night'),
       mission: tr('A spacecraft touchscreen: thin lines, one blue accent'),
-      hacker: tr('A terminal on a black screen: green text and scanlines')};
+      hacker: tr('A terminal on a black screen: green text and scanlines'),
+      noir: tr('Gold on black, film strips and marquee lights'), vhs: tr('A video recorder menu: blue screen, channel numbers'),
+      contrast: tr('Large white text on black, easy to read from far away'), zen: tr('Quiet paper, ink and one red dot'),
+      lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
 
   /** The screen mode (it opens its own menu), the theme, reduced motion and larger text. */
@@ -1220,6 +1339,7 @@
         if (others[st.grid]) launcher(others[st.grid].id, others[st.grid].title)();
         return;
       case Z.MORE:
+        if (st.moreTop) { selectMoreChip(st.mchip); return; }
         var mp = moreList[st.more], mapp = mp && Data.appFor(mp.app);
         if (mapp) launcher(mapp.id, mapp.title)();
         return;
@@ -1312,8 +1432,16 @@
         if (g >= 0 && g < others.length && (dx === 0 || Math.floor(g / 5) === Math.floor(st.grid / 5))) st.grid = g;
         break;
       case Z.MORE:
-        var mg = st.more + dx + dy * 4;
-        if (mg >= 0 && mg < moreList.length && (dx === 0 || Math.floor(mg / 4) === Math.floor(st.more / 4))) st.more = mg;
+        if (st.moreTop) {
+          if (dx) { st.mchip = Math.max(0, Math.min(moreChips.length - 1, st.mchip + dx)); selectMoreChip(st.mchip); return; }
+          if (dy > 0 && moreList.length) { st.moreTop = false; st.more = 0; }
+          break;
+        }
+        var mg = st.more + dx + dy * 4, mrow = Math.floor(st.more / 4), mlast = Math.floor((moreList.length - 1) / 4);
+        if (dy < 0 && mrow === 0) st.moreTop = true;
+        else if (dy > 0 && mg >= moreList.length && mrow < mlast) st.more = moreList.length - 1;
+        else if (mg >= 0 && mg < moreList.length && (dx === 0 || Math.floor(mg / 4) === mrow)) st.more = mg;
+        wantMore();
         break;
       case Z.SETTINGS:
         if (Prefs.menuStyle() === 'categories') {
@@ -1383,7 +1511,7 @@
       else if (zone === Z.SHELF) st.shelf = index;
       else if (zone === Z.DRAWER) st.drawer = index;
       else if (zone === Z.APPS) st.grid = index;
-      else if (zone === Z.MORE) st.more = index;
+      else if (zone === Z.MORE) { st.more = index; st.moreTop = false; }
       else if (zone === Z.SETTINGS) st.row = index;
       else if (zone === Z.EDIT) st.edit = index;
       else if (zone === Z.LANG) st.lang = index;

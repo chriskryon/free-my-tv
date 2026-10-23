@@ -496,11 +496,11 @@ var Data = (function () {
     }
   }
 
-  /** "See more": up to 12 more picks of the tab's kind that are on an app of this TV, apart from the ones on the home screen. */
-  var MORE_MAX = 12;
+  /** "See more": up to 48 picks that are on an app of this TV, apart from the ones on the home screen. */
+  var MORE_MAX = 48;
 
   function moreOf(kind, playable) {
-    var cur = {}, shown = now(kind), out = [];
+    var cur = {}, shown = all(), out = [];
     for (var i = 0; i < shown.length; i++) cur[keyOf(shown[i])] = true;
     for (var j = 0; j < picks.length && out.length < (playable ? MORE_MAX : 16); j++) {
       var p = picks[j];
@@ -511,14 +511,14 @@ var Data = (function () {
 
   var loadingMore = false;
 
-  /** Fetches the details of the next candidates one by one (only when the sheet opens), calling update as each arrives. */
-  function loadMore(kind, update) {
+  /** Fetches the details of the next candidates one by one, only until `want` picks are playable, calling update as each arrives. */
+  function loadMore(kind, want, update) {
     if (!KEY || loadingMore) return;
     var todo = moreOf(kind, false);
     if (!todo.length) return;
     loadingMore = true;
     each(todo, function (x, next) {
-      if (moreOf(kind, true).length >= MORE_MAX) { next(); return; }
+      if (moreOf(kind, true).length >= want) { next(); return; }
       details(x, function () { update(); next(); });
     }, function () { loadingMore = false; saveRecs(); update(); });
   }

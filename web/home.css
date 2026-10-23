@@ -935,3 +935,62 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-hacker .p3 { left: 50px; top: 8px; width: 34px; height: 6px; background: #06210F; box-shadow: 40px 0 0 #06210F; }
 .t-hacker .p4 { left: 8px; right: 8px; bottom: 5px; height: 18px; box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.5); background: rgba(0, 12, 6, 0.9); }
 .t-hacker .p5 { left: 12px; bottom: 9px; width: 10px; height: 10px; background: #00FF88; box-shadow: 14px 0 0 #2EA866, 28px 0 0 #2EA866, 42px 0 0 #2EA866, 56px 0 0 #2EA866; }
+
+/* Ver mais: filter chips and a grid that scrolls by rows. */
+#more .mchips { position: absolute; left: 140px; top: 128px; width: 1640px; height: 48px; white-space: nowrap; overflow: hidden; }
+#more .mchip { display: inline-block; height: 44px; line-height: 44px; margin-right: 12px; padding: 0 24px; border-radius: 22px; background: rgba(255, 255, 255, 0.09); color: rgba(255, 255, 255, 0.7); font-size: 23px; font-weight: 600; }
+#more .mchip.selected { background: rgba(255, 255, 255, 0.24); color: #FFF; }
+#more .mchip.focus { background: #FFF; color: #111; }
+#more .grid { position: absolute; left: 0; top: 184px; width: 1920px; height: 896px; overflow: hidden; }
+#more .mrows { position: absolute; left: 0; top: 0; width: 1920px; -webkit-transition: -webkit-transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+.reduce-motion #more .mrows { -webkit-transition: none; transition: none; }
+/* A photo that failed to load: a plain tile. */
+.noimg { background-image: -webkit-linear-gradient(315deg, #8A97AE, #4B566B); background-image: linear-gradient(135deg, #8A97AE, #4B566B); }
+/* Noir: gold on black, a film strip, marquee bulbs. */
+.t-noir { background: #0B0A09; }
+.t-noir .p0 { left: 8px; top: 7px; width: 40px; height: 4px; background: #F3EBDD; }
+.t-noir .p1 { left: 8px; top: 15px; width: 34px; height: 22px; background: #5A4A2E; box-shadow: 40px 0 0 #5A4A2E, 80px 0 0 #5A4A2E; }
+.t-noir .p2 { left: 8px; top: 15px; width: 34px; height: 3px; background: #F3EBDD; box-shadow: 40px 0 0 #F3EBDD, 80px 0 0 #F3EBDD, 0 19px 0 #F3EBDD, 40px 19px 0 #F3EBDD, 80px 19px 0 #F3EBDD; }
+.t-noir .p3 { left: 12px; bottom: 16px; width: 20px; height: 3px; background: #D8B15A; }
+.t-noir .p4 { left: 8px; right: 8px; bottom: 5px; height: 12px; background: #120F0B; box-shadow: 0 0 0 1px #D8B15A; }
+.t-noir .p5 { left: 12px; bottom: 3px; width: 4px; height: 4px; border-radius: 2px; background: #FFE7A8; box-shadow: 14px 0 0 #FFE7A8, 28px 0 0 #FFE7A8, 42px 0 0 #FFE7A8, 56px 0 0 #FFE7A8, 70px 0 0 #FFE7A8, 84px 0 0 #FFE7A8; }
+/* VHS: blue screen, yellow text, channel lines. */
+.t-vhs { background: #1230D8; }
+.t-vhs .p0 { left: 8px; top: 7px; width: 30px; height: 5px; background: #FFE600; }
+.t-vhs .p1 { left: 8px; top: 17px; width: 34px; height: 22px; background: #FFF; box-shadow: 40px 0 0 #FFF, 80px 0 0 #FFF; }
+.t-vhs .p2 { left: 10px; top: 19px; width: 30px; height: 18px; background: #0A1990; box-shadow: 40px 0 0 #0A1990, 80px 0 0 #0A1990; }
+.t-vhs .p3 { left: 8px; top: 43px; width: 14px; height: 3px; background: #FFE600; box-shadow: 40px 0 0 #FFE600, 80px 0 0 #FFE600; }
+.t-vhs .p4 { left: 8px; right: 8px; bottom: 4px; height: 12px; box-shadow: 0 0 0 2px #FFF; }
+.t-vhs .p5 { left: 12px; bottom: 7px; width: 7px; height: 6px; background: #FFE600; box-shadow: 12px 0 0 #FFF, 24px 0 0 #FFF, 36px 0 0 #FFF, 48px 0 0 #FFF; }
+/* High contrast: white blocks on black, a yellow frame. */
+.t-contrast { background: #000; }
+.t-contrast .p0 { left: 8px; top: 7px; width: 46px; height: 6px; background: #FFF; }
+.t-contrast .p1 { left: 8px; top: 18px; width: 36px; height: 24px; box-shadow: 0 0 0 2px #FFF, 40px 0 0 2px #FFF, 80px 0 0 2px #FFF; }
+.t-contrast .p2 { left: 48px; top: 18px; width: 36px; height: 24px; box-shadow: 0 0 0 3px #FFE100; }
+.t-contrast .p3 { left: 8px; top: 48px; width: 20px; height: 4px; background: #FFF; }
+.t-contrast .p4 { left: 8px; right: 8px; bottom: 4px; height: 10px; box-shadow: 0 0 0 2px #FFF; }
+.t-contrast .p5 { left: 12px; bottom: 7px; width: 10px; height: 5px; background: #FFE100; box-shadow: 14px 0 0 #FFF, 28px 0 0 #FFF, 42px 0 0 #FFF; }
+/* Zen: paper, an open ring, a red dot. */
+.t-zen { background: #EFE9DC; }
+.t-zen .p0 { right: 12px; top: 6px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(35, 32, 28, 0.35); border-top-color: transparent; }
+.t-zen .p1 { left: 12px; top: 12px; width: 40px; height: 4px; background: #23201C; }
+.t-zen .p2 { left: 12px; top: 24px; width: 26px; height: 20px; background: #CFC6B3; box-shadow: 34px 0 0 #CFC6B3, 68px 0 0 #CFC6B3; }
+.t-zen .p3 { left: 22px; top: 49px; width: 6px; height: 6px; border-radius: 3px; background: #C8412B; }
+.t-zen .p4 { left: 12px; right: 12px; bottom: 6px; height: 1px; background: rgba(35, 32, 28, 0.35); }
+.t-zen .p5 { left: 16px; bottom: 9px; width: 8px; height: 8px; border-radius: 3px; background: #7A7366; box-shadow: 16px 0 0 #7A7366, 32px 0 0 #7A7366, 48px 0 0 #7A7366; }
+/* Lounge: lamp glow, framed pictures, a wooden shelf. */
+.t-lounge { background: -webkit-linear-gradient(top, #2E1B12, #140A06); background: linear-gradient(#2E1B12, #140A06); }
+.t-lounge .p0 { left: -20px; top: -24px; width: 64px; height: 64px; border-radius: 50%; background: -webkit-radial-gradient(center, circle closest-side, rgba(255, 170, 70, 0.8), rgba(255, 170, 70, 0)); background: radial-gradient(circle closest-side, rgba(255, 170, 70, 0.8), rgba(255, 170, 70, 0)); }
+.t-lounge .p1 { left: 12px; top: 14px; width: 30px; height: 22px; background: #8A6A4A; box-shadow: 0 0 0 3px #F0E3CC, 0 0 0 6px #6B4428; }
+.t-lounge .p2 { left: 54px; top: 14px; width: 30px; height: 22px; background: #A07A52; box-shadow: 0 0 0 3px #F0E3CC, 0 0 0 6px #D98B3A; }
+.t-lounge .p3 { left: 96px; top: 14px; width: 24px; height: 22px; background: #8A6A4A; box-shadow: 0 0 0 3px #F0E3CC, 0 0 0 6px #6B4428; }
+.t-lounge .p4 { left: 6px; right: 6px; bottom: 5px; height: 14px; border-radius: 3px; background: #5B3A22; }
+.t-lounge .p5 { left: 12px; bottom: 9px; width: 8px; height: 8px; border-radius: 3px; background: #FFB45A; box-shadow: 14px 0 0 #F6E7CF, 28px 0 0 #F6E7CF, 42px 0 0 #F6E7CF, 56px 0 0 #F6E7CF; }
+/* Pixel: sky, a pixel cloud, a grass-and-dirt ground. */
+.t-pixel { background: #7BBCFF; }
+.t-pixel .p0 { left: 80px; top: 8px; width: 22px; height: 8px; background: #FFF; box-shadow: 6px -6px 0 -2px #FFF, 16px -2px 0 -2px #FFF; }
+.t-pixel .p1 { left: 10px; top: 16px; width: 34px; height: 24px; background: #FFD93B; box-shadow: 0 0 0 2px #101020, 3px 3px 0 2px #101020; }
+.t-pixel .p2 { left: 54px; top: 16px; width: 34px; height: 24px; background: #FF8F70; box-shadow: 0 0 0 2px #101020, 3px 3px 0 2px #101020; }
+.t-pixel .p3 { left: 98px; top: 16px; width: 24px; height: 24px; background: #FFD93B; box-shadow: 0 0 0 2px #101020, 3px 3px 0 2px #101020; }
+.t-pixel .p4 { left: 0; right: 0; bottom: 0; height: 20px; background: #8B4A12; border-top: 5px solid #3CC15A; }
+.t-pixel .p5 { left: 10px; bottom: 5px; width: 9px; height: 9px; background: #FFF; box-shadow: 13px 0 0 #E8433A, 26px 0 0 #FFF, 39px 0 0 #FFD93B, 52px 0 0 #FFF; }
