@@ -761,24 +761,29 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* The hardware line is long ("4 cores · ~1 GB"): a smaller type. */
 #perf .row:last-child .v { font-size: 18px; }
 
-/* Home Settings: a panel docked to the right, in sections; the mode as a row of five small drawings. */
-#settings, #modepick { background: rgba(0, 0, 0, 0.32); }
+/* Home Settings: grouped controls leave the home visible for live changes. */
+#settings, #modepick { background: rgba(0, 0, 0, 0.2); }
 #settings .box, #modepick .box {
   left: 1164px; top: 0; width: 756px; height: 1080px; padding: 40px 32px 28px;
-  border-radius: 48px 0 0 48px;
+  border-radius: 42px 0 0 42px; background: #171C28;
+  box-shadow: -24px 0 70px rgba(0, 0, 0, 0.35);
   -webkit-transform: translateX(90px); transform: translateX(90px);
   -webkit-transition: -webkit-transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1); transition: transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 #settings.open .box, #modepick.open .box { -webkit-transform: none; transform: none; }
+#settings .box .title, #modepick .box .title { padding: 4px 12px 22px; font-size: 40px; }
 #settings .list { height: 850px; }
-.box .sect { margin: 22px 18px 10px; font-size: 24px; font-weight: 600; color: rgba(255, 255, 255, 0.5); }
-.box .rows .sect:first-child { margin-top: 6px; }
-.box .row.choice { height: 98px; padding-left: 174px; line-height: 40px; padding-top: 14px; box-sizing: border-box; font-size: 28px; }
-.box .row.choice .desc { position: absolute; left: 174px; right: 70px; top: 52px; font-size: 20px; font-weight: 500; line-height: 30px; color: rgba(255, 255, 255, 0.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.box .row.choice.focus .desc { color: rgba(255, 255, 255, 0.85); }
-.box .row.choice .tick { position: absolute; right: 24px; top: 31px; width: 36px; height: 36px; color: #7DB2FF; }
-.box .row.choice .thumb { position: absolute; left: 20px; top: 12px; }
-.box .row.choice { margin-bottom: 10px; }
+#settings .setting-group { margin-bottom: 22px; }
+#settings .sect { margin: 0 12px 10px; font-size: 23px; font-weight: 600; color: #AAB9D0; }
+#settings .setting-items { padding: 6px; border-radius: 24px; background: #252C3A; }
+#settings .row { height: 68px; line-height: 68px; margin: 0; padding: 0 20px; border-radius: 18px; background: transparent; font-size: 28px; }
+#settings .row.focus { background: rgba(62, 145, 255, 0.34); box-shadow: inset 0 0 0 2px #8DBAFF; }
+#settings .row-label { display: block; max-width: 510px; overflow: hidden; text-overflow: ellipsis; }
+#settings .has-value .row-label { max-width: 340px; }
+#settings .row .value { right: 20px; max-width: 310px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#settings .row .value .chev { margin: 0 7px; }
+#settings .toggle { top: 12px; right: 18px; }
+#settings .hint, #modepick .hint { padding: 16px 12px 0; font-size: 20px; color: #AAB9D0; }
 .thumb { position: relative; display: block; width: 132px; height: 74px; border-radius: 14px; overflow: hidden; background: #E9EDF5; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
 .thumb span { position: absolute; border-radius: 4px; }
 /* default: a light screen, the hero pick and two small ones, the bar with a blue tile */
@@ -836,8 +841,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .text-l .key .label { font-size: 26px; }
 .text-l .box .row { font-size: 33px; }
 .text-l .box .sect { font-size: 27px; }
-.text-l .box .row.choice { font-size: 31px; }
-.text-l .box .row.choice .desc { font-size: 23px; }
+.text-l #settings .row { font-size: 31px; }
 
 /* Screensaver: no glass box, a large thin clock with the weather, the title as a quiet caption. */
 #saver .shade { height: 640px; }
@@ -848,7 +852,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #saver .clock .wx .sym { width: 40px; height: 40px; vertical-align: -8px; margin-right: 12px; }
 #saver .clock .title { margin-top: 30px; font-size: 26px; color: rgba(255, 255, 255, 0.6); }
 
-#modepick .row.choice { height: 142px; padding-left: 236px; padding-top: 22px; margin-bottom: 12px; font-size: 32px; }
-#modepick .row.choice .desc { left: 236px; top: 70px; font-size: 22px; }
-#modepick .row.choice .thumb { left: 22px; top: 17px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(1.42); transform: scale(1.42); }
-#modepick .row.choice .tick { top: 50px; }
+#modepick .mode-preview { position: relative; height: 284px; margin: 0 8px 18px; border-radius: 28px; overflow: hidden; background: #252C3A; }
+#modepick .mode-preview .thumb { position: absolute; left: 26px; top: 27px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(3.05); transform: scale(3.05); }
+#modepick .mode-caption { position: absolute; left: 456px; right: 24px; top: 48px; }
+#modepick .mode-name { font-size: 31px; font-weight: 700; line-height: 38px; white-space: normal; }
+#modepick .mode-desc { margin-top: 16px; font-size: 21px; font-weight: 500; line-height: 29px; color: #B6C5D8; }
+#modepick .list { height: 490px; }
+#modepick .row.choice { height: 90px; margin-bottom: 8px; padding: 0 58px 0 150px; border-radius: 20px; box-sizing: border-box; background: #252C3A; font-size: 27px; line-height: 90px; overflow: hidden; }
+#modepick .row.choice.focus { background: rgba(62, 145, 255, 0.36); box-shadow: inset 0 0 0 2px #8DBAFF; }
+#modepick .row.choice .thumb { position: absolute; left: 18px; top: 14px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(0.84); transform: scale(0.84); }
+#modepick .row.choice .mode-option-name { display: block; overflow: hidden; text-overflow: ellipsis; }
+#modepick .row.choice .tick { position: absolute; right: 20px; top: 29px; width: 32px; height: 32px; color: #8DBAFF; }
+.text-l #modepick .row.choice { font-size: 30px; }

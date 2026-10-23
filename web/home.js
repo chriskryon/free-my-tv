@@ -202,7 +202,8 @@
     for (var i = 0; i < rows.length; i++) setClass(rows[i], 'focus', on && i === index);
     var holder = sheet.querySelector('.rows'), list = sheet.querySelector('.list');
     if (!holder || !list || !rows[index]) return;
-    var max = Math.max(0, holder.offsetHeight - list.offsetHeight), y = Math.max(0, Math.min(max, rows[index].offsetTop - 3 * 78));
+    var max = Math.max(0, holder.offsetHeight - list.offsetHeight);
+    var y = Math.max(0, Math.min(max, rows[index].offsetTop + rows[index].offsetHeight / 2 - list.offsetHeight / 2));
     holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-y) + 'px)';
   }
 
@@ -824,10 +825,16 @@
     title.appendChild(document.createTextNode(tr('Home Settings')));
     var list = el('div', 'list', box), holder = el('div', 'rows', list);
     rowsNow = settingRows();
+    var group = null, items = null;
     for (var i = 0; i < rowsNow.length; i++) {
       var r = rowsNow[i];
-      if (r.section) el('div', 'sect', holder, r.section);
-      var row = el('div', 'row' + (r.dim ? ' dim' : ''), holder, r.label);
+      if (r.section) {
+        group = el('div', 'setting-group', holder);
+        el('div', 'sect', group, r.section);
+        items = el('div', 'setting-items', group);
+      }
+      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.toggle !== undefined ? ' has-toggle' : ' has-value'), items);
+      el('span', 'row-label', row, r.label);
       if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
       else {
         var v = el('span', 'value', row);
@@ -854,18 +861,24 @@
   var modeBefore = 'default';
 
   function renderModes() {
-    var box = $('modepick').firstChild, names = modeNames(), descs = modeDescs();
+    var box = $('modepick').firstChild, names = modeNames(), descs = modeDescs(), selected = MODE_IDS[st.mp];
     box.innerHTML = '';
     var title = el('div', 'title', box);
     sym('tv_settings', title);
     title.appendChild(document.createTextNode(tr('Screen mode')));
+    var preview = el('div', 'mode-preview', box);
+    var large = el('div', 'thumb t-' + selected, preview);
+    for (var p = 0; p < 6; p++) el('span', 'p' + p, large);
+    var caption = el('div', 'mode-caption', preview);
+    el('div', 'mode-name', caption, names[selected]);
+    el('div', 'mode-desc', caption, descs[selected]);
     var list = el('div', 'list', box), holder = el('div', 'rows', list);
     for (var i = 0; i < MODE_IDS.length; i++) {
-      var id = MODE_IDS[i], row = el('div', 'row choice', holder, names[id]);
+      var id = MODE_IDS[i], row = el('div', 'row choice', holder);
       var th = el('div', 'thumb t-' + id, row);
       for (var m = 0; m < 6; m++) el('span', 'p' + m, th);
-      el('div', 'desc', row, descs[id]);
-      if (id === Prefs.mode()) sym('check', row).className += ' tick';
+      el('span', 'mode-option-name', row, names[id]);
+      if (id === modeBefore) sym('check', row).className += ' tick';
       hover(row, Z.MODEPICK, i);
     }
     el('div', 'hint', box, tr('OK picks, Back cancels.'));
@@ -1192,7 +1205,7 @@
       else if (zone === Z.SETTINGS) st.row = index;
       else if (zone === Z.EDIT) st.edit = index;
       else if (zone === Z.LANG) st.lang = index;
-      else if (zone === Z.MODEPICK) st.mp = index;
+      else if (zone === Z.MODEPICK) { st.mp = index; previewMode(); updateFocus(); return; }
       updateFocus();
     };
     node.onclick = function () { node.onmouseover(); activate(); };
