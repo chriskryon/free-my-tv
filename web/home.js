@@ -54,9 +54,10 @@
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  // Grouped: the essentials, dark and cinematic, warm, light and soft, techy and retro; High contrast stays last.
-  var MODE_IDS = ['default', 'hero', 'bar', 'focus', 'calm', 'editorial', 'noir', 'hoku', 'orbital', 'aurora', 'material', 'glass', 'hyperos', 'lounge', 'zen',
-    'mission', 'military', 'hacker', 'vhs', 'pixel', 'contrast'];
+  // Most modern first (today's phone and OS looks, then the cinematic and editorial ones, then the techy and classic ones);
+  // Android, iOS and HyperOS stay together, and Living room, VHS, Pixel and High contrast close the list.
+  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
+    'noir', 'zen', 'hacker', 'lounge', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
   function modeNames() {
