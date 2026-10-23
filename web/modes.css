@@ -1786,3 +1786,28 @@ body.m-hyperos #more .mchip.focus { background: #3D8BFF; color: #FFF; }
 .m-hyperos #hint { top: 1030px; color: rgba(255, 255, 255, 0.7); }
 .m-hyperos.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
 .reduce-motion.m-hyperos #sky::after { display: none; }
+
+/* Camaleão: the colors come from the title in focus (applyChameleon); here only the shape and the neutral parts. */
+.m-chameleon #sky canvas { opacity: 0; }
+.m-chameleon #sky canvas.on { opacity: 0.9; }
+.m-chameleon #sky .glow { opacity: 0; }
+.m-chameleon #title { left: 96px; top: 50px; font-size: 58px; font-weight: 700; letter-spacing: -0.02em; color: #FFF; }
+.m-chameleon #tabs { left: 70px; top: 148px; }
+.m-chameleon .tab { color: rgba(255, 255, 255, 0.72); font-size: 25px; font-weight: 600; border-radius: 28px; }
+.m-chameleon .tab.focus { box-shadow: none; }
+.m-chameleon #clock { top: 50px; font-size: 54px; font-weight: 600; color: #FFF; }
+.m-chameleon .card { top: 232px; height: 304px; }
+.m-chameleon .card .img, .m-chameleon .card .img::after { border-radius: 28px; }
+.m-chameleon .card .img { box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4); }
+.m-chameleon .card .img::after { box-shadow: none; }
+.m-chameleon .card .name { top: 326px; font-size: 28px; font-weight: 600; color: #FFF; }
+.m-chameleon .card .meta { top: 368px; font-size: 21px; }
+.m-chameleon .card + .card:not(.focus) .img, .m-chameleon .card + .card:not(.focus) .name { opacity: 0.85; }
+.m-chameleon .card.more .img { background: rgba(255, 255, 255, 0.1); }
+.m-chameleon .card.more .name { display: none; }
+.m-chameleon #platter { border-radius: 44px; }
+.m-chameleon .sidebtn, .m-chameleon .tile { border-radius: 30px; }
+.m-chameleon .sidebtn { border-radius: 50%; color: #FFF; }
+.m-chameleon .sidebtn::before, .m-chameleon .tile::before { display: none; }
+.m-chameleon #hint { top: 1030px; }
+.m-chameleon.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }

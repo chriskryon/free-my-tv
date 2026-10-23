@@ -245,5 +245,7 @@
  "A naval command display: sonar tints, a chart grid and contacts": "Laivaston komentonäyttö: kaikuvärit, karttaruudukko ja kontaktit",
  "A dark phone-style theme: gray surfaces and a soft blue accent": "Tumma puhelinteema: harmaat pinnat ja pehmeä sininen",
  "Soft light, rounded widgets, a segmented control and a frosted dock": "Pehmeä valo, pyöreät widgetit, segmenttiohjain ja himmeä dokki",
- "Vivid glowing wallpaper, frosted cards and a blue accent": "Eloisa hehkuva tausta, himmeät kortit ja sininen korostus"
+ "Vivid glowing wallpaper, frosted cards and a blue accent": "Eloisa hehkuva tausta, himmeät kortit ja sininen korostus",
+ "Chameleon": "Kameleontti",
+ "The whole screen takes the color of the title in focus": "Koko näyttö saa valitun nimikkeen värin"
 }

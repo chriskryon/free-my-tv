@@ -245,5 +245,7 @@
  "A naval command display: sonar tints, a chart grid and contacts": "จอสั่งการกองทัพเรือ: โทนโซนาร์ ตารางแผนที่ และเป้าหมาย",
  "A dark phone-style theme: gray surfaces and a soft blue accent": "ธีมมืดแบบโทรศัพท์: พื้นผิวสีเทาและสีฟ้านุ่ม",
  "Soft light, rounded widgets, a segmented control and a frosted dock": "แสงนุ่ม วิดเจ็ตมน ตัวควบคุมแบบแบ่งส่วน และด็อกฝ้า",
- "Vivid glowing wallpaper, frosted cards and a blue accent": "วอลเปเปอร์สดใสเรืองแสง การ์ดฝ้า และสีน้ำเงินเป็นจุดเด่น"
+ "Vivid glowing wallpaper, frosted cards and a blue accent": "วอลเปเปอร์สดใสเรืองแสง การ์ดฝ้า และสีน้ำเงินเป็นจุดเด่น",
+ "Chameleon": "กิ้งก่า",
+ "The whole screen takes the color of the title in focus": "ทั้งหน้าจอเปลี่ยนเป็นสีของเรื่องที่เลือก"
 }

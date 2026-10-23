@@ -47,6 +47,8 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    chameleon: {dark: true, chameleon: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
+                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     hyperos: {dark: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     glass: {light: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
@@ -56,7 +58,7 @@
   };
   // Most modern first (today's phone and OS looks, then the cinematic and editorial ones, then the techy and classic ones);
   // Android, iOS and HyperOS stay together, and Living room, VHS, Pixel and High contrast close the list.
-  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
+  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'chameleon', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
     'noir', 'zen', 'hacker', 'lounge', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
@@ -64,7 +66,7 @@
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
       orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
-      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS',
+      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS', chameleon: tr('Chameleon'),
       noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
@@ -75,6 +77,7 @@
     V = MODES[id];
     heroId = null;
     for (var i = 0; i < MODE_IDS.length; i++) setClass(body, 'm-' + MODE_IDS[i], MODE_IDS[i] === id);
+    if (V.chameleon) { bgUrl = null; applyChameleon(CHAMELEON_NEUTRAL); }
   }
 
   function el(tag, cls, parent, text) {
@@ -208,6 +211,7 @@
 
   function updateFocus() {
     var i, list;
+    chameleonFollow();
     list = $('tabs').children;
     for (i = 0; i < list.length; i++) {
       setClass(list[i], 'on', i === st.tab);
@@ -457,7 +461,8 @@
       setClass($('bgB'), 'on', false);
       return;
     }
-    var img = new Image();
+    var img = new Image(), cors = V.chameleon && !chameleonNoCors[url];
+    if (cors) img.crossOrigin = 'anonymous';   // so the chameleon mode may read the photo's colors
     img.onload = function () {
       if (bgUrl !== url) return;
       var canvas = $(next), ctx = canvas.getContext('2d');
@@ -465,8 +470,82 @@
       setClass(canvas, 'on', true);
       setClass($(bgFront), 'on', false);
       bgFront = next;
+      if (V.chameleon) tintFrom(canvas);
     };
-    img.src = url;
+    img.onerror = function () {
+      // without CORS the photo can't be read: show it anyway, in the neutral tint
+      if (cors && bgUrl === url) { chameleonNoCors[url] = true; bgUrl = null; backdrop(url); }
+    };
+    // its own address for the readable copy: the same photo already loaded without CORS (the cards) would come back unreadable from the cache
+    img.src = cors ? url + (url.indexOf('?') < 0 ? '?' : '&') + 'cors=1' : url;
+  }
+
+  // MARK: - Chameleon: the screen takes the color of the title in focus
+
+  var chameleonNoCors = {}, chameleonCss = '', CHAMELEON_NEUTRAL = {h: 220, s: 18};
+
+  /** The most colorful hue of a tiny photo (hue and saturation), or null when it's all gray or the canvas can't be read. */
+  function photoHue(canvas) {
+    var d, i, k, bins = [];
+    try { d = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data; } catch (e) { return null; }
+    for (i = 0; i < 12; i++) bins.push({w: 0, s: 0, h: 0});
+    for (i = 0; i < d.length; i += 4) {
+      var r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), c = mx - mn;
+      if (c < 0.1 || mx < 0.15) continue;   // grays and near-blacks say nothing about the color
+      var h = mx === r ? ((g - b) / c + 6) % 6 : mx === g ? (b - r) / c + 2 : (r - g) / c + 4, w = c * mx;
+      k = Math.floor(h * 2) % 12;
+      bins[k].w += w;
+      bins[k].h += h * 60 * w;
+      bins[k].s += (c / mx) * w;
+    }
+    var best = bins[0];
+    for (i = 1; i < 12; i++) if (bins[i].w > best.w) best = bins[i];
+    if (best.w < 0.5) return null;
+    return {h: Math.round(best.h / best.w), s: Math.round(best.s / best.w * 100)};
+  }
+
+  function tintFrom(canvas) { applyChameleon(photoHue(canvas) || CHAMELEON_NEUTRAL); }
+
+  /** Writes the mode's colors (one small style sheet, rewritten only when the hue changes; no CSS variables on old TVs). */
+  function applyChameleon(c) {
+    var h = c.h, s = Math.max(30, Math.min(85, c.s)), sa = Math.max(60, s);
+    function hs(sat, l, a) { return a === undefined ? 'hsl(' + h + ',' + Math.round(sat) + '%,' + l + '%)' : 'hsla(' + h + ',' + Math.round(sat) + '%,' + l + '%,' + a + ')'; }
+    var A = hs(sa, 64), M = hs(s * 0.5, 78), INK = '#0B0B10', P = 'body.m-chameleon ';
+    var rules = [
+      '#sky .night{background:-webkit-linear-gradient(top,' + hs(s * 0.55, 14) + ',' + hs(s * 0.4, 5) + ');background:linear-gradient(' + hs(s * 0.55, 14) + ',' + hs(s * 0.4, 5) + ')}',
+      '#sky .veil{background:' + hs(s * 0.5, 8, 0.55) + '}',
+      '.tab.on{color:' + A + '}', '.tab.focus{background:' + A + ';color:' + INK + '}', '.tab::before,.key::before,.card::before{border-color:' + A + ';box-shadow:none}',
+      '.card .meta,.row-title,.panel .head,.panel .side,#clock .date,#hint{color:' + M + '}',
+      '.card.focus .img{box-shadow:0 0 0 4px ' + A + ',0 18px 44px ' + hs(sa, 40, 0.35) + '}', '.card.more .sym{color:' + A + '}',
+      '#platter{background:' + hs(s * 0.35, 16, 0.78) + ';box-shadow:inset 0 0 0 1px ' + hs(s, 70, 0.18) + '}',
+      '.tile.focus{box-shadow:0 0 0 4px ' + A + ',0 14px 30px rgba(0,0,0,0.5)}',
+      '.sidebtn{background:' + hs(s * 0.5, 24) + ';color:' + hs(s * 0.6, 86) + '}', '.sidebtn.focus{background:' + A + ';color:' + INK + '}',
+      // the apps take the color too, like themed icons: one tint for all, the focused one in the accent
+      '.tile,.cell .face{background:' + hs(s * 0.5, 24) + ' !important}', '.tile .word,.cell .face .word{color:' + hs(s * 0.6, 90) + '}',
+      '.tile.focus,.cell.focus .face{background:' + A + ' !important}', '.tile.focus .word,.cell.focus .face .word{color:' + INK + '}',
+      '.glass{background:' + hs(s * 0.35, 14, 0.9) + '}', '.key{background-color:' + hs(s * 0.4, 70, 0.1) + '}', '.key.focus{background:' + A + ';color:' + INK + '}',
+      '#settings .box,#modepick .box,#langpick .box,#shelfedit .box{background:' + hs(s * 0.35, 10) + '}',
+      '#settings .setting-items,#modepick .mode-preview,#settings .category-panel{background:' + hs(s * 0.3, 16) + '}',
+      '#settings .row.focus,.box .row.focus,#modepick .row.focus,#langpick .row.focus,#shelfedit .row.focus,#settings .category-row.focus,#settings .category-row.selected.focus{background:' + A + ';color:' + INK + ';box-shadow:none}',
+      '.box .row.focus .value,.box .row.focus .value .chev,#settings .row.focus .value,#settings .row.focus .value .chev{color:' + INK + '}',
+      '.toggle.on{background:' + A + '}', '.box .title .sym,.box .row.choice .tick{color:' + A + '}', '#settings .sect,.box .hint,#modepick .mode-desc{color:' + M + '}',
+      '#more,#apps{background:' + hs(s * 0.4, 6, 0.96) + '}', '#more .mcell::before{border-color:' + A + '}',
+      '#more .mchip{background:' + hs(s * 0.3, 16) + ';color:' + M + '}', '#more .mchip.selected{background:' + hs(s * 0.4, 70, 0.22) + ';color:#FFF}',
+      '#more .mchip.focus{background:' + A + ';color:' + INK + '}', '.cell.focus .face{box-shadow:0 16px 34px rgba(0,0,0,0.35),0 0 0 3px ' + A + '}'
+    ];
+    var css = P + rules.join('\n' + P);
+    if (css === chameleonCss) return;
+    chameleonCss = css;
+    var tag = $('chameleon-css');
+    if (!tag) { tag = document.createElement('style'); tag.id = 'chameleon-css'; document.getElementsByTagName('head')[0].appendChild(tag); }
+    tag.textContent = css;
+  }
+
+  /** In the chameleon mode the background (and so the tint) follows the focused pick, not only the first one. */
+  function chameleonFollow() {
+    if (!V.chameleon) return;
+    var p = st.zone === Z.CARDS && st.card < cards.length ? cards[st.card] : null;
+    if (p && p.backdrop) backdrop(Data.image(p.backdrop, 'w300'));
   }
 
   function renderClock() {
@@ -995,6 +1074,7 @@
       military: tr('A naval command display: sonar tints, a chart grid and contacts'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
       glass: tr('Soft light, rounded widgets, a segmented control and a frosted dock'),
       hyperos: tr('Vivid glowing wallpaper, frosted cards and a blue accent'),
+      chameleon: tr('The whole screen takes the color of the title in focus'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
 

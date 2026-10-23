@@ -245,5 +245,7 @@
  "A naval command display: sonar tints, a chart grid and contacts": "Un écran de commandement naval : teintes sonar, grille de carte et contacts",
  "A dark phone-style theme: gray surfaces and a soft blue accent": "Un thème sombre de téléphone : surfaces grises et bleu doux",
  "Soft light, rounded widgets, a segmented control and a frosted dock": "Lumière douce, widgets arrondis, contrôle segmenté et dock dépoli",
- "Vivid glowing wallpaper, frosted cards and a blue accent": "Fond vif et lumineux, cartes dépolies et un accent bleu"
+ "Vivid glowing wallpaper, frosted cards and a blue accent": "Fond vif et lumineux, cartes dépolies et un accent bleu",
+ "Chameleon": "Caméléon",
+ "The whole screen takes the color of the title in focus": "Tout l'écran prend la couleur du titre sélectionné"
 }

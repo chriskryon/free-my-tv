@@ -245,5 +245,7 @@
  "A naval command display: sonar tints, a chart grid and contacts": "Deniz komuta ekranı: sonar tonları, harita ızgarası ve temaslar",
  "A dark phone-style theme: gray surfaces and a soft blue accent": "Telefon tarzı koyu tema: gri yüzeyler ve yumuşak mavi",
  "Soft light, rounded widgets, a segmented control and a frosted dock": "Yumuşak ışık, yuvarlak widget’lar, segmentli kontrol ve buzlu dock",
- "Vivid glowing wallpaper, frosted cards and a blue accent": "Canlı parlak duvar kağıdı, buzlu kartlar ve mavi vurgu"
+ "Vivid glowing wallpaper, frosted cards and a blue accent": "Canlı parlak duvar kağıdı, buzlu kartlar ve mavi vurgu",
+ "Chameleon": "Bukalemun",
+ "The whole screen takes the color of the title in focus": "Tüm ekran seçili yapımın rengini alır"
 }
