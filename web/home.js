@@ -47,6 +47,10 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    console: {hero: true, dark: true, appsTop: true, dockRow: true, dockX: 96, labelBelow: true, tile: 96, gap: 18, barTop: 120, barH: 120,
+              rects: [[96, 400], [516, 400], [936, 400]], moreLeft: 1356, moreWidth: 180},
+    tvos: {hero: true, dark: true, cols: 5, ratio: 0.6, tile: 300, gap: 30, rowGap: 26, barTop: 640, barH: 380, barLeft: 96, barWidth: 1728,
+           rects: [[96, 300], [416, 300], [736, 300]], moreLeft: 1056, moreWidth: 160},
     chameleon: {dark: true, chameleon: true, dockRow: true, tile: 128, gap: 24, barTop: 838, barH: 160,
                 rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     hyperos: {dark: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
@@ -58,7 +62,7 @@
   };
   // Most modern first (today's phone and OS looks, then the cinematic and editorial ones, then the techy and classic ones);
   // Android, iOS and HyperOS stay together, and Living room, VHS, Pixel and High contrast close the list.
-  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'chameleon', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
+  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'tvos', 'console', 'chameleon', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
     'noir', 'zen', 'hacker', 'lounge', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
@@ -66,7 +70,7 @@
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
       orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
-      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS', chameleon: tr('Chameleon'),
+      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS', tvos: 'tvOS', console: 'PS5', chameleon: tr('Chameleon'),
       noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
@@ -587,7 +591,7 @@
     var n = shelf.length, gap = V.gap || 24, pad = 28, bw = 64, bgap = 14, div = 48, barH = V.barH || 160, barTop = V.barTop || 838;
     var btnW = 4 * bw + 3 * bgap, room = 1728 - 2 * pad - btnW - div;
     var tw = Math.floor(Math.min(V.tile || 128, (room - Math.max(0, n - 1) * gap) / Math.max(1, n)));
-    var groupW = btnW + div + n * tw + Math.max(0, n - 1) * gap, left = Math.round((1920 - groupW) / 2), mid = barTop + barH / 2, b, i;
+    var groupW = btnW + div + n * tw + Math.max(0, n - 1) * gap, left = V.dockX !== undefined ? V.dockX : Math.round((1920 - groupW) / 2), mid = barTop + barH / 2, b, i;
     var platter = $('platter');
     platter.style.left = (left - pad) + 'px';
     platter.style.width = (groupW + 2 * pad) + 'px';
@@ -600,7 +604,7 @@
     line.style.left = (left + btnW + div / 2 - 1) + 'px';
     line.style.top = (mid - 40) + 'px';
     var label = el('div', 'docklabel', side);
-    label.style.top = (barTop - 66) + 'px';
+    label.style.top = (V.labelBelow ? barTop + barH - 4 : barTop - 66) + 'px';
     for (b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r0', side);
       r.style.left = (left + b * (bw + bgap)) + 'px';
@@ -930,6 +934,7 @@
 
   function closeDrawer() {
     var keys = document.querySelectorAll('#drawer .key');
+    if (V.appsTop && cards.length) { st.zone = Z.CARDS; st.card = nearest($('cards').children, centerX(keys[st.drawer])); updateFocus(); return; }
     st.zone = Z.SHELF;
     if (shelf.length) st.shelf = nearest($('tiles').children, centerX(keys[st.drawer]));
     updateFocus();
@@ -1136,6 +1141,8 @@
       glass: tr('Soft light, rounded widgets, a segmented control and a frosted dock'),
       hyperos: tr('Vivid glowing wallpaper, frosted cards and a blue accent'),
       chameleon: tr('The whole screen takes the color of the title in focus'),
+      console: tr('Apps on top like games, the art of the title behind and activity cards below'),
+      tvos: tr('A top shelf, big rounded app icons and a glassy shine on focus'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
 
@@ -1537,6 +1544,10 @@
         var cols = V.cols || shelf.length || 1, srow = Math.floor(st.shelf / cols), rowEnd = Math.min(shelf.length - 1, srow * cols + cols - 1);
         if (dx < 0 && st.shelf % cols === 0) { st.zone = Z.SIDE; st.side = V.rail || V.dockRow ? 3 : 1; break; }
         if (dx) st.shelf = Math.max(srow * cols, Math.min(rowEnd, st.shelf + dx));
+        else if (dy > 0 && V.appsTop) {
+          if (cards.length) { st.zone = Z.CARDS; st.card = nearest(cardNodes, centerX(tiles[st.shelf])); }
+          else { openDrawer(); return; }
+        } else if (dy < 0 && V.appsTop) { st.zone = Z.TOP; st.top = st.tab; }
         else if (dy > 0) {
           if (st.shelf + cols < shelf.length) st.shelf += cols;
           else if (srow < Math.floor((shelf.length - 1) / cols)) st.shelf = shelf.length - 1;
@@ -1551,9 +1562,11 @@
         if (V.dockRow) {   // the four option buttons in one row, left of the apps
           if (dx > 0 && st.side === 3) { if (shelf.length) { st.zone = Z.SHELF; st.shelf = 0; } }
           else if (dx) st.side = Math.max(0, Math.min(3, st.side + dx));
-          else if (dy > 0) { openDrawer(); return; }
-          else if (dy < 0) {
-            if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
+          else if (dy > 0) {
+            if (V.appsTop && cards.length) { st.zone = Z.CARDS; st.card = 0; }
+            else { openDrawer(); return; }
+          } else if (dy < 0) {
+            if (cards.length && !V.appsTop) { st.zone = Z.CARDS; st.card = 0; }
             else { st.zone = Z.TOP; st.top = st.tab; }
           }
           break;
@@ -1580,6 +1593,8 @@
       case Z.CARDS:
         if (dx < 0 && st.card === 0 && V.rail) { st.zone = Z.SIDE; st.side = 0; break; }
         if (dx) st.card = Math.max(0, Math.min(cards.length, st.card + dx));
+        else if (dy > 0 && V.appsTop) { openDrawer(); return; }
+        else if (dy < 0 && V.appsTop && shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(tiles, centerX(cardNodes[st.card])); }
         else if (dy < 0) { st.zone = Z.TOP; st.top = st.tab; }
         else if (shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(Array.prototype.slice.call(tiles, 0, V.cols || tiles.length), centerX(cardNodes[st.card])); }
         break;
@@ -1589,7 +1604,8 @@
           st.top = Math.max(0, Math.min(2, st.top + dx));
           selectTab(st.top);   // as on Apple TV: focusing a tab selects it
         } else if (dy > 0) {
-          if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
+          if (V.appsTop && shelf.length) { st.zone = Z.SHELF; st.shelf = 0; }
+          else if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
           else st.zone = Z.SHELF;
         }
         break;

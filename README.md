@@ -100,7 +100,7 @@ Você precisa de uma TV Samsung de 2017 ou mais nova (Tizen 3 ou mais) e de um c
 
 Essa versão pega a cidade pelo fuso horário da TV. Para a sua cidade exata e para os destaques, monte o app com o seu próprio `config.properties` e a sua [chave do TMDB](#a-chave-do-tmdb): abra a pasta no Claude Code e diga *"Install Free My TV on my Samsung TV at 192.168.1.50. I live in Lisbon."* Ele prepara as ferramentas da Samsung, e nas TVs de 2023 em diante você entra na sua conta Samsung pelo navegador para gerar o certificado. A versão assinada instala com `python3 tizen/install.py 192.168.1.50`, que só precisa de Python: sem Tizen Studio, e sem Rosetta nos Macs com Apple Silicon.
 
-Na LG e na Samsung, os Ajustes do Início têm 21 modos de tela, do Padrão ao Alto contraste, cada um com a própria paleta nos menus, no "Ver mais" e na gaveta.
+Na LG e na Samsung, os Ajustes do Início têm 24 modos de tela, do Padrão ao Alto contraste, cada um com a própria paleta nos menus, no "Ver mais" e na gaveta.
 
 ## Ajustes
 

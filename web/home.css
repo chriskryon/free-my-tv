@@ -1046,3 +1046,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-chameleon .p3 { left: 88px; top: 20px; width: 34px; height: 24px; border-radius: 8px; background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 0 2px #F0C040; }
 .t-chameleon .p4 { left: 8px; right: 8px; bottom: 4px; height: 14px; border-radius: 9px; background: rgba(255, 255, 255, 0.16); }
 .t-chameleon .p5 { left: 14px; bottom: 7px; width: 8px; height: 8px; border-radius: 3px; background: #4FD1E8; box-shadow: 14px 0 0 #F05BA8, 28px 0 0 #F0C040, 42px 0 0 #FFF, 56px 0 0 #FFF; }
+/* PS5: apps on top, the art behind, activity cards below. */
+.t-console { background: -webkit-linear-gradient(left, #060818, #24325E); background: linear-gradient(90deg, #060818, #24325E); }
+.t-console .p0 { left: 8px; top: 6px; width: 20px; height: 3px; background: #FFF; box-shadow: 26px 0 0 rgba(255, 255, 255, 0.5); }
+.t-console .p1 { left: 8px; top: 14px; width: 10px; height: 10px; border-radius: 3px; background: #556; box-shadow: 14px 0 0 #556, 28px 0 0 #556, 44px -1px 0 1px #FFF, 60px 0 0 #556, 74px 0 0 #556; }
+.t-console .p2 { left: 8px; top: 32px; width: 44px; height: 6px; background: #FFF; }
+.t-console .p3 { left: 8px; top: 42px; width: 30px; height: 3px; background: rgba(255, 255, 255, 0.6); }
+.t-console .p4 { left: 8px; bottom: 6px; width: 30px; height: 16px; border-radius: 3px; background: #3A4A7A; box-shadow: 0 0 0 2px #FFF, 36px 0 0 #3A4A7A, 72px 0 0 #3A4A7A; }
+.t-console .p5 { display: none; }
+/* tvOS: a top shelf, big rounded icons. */
+.t-tvos { background: #000; }
+.t-tvos .p0 { left: 0; right: 0; top: 0; height: 36px; background: -webkit-linear-gradient(top, #5A6A80, #000); background: linear-gradient(#5A6A80, #000); }
+.t-tvos .p1 { left: 8px; top: 24px; width: 22px; height: 12px; border-radius: 3px; background: #8A96A8; box-shadow: 26px 0 0 #8A96A8, 52px 0 0 #8A96A8; }
+.t-tvos .p2 { left: 10px; top: 42px; width: 20px; height: 12px; border-radius: 3px; background: #3A3A3C; box-shadow: 24px 0 0 #FFF, 48px 0 0 #3A3A3C, 72px 0 0 #3A3A3C, 96px 0 0 #3A3A3C; }
+.t-tvos .p3 { left: 10px; top: 58px; width: 20px; height: 12px; border-radius: 3px; background: #3A3A3C; box-shadow: 24px 0 0 #3A3A3C, 48px 0 0 #3A3A3C; }
+.t-tvos .p4, .t-tvos .p5 { display: none; }

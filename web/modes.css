@@ -1824,3 +1824,187 @@ body.m-hyperos #more .mchip.focus { background: #3D8BFF; color: #FFF; }
   -webkit-transform: translateX(-50%); transform: translateX(-50%); opacity: 0; -webkit-transition: opacity 0.15s; transition: opacity 0.15s; pointer-events: none; }
 .m-chameleon .docklabel.on { opacity: 1; }
 .m-chameleon.drawer-open #side { opacity: 0; }
+
+/* ===== PS5 and tvOS ===== */
+body.m-console .sheet { color: #FFF; }
+body.m-console #settings .box, body.m-console #shelfedit .box, body.m-console #langpick .box, body.m-console #modepick .box { background: #0F1530; }
+body.m-console #settings .setting-items { background: #1A2245; }
+body.m-console #settings .sect, body.m-console #settings .hint, body.m-console #modepick .hint, body.m-console .box .hint { color: #9AA6CC; }
+body.m-console .box .title .sym { color: #FFF; }
+body.m-console .box .row .value { color: #FFF; }
+body.m-console .box .row .value .chev, body.m-console .box .row.dim { color: #9AA6CC; }
+body.m-console #settings .row.focus, body.m-console .box .row.focus, body.m-console #settings .category-row.focus, body.m-console #modepick .row.focus, body.m-console #shelfedit .row.focus, body.m-console #langpick .row.focus { background: #FFF; color: #0B1026; box-shadow: none; }
+body.m-console #settings .row.focus .value, body.m-console #settings .row.focus .value .chev, body.m-console .box .row.focus .value, body.m-console .box .row.focus .value .chev { color: #0B1026; }
+body.m-console .toggle.on { background: #2F7BFF; }
+body.m-console .box .row.choice .tick { color: #2F7BFF; }
+body.m-console #modepick .mode-preview { background: #1A2245; }
+body.m-console #modepick .mode-desc { color: #9AA6CC; }
+body.m-console #settings .category-panel { background: #141B3A; }
+body.m-console #settings .category-heading { border-bottom-color: #2C366A; }
+body.m-console #settings .category-row { color: #9AA6CC; }
+body.m-console #settings .category-row.selected { background: #222C57; color: #FFF; }
+body.m-console #settings .category-icon { background: #222C57; color: #FFF; }
+body.m-console #settings .category-row.selected .category-icon { background: #2F4FA8; color: #FFF; }
+body.m-console #settings .category-row.selected.focus { background: #FFF; color: #0B1026; }
+body.m-console #settings .category-row.focus .category-icon, body.m-console #settings .category-row.selected.focus .category-icon { background: rgba(0, 0, 0, 0.12); color: #0B1026; }
+body.m-console #more, body.m-console #apps { background: rgba(6, 8, 24, 0.97); }
+body.m-console #more .mcell .img { background-color: #1A2245; }
+body.m-console #more .mcell .name, body.m-console .cell .label { color: #9AA6CC; }
+body.m-console #more .mcell.focus .name, body.m-console .cell.focus .label, body.m-console .sheet h2 { color: #FFF; }
+body.m-console #more .mcell::before { border-color: #2F7BFF; box-shadow: none; }
+body.m-console .cell.focus .face { box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), 0 0 0 3px #2F7BFF; }
+body.m-console #settings .box, body.m-console #modepick .box { border-radius: 14px 0 0 14px; }
+body.m-console #settings .row, body.m-console .box .row, body.m-console #settings .setting-items, body.m-console #settings .category-panel, body.m-console #settings .category-row, body.m-console #modepick .mode-preview { border-radius: 12px; }
+body.m-console #more .mcell .img { border-radius: 12px; }
+body.m-console .glass { background: #121A3A; }
+body.m-console .key { background-color: rgba(255, 255, 255, 0.08); color: #FFF; }
+body.m-console .key.focus { background: #FFF; color: #0B1026; }
+body.m-console .key::before, body.m-console .tab::before { border-color: #2F7BFF; box-shadow: none; }
+body.m-console .row-title, body.m-console .panel .head, body.m-console .panel .side { color: #9AA6CC; }
+body.m-console .panel { color: #FFF; }
+body.m-console .tab.focus { background: #FFF; color: #0B1026; border-radius: 22px; }
+body.m-console #more .mchip { background: #1A2245; color: #9AA6CC; }
+body.m-console #more .mchip.selected { background: #222C57; color: #FFF; }
+body.m-console #more .mchip.focus { background: #FFF; color: #0B1026; }
+body.m-tvos .sheet { color: #FFF; }
+body.m-tvos #settings .box, body.m-tvos #shelfedit .box, body.m-tvos #langpick .box, body.m-tvos #modepick .box { background: #1C1C1E; }
+body.m-tvos #settings .setting-items { background: #2C2C2E; }
+body.m-tvos #settings .sect, body.m-tvos #settings .hint, body.m-tvos #modepick .hint, body.m-tvos .box .hint { color: #98989F; }
+body.m-tvos .box .title .sym { color: #0A84FF; }
+body.m-tvos .box .row .value { color: #FFF; }
+body.m-tvos .box .row .value .chev, body.m-tvos .box .row.dim { color: #98989F; }
+body.m-tvos #settings .row.focus, body.m-tvos .box .row.focus, body.m-tvos #settings .category-row.focus, body.m-tvos #modepick .row.focus, body.m-tvos #shelfedit .row.focus, body.m-tvos #langpick .row.focus { background: #FFF; color: #000; box-shadow: none; }
+body.m-tvos #settings .row.focus .value, body.m-tvos #settings .row.focus .value .chev, body.m-tvos .box .row.focus .value, body.m-tvos .box .row.focus .value .chev { color: #000; }
+body.m-tvos .toggle.on { background: #30D158; }
+body.m-tvos .box .row.choice .tick { color: #30D158; }
+body.m-tvos #modepick .mode-preview { background: #2C2C2E; }
+body.m-tvos #modepick .mode-desc { color: #98989F; }
+body.m-tvos #settings .category-panel { background: #242426; }
+body.m-tvos #settings .category-heading { border-bottom-color: #3A3A3C; }
+body.m-tvos #settings .category-row { color: #98989F; }
+body.m-tvos #settings .category-row.selected { background: #3A3A3C; color: #FFF; }
+body.m-tvos #settings .category-icon { background: #3A3A3C; color: #0A84FF; }
+body.m-tvos #settings .category-row.selected .category-icon { background: #48484A; color: #FFF; }
+body.m-tvos #settings .category-row.selected.focus { background: #FFF; color: #000; }
+body.m-tvos #settings .category-row.focus .category-icon, body.m-tvos #settings .category-row.selected.focus .category-icon { background: rgba(0, 0, 0, 0.12); color: #000; }
+body.m-tvos #more, body.m-tvos #apps { background: rgba(0, 0, 0, 0.96); }
+body.m-tvos #more .mcell .img { background-color: #2C2C2E; }
+body.m-tvos #more .mcell .name, body.m-tvos .cell .label { color: #98989F; }
+body.m-tvos #more .mcell.focus .name, body.m-tvos .cell.focus .label, body.m-tvos .sheet h2 { color: #FFF; }
+body.m-tvos #more .mcell::before { border-color: #30D158; box-shadow: none; }
+body.m-tvos .cell.focus .face { box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), 0 0 0 3px #30D158; }
+body.m-tvos .glass { background: #1C1C1E; }
+body.m-tvos .key { background-color: rgba(255, 255, 255, 0.08); color: #FFF; }
+body.m-tvos .key.focus { background: #FFF; color: #000; }
+body.m-tvos .key::before, body.m-tvos .tab::before { border-color: #30D158; box-shadow: none; }
+body.m-tvos .row-title, body.m-tvos .panel .head, body.m-tvos .panel .side { color: #98989F; }
+body.m-tvos .panel { color: #FFF; }
+body.m-tvos .tab.focus { background: #FFF; color: #000; }
+body.m-tvos #more .mchip { background: #2C2C2E; color: #98989F; }
+body.m-tvos #more .mchip.selected { background: #3A3A3C; color: #FFF; }
+body.m-tvos #more .mchip.focus { background: #FFF; color: #000; }
+
+/* PS5: the apps on top like games, the art of the title in focus behind, activity cards below; white focus outlines on deep navy. */
+.m-console { font-family: 'SST', 'Segoe UI', Arial, sans-serif; }
+.m-console #sky .night {
+  background-image: -webkit-radial-gradient(circle, rgba(255, 255, 255, 0.7) 0, rgba(255, 255, 255, 0) 1.4px), -webkit-linear-gradient(top, #0B1026, #060818);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0, rgba(255, 255, 255, 0) 1.4px), linear-gradient(#0B1026, #060818);
+  background-size: 263px 211px, 100% 100%; background-position: 40px 30px, 0 0; }
+.m-console #sky canvas { display: none; }
+.m-console #sky .veil { background: transparent; }
+.m-console #sky .glow { opacity: 0; }
+.m-console #title { display: none; }
+.m-console #tabs { left: 70px; top: 30px; }
+.m-console .tab { color: rgba(255, 255, 255, 0.6); font-size: 26px; font-weight: 600; border-radius: 26px; }
+.m-console .tab.on { color: #FFF; }
+.m-console .tab.focus { background: #FFF; color: #0B1026; box-shadow: none; }
+.m-console .tab.focus::before { display: none; }
+.m-console #clock { top: 34px; font-size: 32px; font-weight: 500; color: #FFF; }
+.m-console #clock .date { font-size: 18px; color: rgba(255, 255, 255, 0.6); }
+.m-console #hero { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; pointer-events: none; opacity: 0; -webkit-transition: opacity 0.5s; transition: opacity 0.5s; }
+.m-console #hero.on { opacity: 1; }
+.m-console.drawer-open #hero.on { opacity: 0.3; }
+.m-console #hero .ph { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background-size: cover; background-position: center top; opacity: 0; -webkit-transition: opacity 0.8s; transition: opacity 0.8s; }
+.m-console #hero .ph.on { opacity: 1; }
+.m-console #hero .scrim { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: -webkit-linear-gradient(left, rgba(6, 8, 24, 0.95), rgba(6, 8, 24, 0.55) 48%, rgba(6, 8, 24, 0.15)); background: linear-gradient(90deg, rgba(6, 8, 24, 0.95), rgba(6, 8, 24, 0.55) 48%, rgba(6, 8, 24, 0.15)); }
+.m-console #hero .scrim::after { content: ''; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: -webkit-linear-gradient(top, rgba(6, 8, 24, 0.85), rgba(6, 8, 24, 0) 30%, rgba(6, 8, 24, 0) 55%, rgba(6, 8, 24, 0.95)); background: linear-gradient(rgba(6, 8, 24, 0.85), rgba(6, 8, 24, 0) 30%, rgba(6, 8, 24, 0) 55%, rgba(6, 8, 24, 0.95)); }
+.drawer-open.m-console #hero .hcopy { opacity: 0; }
+.m-console #hero .hcopy { position: absolute; left: 96px; top: 330px; width: 900px; }
+.m-console #hero .htitle { font-size: 64px; font-weight: 600; line-height: 1.08; letter-spacing: -0.01em; color: #FFF; max-height: 140px; overflow: hidden; }
+.m-console #hero .hmeta { margin-top: 14px; font-size: 24px; color: #C9D2F0; }
+.m-console #hero .hover { margin-top: 14px; font-size: 24px; line-height: 36px; max-height: 72px; overflow: hidden; color: #E2E7F7; }
+.m-console #hero .hrow { margin-top: 22px; height: 56px; }
+.m-console #hero .hbtn { display: none; height: 56px; line-height: 56px; padding: 0 34px; border-radius: 28px; background: #FFF; color: #0B1026; font-size: 24px; font-weight: 700; }
+.m-console #hero.cardfocus .hbtn:not(.none) { display: inline-block; }
+.m-console #hero .hdots { display: none; }
+.m-console .card { top: 720px; height: 225px; }
+.m-console .card .img, .m-console .card .img::after { border-radius: 12px; }
+.m-console .card .img { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); }
+.m-console .card .img::after { box-shadow: none; }
+.m-console .card.focus { -webkit-transform: scale(1.04); transform: scale(1.04); }
+.m-console .card.focus .img { box-shadow: 0 0 0 4px #FFF, 0 0 0 8px rgba(255, 255, 255, 0.2), 0 16px 36px rgba(0, 0, 0, 0.6); }
+.m-console .card .name { top: 240px; font-size: 22px; font-weight: 600; color: #FFF; }
+.m-console .card .meta { display: none; }
+.m-console .card + .card:not(.focus) .img { opacity: 0.85; }
+.m-console .card.more .img { background: rgba(255, 255, 255, 0.1); }
+.m-console .card.more .name { display: none; }
+.m-console #platter { background: transparent; box-shadow: none; }
+.m-console .sidepanel { position: absolute; width: 2px; height: 60px; border-radius: 1px; background: rgba(255, 255, 255, 0.22); }
+.m-console .sidebtn { width: 64px; height: 64px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: #FFF; }
+.m-console .sidebtn .sym { left: 17px; top: 17px; width: 30px; height: 30px; }
+.m-console .sidebtn.focus { background: #FFF; color: #0B1026; -webkit-transform: scale(1.1); transform: scale(1.1); }
+.m-console .sidebtn .tip { display: none; }
+.m-console .sidebtn::before, .m-console .tile::before { display: none; }
+.m-console .tile { border-radius: 18px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s; }
+.m-console .tile.focus, .m-console.night .tile.focus { -webkit-transform: scale(1.28); transform: scale(1.28); box-shadow: 0 0 0 3px #FFF, 0 14px 34px rgba(0, 0, 0, 0.6); z-index: 2; }
+.m-console .docklabel { position: absolute; height: 36px; line-height: 36px; font-size: 22px; font-weight: 600; white-space: nowrap; color: #FFF; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  -webkit-transform: translateX(-50%); transform: translateX(-50%); opacity: 0; -webkit-transition: opacity 0.15s; transition: opacity 0.15s; pointer-events: none; }
+.m-console .docklabel.on { opacity: 1; }
+.m-console #hint { top: 1030px; color: rgba(255, 255, 255, 0.6); }
+.m-console.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
+
+/* tvOS: a top shelf with the title in focus, big rounded app icons in rows, a glassy shine on the focused one. */
+.m-tvos { font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; }
+.m-tvos #sky .night { background: #050505; }
+.m-tvos #sky canvas { display: none; }
+.m-tvos #sky .veil { background: transparent; }
+.m-tvos #sky .glow { opacity: 0; }
+.m-tvos #title { display: none; }
+.m-tvos #tabs { left: 70px; top: 30px; }
+.m-tvos .tab { color: rgba(255, 255, 255, 0.65); font-size: 26px; font-weight: 600; border-radius: 28px; }
+.m-tvos .tab.on { color: #FFF; background: rgba(255, 255, 255, 0.14); }
+.m-tvos .tab.focus { background: #FFF; color: #000; box-shadow: none; }
+.m-tvos .tab.focus::before { display: none; }
+.m-tvos #clock { top: 34px; font-size: 34px; font-weight: 500; color: #FFF; }
+.m-tvos #clock .date { font-size: 18px; color: rgba(255, 255, 255, 0.6); }
+.m-tvos #hero { position: absolute; left: 0; top: 0; width: 1920px; height: 640px; overflow: hidden; pointer-events: none; opacity: 0; -webkit-transition: opacity 0.5s; transition: opacity 0.5s; }
+.m-tvos #hero.on { opacity: 1; }
+.m-tvos.drawer-open #hero.on { opacity: 0; }
+.m-tvos #hero .ph { position: absolute; left: 0; top: 0; width: 1920px; height: 640px; background-size: cover; background-position: center 30%; opacity: 0; -webkit-transition: opacity 0.8s; transition: opacity 0.8s; }
+.m-tvos #hero .ph.on { opacity: 1; }
+.m-tvos #hero .scrim { position: absolute; left: 0; top: 0; width: 1920px; height: 640px;
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.15) 55%, #050505); background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.15) 55%, #050505); }
+.m-tvos #hero .hcopy { position: absolute; left: 96px; top: 250px; width: 1100px; }
+.m-tvos #hero .htitle { font-size: 46px; font-weight: 700; color: #FFF; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-tvos #hero .hmeta { margin-top: 8px; font-size: 22px; color: rgba(255, 255, 255, 0.8); text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6); }
+.m-tvos #hero .hover, .m-tvos #hero .hrow { display: none; }
+.m-tvos .card { top: 410px; height: 170px; }
+.m-tvos .card .img, .m-tvos .card .img::after { border-radius: 14px; }
+.m-tvos .card .img { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5); }
+.m-tvos .card .img::after { box-shadow: none; }
+.m-tvos .card.focus { -webkit-transform: scale(1.1); transform: scale(1.1); }
+.m-tvos .card.focus .img { box-shadow: 0 26px 50px rgba(0, 0, 0, 0.7); }
+.m-tvos .card .name, .m-tvos .card .meta { display: none; }
+.m-tvos .card.more .img { background: rgba(255, 255, 255, 0.12); }
+.m-tvos #platter { background: transparent; box-shadow: none; }
+.m-tvos .sidebtn { border-radius: 22px; background: rgba(255, 255, 255, 0.12); color: #FFF; }
+.m-tvos .sidebtn.focus { background: #FFF; color: #000; }
+.m-tvos .sidebtn::before, .m-tvos .tile::before { display: none; }
+.m-tvos .tile { border-radius: 20px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5); -webkit-transition: -webkit-transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s; transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s; }
+.m-tvos .tile.focus, .m-tvos.night .tile.focus { -webkit-transform: scale(1.12); transform: scale(1.12); box-shadow: 0 28px 56px rgba(0, 0, 0, 0.75); z-index: 2; }
+.m-tvos .tile.focus::after { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+  background: -webkit-linear-gradient(315deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 48%); background: linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 48%); }
+.m-tvos #hint { top: 1040px; color: rgba(255, 255, 255, 0.55); }
+.m-tvos.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
