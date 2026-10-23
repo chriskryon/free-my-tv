@@ -18,7 +18,7 @@
     hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
     focus: {glide: true, dark: true},
     bar: {tile: 150, gap: 28, names: true, barTop: 734, barH: 290, rail: true, sidebar: true, sideLeft: 64, sideTop: 758, sidePitch: 62, light: true,
-          barLeft: 360, barWidth: 1500, rects: [[360, 560], [950, 340], [1320, 340]], moreLeft: 1690, moreWidth: 170},
+          barLeft: 360, barWidth: 1500, rects: [[96, 640], [766, 400], [1196, 400]], moreLeft: 1626, moreWidth: 198},
     calm: {calm: true},
     editorial: {hero: true, dark: true, editorial: true, tile: 116, gap: 32, barTop: 858, barH: 176, barLeft: 160, barWidth: 1600,
                 rects: [[80, 1000], [1160, 300], [1480, 300]], moreLeft: 1160, moreWidth: 300},
@@ -29,16 +29,18 @@
               rects: [[96, 330], [460, 330], [824, 330]], moreLeft: 1188, moreWidth: 220},
     mission: {dark: true, tile: 120, gap: 24, barTop: 760, barH: 176, barLeft: 96, barWidth: 1728,
               rects: [[96, 520], [656, 520], [1216, 520]], moreLeft: 1760, moreWidth: 64},
+    hacker: {dark: true, tile: 112, gap: 26, names: true, barTop: 740, barH: 220, barLeft: 96, barWidth: 1728,
+             rects: [[96, 540], [646, 540], [1196, 540]], moreLeft: 1746, moreWidth: 78},
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission'];
+  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission', 'hacker'];
   var V = {};
 
   function modeNames() {
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
-      orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission')};
+      orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker'};
   }
 
   /** The saved mode, or ?mode=hero in the address (to preview one). */
@@ -854,7 +856,8 @@
       hoku: tr('Warm colors and a relaxed app dock'),
       orbital: tr('A cinematic mission-control view'),
       aurora: tr('Northern lights over a quiet night'),
-      mission: tr('A spacecraft touchscreen: thin lines, one blue accent')};
+      mission: tr('A spacecraft touchscreen: thin lines, one blue accent'),
+      hacker: tr('A terminal on a black screen: green text and scanlines')};
   }
 
   /** The screen mode (it opens its own menu), the theme, reduced motion and larger text. */

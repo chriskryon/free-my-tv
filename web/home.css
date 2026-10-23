@@ -927,3 +927,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-mission .p3 { left: 8px; top: 40px; width: 44px; height: 3px; background: #3BA0FF; }
 .t-mission .p4 { left: 8px; right: 8px; bottom: 5px; height: 16px; background: #0E131A; box-shadow: 0 0 0 1px #2A3442; }
 .t-mission .p5 { left: 12px; bottom: 9px; width: 9px; height: 9px; background: #E6EDF5; box-shadow: 14px 0 0 #E6EDF5, 28px 0 0 #E6EDF5, 42px 0 0 #3BA0FF, 56px 0 0 #E6EDF5; }
+/* Hacker: green text on black, a window, a prompt. */
+.t-hacker { background: #000; }
+.t-hacker .p0 { left: 8px; top: 7px; width: 34px; height: 4px; background: #00FF88; box-shadow: 0 8px 0 #2EA866, 0 16px 0 #2EA866; }
+.t-hacker .p1 { left: 8px; top: 40px; width: 8px; height: 5px; background: #00FF88; }
+.t-hacker .p2 { left: 50px; top: 8px; width: 34px; height: 28px; background: #0A5C30; box-shadow: 0 0 0 1px #00FF88, 40px 0 0 #0A5C30; }
+.t-hacker .p3 { left: 50px; top: 8px; width: 34px; height: 6px; background: #06210F; box-shadow: 40px 0 0 #06210F; }
+.t-hacker .p4 { left: 8px; right: 8px; bottom: 5px; height: 18px; box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.5); background: rgba(0, 12, 6, 0.9); }
+.t-hacker .p5 { left: 12px; bottom: 9px; width: 10px; height: 10px; background: #00FF88; box-shadow: 14px 0 0 #2EA866, 28px 0 0 #2EA866, 42px 0 0 #2EA866, 56px 0 0 #2EA866; }

@@ -686,3 +686,108 @@ body.m-bar.drawer-open #side { opacity: 0; }
 .m-mission #hint { top: 1030px; color: #7F8CA0; letter-spacing: 0.06em; }
 .m-mission.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
 .m-mission.no-picks #clock::before { font-size: 70px; vertical-align: 40px; }
+
+/* ===== Round 6: Barra com nomes widened, Mission's timeline hides with the drawer, Hacker ===== */
+body.m-bar #title { left: 96px; }
+body.m-bar #tabs { left: 70px; }
+.m-mission.drawer-open #sky::after { opacity: 0; }
+
+/* Hacker: a terminal on a black screen. Green phosphor text, a wall of faint code, scanlines, windows for the picks. */
+.m-hacker { font-family: 'Courier New', Courier, monospace; }
+.m-hacker #sky .night { background: #000; }
+.m-hacker #sky canvas { display: none; }
+.m-hacker #sky .veil { background: rgba(0, 0, 0, 0.5); }
+.m-hacker #sky .glow { opacity: 0.22; border-radius: 50%; }
+.m-hacker #sky .glow.a { left: 300px; top: 300px; width: 1300px; height: 900px; background: -webkit-radial-gradient(center, ellipse closest-side, rgba(0, 255, 136, 0.5), rgba(0, 255, 136, 0)); background: radial-gradient(ellipse closest-side, rgba(0, 255, 136, 0.5), rgba(0, 255, 136, 0)); }
+.m-hacker #sky .glow.b { opacity: 0; }
+.m-hacker #sky::after { content: '41>/<22>*7 1C7#D3> /6> {[=/ 7  /F  2DAF[>*]FE2 [;    C E{197#5>4  D  75[F 9D{4 {  #   CF 2 31/3 2 4  F#E93  ]0<]0 }  B 7=}+  7  <;0 6  ;  7F6{ }}[C  5}+  ;  4/  *F >0; 4##8</>4;E  * ><E = F3A F >6=E= A<6 > 7   > E3A76   ] 8  3F[ D DAB>]A92+38==D   > ]8]20  #8 A 8 ]3 59 6< +80 67 *  C 6 *  B  } 5[   7 5EB  795C86=8 /0}/  ] =F;4* D  < *  ]  0}3E}> 02 ><;+8=; #F 1}{8   F8 6 <E3 9  E< 862<B* 3 F5F ;B3 =C6  BC B   1 48AB 0    ;;{  1 5A8  }FC}6+7A 47AA8 0 D 81/ <+ 8 }9  1= /2*E 34[*   > 41 4 D 2/8{>EA  70  0[ 7  1  C+#66*E= {5 [{C0 1 E     5 E[   38D =B +1 > B }+ C2 6  8{; 8;    7]  8  F+ ] A + 652 >D  2D] 4{ >  *8B877/277 E F E 91*2#{= }{148; 0 B91 2+>>589 1/ 0  6C05*/ 51} / <B<2F   *  1}]  +  6 6<B7  >   C>   7[<0FE  5 2D+< 4;;1    2   F+ + *=A *8F871C8  +=}  <3> +C B251<}      9DB 7109BD/B 4+42   8 *B/< 0>51 {66}}{9};  #E}7 }A   1>    6<8  5 C7#    *0 ;9 /50{ 4 4    / *[#  73#  = 3+ A88 =A F 0 < ]/# 909  F] F*/ 6 5} ]3 C   }6D C   {   A#   E 7E  8] ;7 BA ; [C4  63C0+7}0{ 7 /}7    7  A]DC  D0 [   0F 85  B/6 } AE[< {1C0D  3;<   5=+ >  [   9   + C   + 7 F}B9 *A */02 3#=+C ]+>  ]2 38*FF4 5# A/9 D  B {; 3F 6  # == A>9*A8 6  A }1> 136 =   {[ [1 =[13  *98 1D/ /*+] 0 [ D2 4 0 ##F;E 1;   }F8 10  C;# A/ 5+}+C 8 9{   { 497[=  08/   4  8  = 2F =  1 6 0 2B /8 F66+ /=4F3E {806  /=3    150>]# {   A}[557 1  >  +;  40  /}ACFE4  6 *{  E  0 A7}A1E44D0*+FE <+ F =B8  95; }+<0  BD/*=52    4] 92 * +9  0=# / 5 #<  B   ] 13 <+0259* ] */7 #53/8347 /C*}D{C B7   A  <[ D 3260D       }     3<7 95{   /4<9 82 E/C]>F9A</B7A9 1 2B1*; [ A 6#*;   }  #D F/#  C  BC{A; E>4C2 *7 D  8F> D< E{ 0 3<> 6 E  ]*B2 3 A   5*< 1 B} D0]93[5># 4D4=05 E+   4 5}/6C7 1{7/ # {F []D]+ 559B> }3BC9D[+]6* E  BC/F7    EBC6=<#= ]9]5 6 >   ]7* C }  8B  D] #}9{  1D9;9  7]D 0= 1 ]7 AB ]  72DA    1 [==] 5= 7 B6 [  7]}9]/} =  E 69F1 3 3EB>0=;  3  +02    7;=45 [+ {5 7>  1/   1 F  }]4C1 6 ** 91D 0   9+BFAD     +  [/B}#}6;2// 7C763*3[FE/   #2 <]    E 5 F =CB]63 2  ; ;   8B<  {B+1  6 /+38>    8] EA F  5  *5 7 2<41*EEBAA7{4 C< /4 > 6   9 +  =B}#C]A  7  6# C9 49/A629E=    58=80C{< ;42* 480  A F[ #1{F E AA{  04**B/ {7 ]1 =]8< 03  }=   >> {4    B #}  60;+ #7D [ 8]7A  F/ #  9A# [E1 ;= D  0 09;=[D[   7} </3 A3F 0[} 3*26  25811> A  >D   AC C    < {    {  ][ A/; AC}  2<[ }    *;/7 =<5 5[}    B  4 B+929  F <[F7 +0019 A8 }2D =1 1 D{ C {# [#=CF   /E F2F=   1 A  7 02 E[A1;/D  A0>8C#CD 7   66B   +E 1 2/ 7 ]/C 6D 4 {0 +7  65]36  [  D1 5 7    8*+ 14 > 4 [1 6  90 28 > F= 9{04 AF;3 2 ;+C1/} *B  [ *  87F>E/<6>4  7 1+ ;=*0{93/7+*7A { 9+ 5D +;5B 7  0 FA   }B ] +   * 1   D}  /}+ * /7 [ [     2[ { 9F3 DE>BE98E> [ 5A 7*CA {* 057+       =  {8 [    }B * C=4  A0  / C/ ==DD   ]8**>4+ ;[1C ]9 {E[C+ 6  D  4>> 2B +}E * { 7  { +  5    + CA5 ;[ 62 0  C;#  7  9     ] 8  <6 B   ]3 0=8E{ *F}  7+ +]=+D}2C/[    8FD[ 6656<=]  =       6*   B A 1  0 3#= 2  *  86[6   ; *46 0* =/2 > } 6 34 /}   ;F}  }F3 2   /    3 017 >  4F ]4 <<   #} {+ 1 E06**3    2B 7  B9 {A 2[ <D 6      [D { ]+BCE} {   7>7B = A 3#}2E<[D = 6= 83 E5   8 #8} }2 2 24;< =3C];  A * 6  0 2[ 84* }/28 B;B B[7 ==}7  F0[B0FEF35 12EA2F #  1 7< 2E ;+A8 3 80     }F B+ 1 }7E 6 4 A2[B F# 6 *9 7  5[ =* +E> 78 4 A 72E /   ]1*0 =  <9  3F +< 285   <*;[[0A   A D6C  ; F 7  <C}/AB=5    3       =  2#  0D 2  77] 02 ABD  28{8# F{ 1  9 +F/+   2 D6 * 8<;7 9] 59  1=]   A9{9<5  6+<  9 2 2[EF ]E  1E8#  E [= <C   = ]5 D5+A7>8   7 9 6 6 # 7<]#A;   0 0 1  #8 {C7[} 7  ;4 }D >  #A ; 1    E  A2A  B21E F } A  #3* E[6B    ED429  7 1;C D9 5=[ C +0 =/10    E 4E { 7< =A +8*{#/ E  *<02  DE6 =  #{964A9F  F 6<5B  B ] 4*0+ }'; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; white-space: pre-wrap; word-break: break-all;
+  font: 20px/26px 'Courier New', Courier, monospace; letter-spacing: 12px; color: rgba(0, 255, 136, 0.11);
+  background-image: -webkit-repeating-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0.32) 2px, rgba(0, 0, 0, 0.32) 3px);
+  background-image: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0.32) 2px, rgba(0, 0, 0, 0.32) 3px); }
+.m-hacker.drawer-open #sky::after { opacity: 0.5; }
+.m-hacker #title { left: 96px; top: 60px; font-size: 34px; font-weight: 700; letter-spacing: 0; color: #00FF88; }
+.m-hacker #title::before { content: 'root@tv:~$ '; color: #2EA866; font-weight: 400; }
+.m-hacker #title::after { content: '\2588'; margin-left: 8px; color: #00FF88; -webkit-animation: cursor 1.1s steps(1) infinite; animation: cursor 1.1s steps(1) infinite; }
+@-webkit-keyframes cursor { 50% { opacity: 0; } }
+@keyframes cursor { 50% { opacity: 0; } }
+.reduce-motion.m-hacker #title::after { -webkit-animation: none; animation: none; }
+.m-hacker #tabs { left: 70px; top: 142px; }
+.m-hacker .tab { color: #2EA866; font-size: 26px; border-radius: 0; }
+.m-hacker .tab.on { color: #00FF88; text-decoration: underline; }
+.m-hacker .tab.focus { background: #00FF88; color: #001A0C; border-radius: 0; box-shadow: none; }
+.m-hacker .tab.focus::before { display: none; }
+.m-hacker #clock { top: 50px; font-size: 52px; font-weight: 400; color: #00FF88; }
+.m-hacker #clock .date { color: #2EA866; font-size: 22px; }
+.m-hacker .card { top: 230px; height: 304px; }
+.m-hacker .card .img { border-radius: 0; background-color: #0A5C30; -webkit-background-blend-mode: luminosity; background-blend-mode: luminosity; box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.55); }
+.m-hacker .card .img::after { opacity: 1; border-radius: 0; box-shadow: none; content: 'CF  CF  CF'; padding-left: 12px; font: 13px/26px 'Courier New', Courier, monospace; color: #2EA866; text-align: left; overflow: hidden;
+  background-repeat: no-repeat; background-size: 100% 26px; background-position: 0 0;
+  background-image: -webkit-linear-gradient(#06210F, #06210F); background-image: linear-gradient(#06210F, #06210F); }
+.m-hacker .card.focus { -webkit-transform: none; transform: none; z-index: 2; }
+.m-hacker .card.focus .img { -webkit-background-blend-mode: normal; background-blend-mode: normal; box-shadow: 0 0 0 2px #00FF88, 0 0 30px rgba(0, 255, 136, 0.35); }
+.m-hacker .card .name { top: 322px; font-size: 24px; font-weight: 700; color: #B6FFD3; }
+.m-hacker .card .name::before { content: '> '; color: #00FF88; }
+.m-hacker .card .meta { top: 362px; font-size: 19px; color: #2EA866; }
+.m-hacker .card .meta::before { content: '# '; }
+.m-hacker .card + .card:not(.focus) .name { opacity: 0.8; }
+.m-hacker .card.more .img { background: #04120A; box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.55); }
+.m-hacker .card.more .img::after { background: none; }
+.m-hacker .card.more .name { display: none; }
+.m-hacker .card.more .sym { color: #00FF88; }
+.m-hacker #platter { border-radius: 0; background: rgba(0, 12, 6, 0.9); box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.5); }
+.m-hacker .sidebtn, .m-hacker .tile { border-radius: 0; }
+.m-hacker .sidebtn { background: rgba(0, 255, 136, 0.06); color: #00FF88; box-shadow: inset 0 0 0 1px rgba(0, 255, 136, 0.4); }
+.m-hacker .sidebtn.focus { background: #00FF88; color: #001A0C; }
+.m-hacker .sidebtn::before, .m-hacker .tile::before { display: none; }
+.m-hacker .tile { box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.4); }
+.m-hacker .tile.focus, .m-hacker.night .tile.focus { box-shadow: 0 0 0 2px #00FF88, 0 0 24px rgba(0, 255, 136, 0.35); }
+.m-hacker .tile .nm { position: absolute; left: -16px; right: -16px; top: 100%; margin-top: 14px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 1; font-size: 19px; font-weight: 400; color: #2EA866; }
+.m-hacker .tile .nm::before { content: './'; }
+.m-hacker .tile.focus .nm { color: #00FF88; }
+.m-hacker #hint { top: 1030px; color: #2EA866; }
+.m-hacker.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
+body.m-hacker .sheet { color: #B6FFD3; }
+body.m-hacker #settings .box, body.m-hacker #shelfedit .box, body.m-hacker #langpick .box, body.m-hacker #modepick .box { background: #020A05; }
+body.m-hacker #settings .setting-items { background: #06160B; }
+body.m-hacker #settings .sect, body.m-hacker #settings .hint, body.m-hacker #modepick .hint, body.m-hacker .box .hint { color: #2EA866; }
+body.m-hacker .box .title .sym { color: #00FF88; }
+body.m-hacker .box .row .value { color: #B6FFD3; }
+body.m-hacker .box .row .value .chev, body.m-hacker .box .row.dim { color: #2EA866; }
+body.m-hacker #settings .row.focus, body.m-hacker .box .row.focus, body.m-hacker #settings .category-row.focus, body.m-hacker #modepick .row.focus, body.m-hacker #shelfedit .row.focus, body.m-hacker #langpick .row.focus { background: #00FF88; color: #001A0C; box-shadow: none; }
+body.m-hacker #settings .row.focus .value, body.m-hacker #settings .row.focus .value .chev, body.m-hacker .box .row.focus .value, body.m-hacker .box .row.focus .value .chev { color: #001A0C; }
+body.m-hacker .toggle.on { background: #00FF88; }
+body.m-hacker .box .row.choice .tick { color: #00FF88; }
+body.m-hacker #modepick .mode-preview { background: #06160B; }
+body.m-hacker #modepick .mode-desc { color: #2EA866; }
+body.m-hacker #settings .category-panel { background: #04100A; }
+body.m-hacker #settings .category-heading { border-bottom-color: #0F3D22; }
+body.m-hacker #settings .category-row { color: #2EA866; }
+body.m-hacker #settings .category-row.selected { background: #0A2616; color: #B6FFD3; }
+body.m-hacker #settings .category-icon { background: #0A2616; color: #00FF88; }
+body.m-hacker #settings .category-row.selected .category-icon { background: #0F5A2C; color: #B6FFD3; }
+body.m-hacker #settings .category-row.selected.focus { background: #00FF88; color: #001A0C; }
+body.m-hacker #settings .category-row.focus .category-icon, body.m-hacker #settings .category-row.selected.focus .category-icon { background: rgba(0, 0, 0, 0.12); color: #001A0C; }
+body.m-hacker #more, body.m-hacker #apps { background: rgba(0, 6, 3, 0.97); }
+body.m-hacker #more .mcell .img { background-color: #06160B; }
+body.m-hacker #more .mcell .name, body.m-hacker .cell .label { color: #2EA866; }
+body.m-hacker #more .mcell.focus .name, body.m-hacker .cell.focus .label, body.m-hacker .sheet h2 { color: #B6FFD3; }
+body.m-hacker #more .mcell::before { border-color: #00FF88; box-shadow: none; }
+body.m-hacker .cell.focus .face { box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), 0 0 0 3px #00FF88; }
+body.m-hacker #settings .box, body.m-hacker #modepick .box { border-radius: 4px 0 0 4px; }
+body.m-hacker #settings .row, body.m-hacker .box .row, body.m-hacker #settings .setting-items, body.m-hacker #settings .category-panel, body.m-hacker #settings .category-row, body.m-hacker #modepick .mode-preview { border-radius: 2px; }
+body.m-hacker #more .mcell .img { border-radius: 2px; }
+body.m-hacker .glass { background: #04120A; }
+body.m-hacker .key { background-color: rgba(0, 255, 136, 0.06); color: #B6FFD3; }
+body.m-hacker .key.focus { background: #00FF88; color: #001A0C; }
+body.m-hacker .key::before, body.m-hacker .tab::before { border-color: #00FF88; box-shadow: none; }
+body.m-hacker .row-title, body.m-hacker .panel .head, body.m-hacker .panel .side { color: #2EA866; }
+body.m-hacker .panel { color: #B6FFD3; }
+body.m-hacker .tab.focus { background: #00FF88; color: #001A0C; border-radius: 0; }
+
+/* Reduced motion (chosen, or automatic when the TV stays under 30 FPS) also drops the heaviest decorations. */
+.reduce-motion.m-hacker #sky::after, .reduce-motion.m-hacker #sky .glow { display: none; }
+.reduce-motion.m-hacker .card .img { -webkit-background-blend-mode: normal; background-blend-mode: normal; }
+.reduce-motion.m-aurora #sky .glow, .reduce-motion.m-aurora #sky::before, .reduce-motion.m-aurora #sky::after { display: none; }
+.reduce-motion.m-focus #sky .glow { display: none; }
+.m-hacker #perf .row { font-size: 20px; }
+.m-hacker #perf .row:last-child .v { font-size: 14px; }
