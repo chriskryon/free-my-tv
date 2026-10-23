@@ -1812,12 +1812,15 @@ body.m-hyperos #more .mchip.focus { background: #3D8BFF; color: #FFF; }
 .m-chameleon #hint { top: 1030px; }
 .m-chameleon.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
 
-/* Camaleão's dock: two floating capsules, the option buttons in a row on the left, the apps with their names on the right. */
-.m-chameleon #platter { border-radius: 40px; }
-.m-chameleon .sidepanel { position: absolute; left: 96px; top: 844px; width: 296px; height: 92px; border-radius: 46px; }
-.m-chameleon .sidebtn { width: 56px; height: 56px; }
-.m-chameleon .sidebtn .sym { left: 13px; top: 13px; width: 30px; height: 30px; }
-.m-chameleon .sidebtn.focus { -webkit-transform: scale(1.08); transform: scale(1.08); }
-.m-chameleon .tile { border-radius: 30px; }
-.m-chameleon .tile .nm { position: absolute; left: -16px; right: -16px; top: 100%; margin-top: 12px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 1; font-size: 18px; font-weight: 600; }
+/* Camaleão's dock: one floating capsule, the option buttons, a thin divider, the apps; the focused app lifts, with its name above. */
+.m-chameleon #platter { border-radius: 48px; }
+.m-chameleon .sidepanel { position: absolute; width: 2px; height: 80px; border-radius: 1px; box-shadow: none; }
+.m-chameleon .sidebtn { width: 64px; height: 64px; border-radius: 50%; }
+.m-chameleon .sidebtn .sym { left: 17px; top: 17px; width: 30px; height: 30px; }
+.m-chameleon .sidebtn.focus { -webkit-transform: scale(1.1); transform: scale(1.1); }
+.m-chameleon .tile { border-radius: 32px; -webkit-transition: -webkit-transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s; transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s; }
+.m-chameleon .tile.focus { -webkit-transform: translateY(-14px) scale(1.1); transform: translateY(-14px) scale(1.1); }
+.m-chameleon .docklabel { position: absolute; height: 44px; line-height: 44px; padding: 0 20px; border-radius: 22px; font-size: 22px; font-weight: 600; white-space: nowrap;
+  -webkit-transform: translateX(-50%); transform: translateX(-50%); opacity: 0; -webkit-transition: opacity 0.15s; transition: opacity 0.15s; pointer-events: none; }
+.m-chameleon .docklabel.on { opacity: 1; }
 .m-chameleon.drawer-open #side { opacity: 0; }

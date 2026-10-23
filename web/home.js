@@ -47,7 +47,7 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
-    chameleon: {dark: true, chameleon: true, names: true, dockRow: true, dockLeft: 96, tile: 112, gap: 28, barTop: 790, barH: 200, barLeft: 416, barWidth: 1408,
+    chameleon: {dark: true, chameleon: true, dockRow: true, tile: 128, gap: 24, barTop: 838, barH: 160,
                 rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     hyperos: {dark: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
               rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
@@ -223,6 +223,7 @@
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.CARDS && st.card === i);
     list = $('tiles').children;
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.SHELF && st.shelf === i);
+    if (V.dockRow) dockLabel();
     setClass($('hint'), 'on', st.zone === Z.SHELF);   // the way to the drawer: inputs, weather, shortcuts
     list = document.querySelectorAll('#drawer .key');
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.DRAWER && st.drawer === i);
@@ -517,11 +518,12 @@
       '.tab.on{color:' + A + '}', '.tab.focus{background:' + A + ';color:' + INK + '}', '.tab::before,.key::before,.card::before{border-color:' + A + ';box-shadow:none}',
       '.card .meta,.row-title,.panel .head,.panel .side,#clock .date,#hint{color:' + M + '}',
       '.card.focus .img{box-shadow:0 0 0 4px ' + A + ',0 18px 44px ' + hs(sa, 40, 0.35) + '}', '.card.more .sym{color:' + A + '}',
-      '#platter{background:' + hs(s * 0.35, 16, 0.78) + ';box-shadow:inset 0 0 0 1px ' + hs(s, 70, 0.18) + '}',
+      '#platter{background:' + hs(s * 0.35, 16, 0.82) + ';box-shadow:inset 0 0 0 1px ' + hs(s, 70, 0.18) + ',0 24px 60px rgba(0,0,0,0.45)}',
+      '.docklabel{background:' + hs(s * 0.4, 20, 0.94) + ';color:#FFF}',
       '.tile.focus{box-shadow:0 0 0 4px ' + A + ',0 14px 30px rgba(0,0,0,0.5)}',
       '.sidebtn{background:' + hs(s * 0.5, 24) + ';color:' + hs(s * 0.6, 86) + '}', '.sidebtn.focus{background:' + A + ';color:' + INK + '}',
       // the apps take the color too, like themed icons: one tint for all, the focused one in the accent
-      '.sidepanel{background:' + hs(s * 0.35, 16, 0.78) + ';box-shadow:inset 0 0 0 1px ' + hs(s, 70, 0.18) + '}',
+      '.sidepanel{background:' + hs(s * 0.5, 70, 0.22) + '}',
       '.tile .nm{color:' + M + '}', '.tile.focus .nm,.sidebtn .tip{color:' + A + '}',
       '.tile,.cell .face{background:' + hs(s * 0.5, 24) + ' !important}', '.tile .word,.cell .face .word{color:' + hs(s * 0.6, 90) + '}',
       '.tile.focus,.cell.focus .face{background:' + A + ' !important}', '.tile.focus .word,.cell.focus .face .word{color:' + INK + '}',
@@ -575,8 +577,65 @@
 
   // MARK: - Shelf
 
+  function sideDefs() { return [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]]; }
+
+  /**
+   * One floating dock, centered on the screen and only as wide as what it holds: the four option buttons, a thin divider,
+   * the apps. The focused app lifts, with its name in a label above (the dock modes, e.g. Chameleon).
+   */
+  function renderDock() {
+    var n = shelf.length, gap = V.gap || 24, pad = 28, bw = 64, bgap = 14, div = 48, barH = V.barH || 160, barTop = V.barTop || 838;
+    var btnW = 4 * bw + 3 * bgap, room = 1728 - 2 * pad - btnW - div;
+    var tw = Math.floor(Math.min(V.tile || 128, (room - Math.max(0, n - 1) * gap) / Math.max(1, n)));
+    var groupW = btnW + div + n * tw + Math.max(0, n - 1) * gap, left = Math.round((1920 - groupW) / 2), mid = barTop + barH / 2, b, i;
+    var platter = $('platter');
+    platter.style.left = (left - pad) + 'px';
+    platter.style.width = (groupW + 2 * pad) + 'px';
+    platter.style.top = barTop + 'px';
+    platter.style.height = barH + 'px';
+    $('quotes').style.right = '80px';
+    var side = $('side'), defs = sideDefs();
+    side.innerHTML = '';
+    var line = el('div', 'sidepanel', side);
+    line.style.left = (left + btnW + div / 2 - 1) + 'px';
+    line.style.top = (mid - 40) + 'px';
+    var label = el('div', 'docklabel', side);
+    label.style.top = (barTop - 66) + 'px';
+    for (b = 0; b < 4; b++) {
+      var r = el('button', 'sidebtn r0', side);
+      r.style.left = (left + b * (bw + bgap)) + 'px';
+      r.style.top = (mid - bw / 2) + 'px';
+      sym(defs[b][0], r);
+      el('div', 'tip', r, defs[b][1]);
+      hover(r, Z.SIDE, b);
+    }
+    var tiles = $('tiles');
+    tiles.innerHTML = '';
+    for (i = 0; i < n; i++) {
+      var t = el('div', 'tile', tiles);
+      t.style.left = (left + btnW + div + i * (tw + gap)) + 'px';
+      t.style.top = (mid - tw / 2) + 'px';
+      t.style.width = tw + 'px';
+      t.style.height = tw + 'px';
+      face(shelf[i], t, wordFit(shelf[i].title, tw, 30));
+      hover(t, Z.SHELF, i);
+    }
+    st.shelf = Math.min(st.shelf, Math.max(0, n - 1));
+  }
+
+  /** The dock's label: the focused app's name, above it. */
+  function dockLabel() {
+    var label = document.querySelector('#side .docklabel'), t = $('tiles').children[st.shelf], on = st.zone === Z.SHELF && t && shelf[st.shelf];
+    if (!label) return;
+    setClass(label, 'on', !!on);
+    if (!on) return;
+    label.textContent = shelf[st.shelf].title;
+    label.style.left = (parseFloat(t.style.left) + t.offsetWidth / 2) + 'px';
+  }
+
   /** The bar: a side panel (Live TV, inputs, All Apps, Settings) on the left, the apps after it. */
   function renderShelf() {
+    if (V.dockRow) { renderDock(); return; }
     var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
     if (V.rail || V.dockRow) { panelW = 0; lead = 0; }
     var avail = (V.barWidth || 1760) - 2 * pad - panelW - lead;
@@ -593,7 +652,7 @@
     var side = $('side');
     side.innerHTML = '';
     if (V.sidebar || V.dockRow) el('div', 'sidepanel', side);
-    var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
+    var defs = sideDefs();
     for (var b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r' + (V.rail ? 'a' : V.dockRow ? 0 : Math.floor(b / 2)), side);
       r.style.left = (V.dockRow ? V.dockLeft + 18 + b * 68 : V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
