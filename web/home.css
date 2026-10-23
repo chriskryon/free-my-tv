@@ -1035,6 +1035,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-hyperos .p0 { left: -16px; bottom: -22px; width: 70px; height: 70px; border-radius: 50%; background: -webkit-radial-gradient(center, circle closest-side, rgba(60, 140, 255, 0.8), rgba(60, 140, 255, 0)); background: radial-gradient(circle closest-side, rgba(60, 140, 255, 0.8), rgba(60, 140, 255, 0)); }
 .t-hyperos .p1 { right: -14px; top: -20px; width: 70px; height: 70px; border-radius: 50%; background: -webkit-radial-gradient(center, circle closest-side, rgba(209, 75, 255, 0.7), rgba(209, 75, 255, 0)); background: radial-gradient(circle closest-side, rgba(209, 75, 255, 0.7), rgba(209, 75, 255, 0)); }
 .t-hyperos .p2 { left: 8px; top: 8px; width: 36px; height: 5px; border-radius: 3px; background: #FFF; }
-.t-hyperos .p3 { left: 8px; top: 20px; width: 34px; height: 24px; border-radius: 9px; background: rgba(255, 255, 255, 0.22); box-shadow: 40px 0 0 rgba(255, 255, 255, 0.22), 40px 0 0 2px #FF6900, 80px 0 0 rgba(255, 255, 255, 0.22); }
+.t-hyperos .p3 { left: 8px; top: 20px; width: 34px; height: 24px; border-radius: 9px; background: rgba(255, 255, 255, 0.22); box-shadow: 40px 0 0 rgba(255, 255, 255, 0.22), 40px 0 0 2px #3D8BFF, 80px 0 0 rgba(255, 255, 255, 0.22); }
 .t-hyperos .p4 { left: 8px; right: 8px; bottom: 4px; height: 14px; border-radius: 9px; background: rgba(255, 255, 255, 0.2); }
-.t-hyperos .p5 { left: 14px; bottom: 7px; width: 8px; height: 8px; border-radius: 3px; background: #FF8A3C; box-shadow: 14px 0 0 #3C8CFF, 28px 0 0 #D14BFF, 42px 0 0 #FFF, 56px 0 0 #FFF; }
+.t-hyperos .p5 { left: 14px; bottom: 7px; width: 8px; height: 8px; border-radius: 3px; background: #2ED1E6; box-shadow: 14px 0 0 #3C8CFF, 28px 0 0 #D14BFF, 42px 0 0 #FFF, 56px 0 0 #FFF; }

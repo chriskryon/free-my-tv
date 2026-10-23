@@ -53,6 +53,7 @@ var Prefs = (function () {
     mode: function () { var m = pick('mode', 'default'); return m === 'prism' || m === 'interstellar' ? 'aurora' : m; },
     menuStyle: function () { return pick('menuStyle', 'standard'); },
     perf: function () { return pick('perf', true); },
+    radar: function () { return pick('radar', true); },
     reduce: function () { return pick('reduce', false); },
     large: function () { return pick('large', false); },
     coin: function (i) { var c = pick('coins', null); return c ? c[i] !== false : true; },
