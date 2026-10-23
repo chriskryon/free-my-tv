@@ -970,7 +970,7 @@
 
   function renderAll() {
     var hint = $('hint');
-    if (!hint.firstChild) sym('chevron_down', hint);
+    if (!hint.firstChild) { sym('chevron_down', hint); el('span', '', hint, tr('Weather and inputs')); }
     renderTop();
     renderQuotes();
     cards = [];
