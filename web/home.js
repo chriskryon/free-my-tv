@@ -295,10 +295,10 @@
 
   /** The bar: a side panel (Live TV, inputs, All Apps, Settings) on the left, the apps after it. */
   function renderShelf() {
-    var n = shelf.length, gap = 28, pad = 28, panelW = 156, lead = 36, barTop = 800, barH = 200;
+    var n = shelf.length, gap = 40, pad = 28, panelW = 156, lead = 36, barTop = 800, barH = 200;
     var avail = 1760 - 2 * pad - panelW - lead;
-    // 16:9 tiles, as on Android: never taller than 126.
-    var tw = Math.min(126 * 16 / 9, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw * 9 / 16;
+    // Rounded squares, as the app icons of One UI: never larger than 140.
+    var tw = Math.min(140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
     var left = 80 + pad + panelW + lead, mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = '80px';

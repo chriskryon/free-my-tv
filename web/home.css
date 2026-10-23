@@ -718,3 +718,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* The arrow now says what is down there. */
 #hint { width: 360px; margin-left: -180px; height: 36px; text-align: center; white-space: nowrap; font-size: 22px; font-weight: 500; line-height: 32px; }
 #hint .sym { position: static; display: inline-block; width: 28px; height: 28px; vertical-align: -7px; margin-right: 10px; }
+
+/* One UI Tizen: phone-like rounded app icons, larger radii everywhere, and settings as separate rounded cards. */
+.tile { border-radius: 30px; }
+.tile::before { border-radius: 37px; }
+.card .img, .card .img::after, #more .mcell .img { border-radius: 22px; }
+.card::before, .mcell::before { border-radius: 29px; }
+#platter { border-radius: 46px; }
+.sidebtn { border-radius: 28px; }
+.sidebtn::before { border-radius: 35px; }
+#settings .box, #shelfedit .box, #langpick .box { border-radius: 44px; }
+.box .title { font-size: 42px; }
+.box .row { border-radius: 26px; background: rgba(255, 255, 255, 0.06); }
+.toggle { border-radius: 22px; }
