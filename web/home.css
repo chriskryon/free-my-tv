@@ -760,3 +760,38 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #settings .box, #shelfedit .box, #langpick .box { border-radius: 48px; }
 /* The hardware line is long ("4 cores · ~1 GB"): a smaller type. */
 #perf .row:last-child .v { font-size: 18px; }
+
+/* Home Settings: a panel docked to the right, in sections; the mode as a row of five small drawings. */
+#settings { background: rgba(0, 0, 0, 0.32); }
+#settings .box {
+  left: 1164px; top: 0; width: 756px; height: 1080px; padding: 40px 32px 28px;
+  border-radius: 48px 0 0 48px;
+  -webkit-transform: translateX(90px); transform: translateX(90px);
+  -webkit-transition: -webkit-transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1); transition: transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+#settings.open .box { -webkit-transform: none; transform: none; }
+#settings .list { height: 850px; }
+.box .sect { margin: 22px 18px 10px; font-size: 24px; font-weight: 600; color: rgba(255, 255, 255, 0.5); }
+.box .rows .sect:first-child { margin-top: 6px; }
+.box .row.picker { height: 164px; line-height: 70px; }
+.box .row.picker .value { top: 0; }
+.thumbs { position: absolute; left: 24px; right: 24px; top: 74px; height: 70px; line-height: 0; white-space: nowrap; }
+.thumb { position: relative; display: inline-block; width: 116px; height: 70px; margin-right: 16px; border-radius: 16px; overflow: hidden; background: #2B2E37; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.08); -webkit-transition: box-shadow 0.15s; transition: box-shadow 0.15s; }
+.thumb.on { box-shadow: inset 0 0 0 3px #3E91FF; }
+.thumb span { position: absolute; background: rgba(255, 255, 255, 0.28); border-radius: 5px; }
+.t-default .a { left: 8px; right: 8px; bottom: 8px; height: 18px; border-radius: 8px; }
+.t-default .b { left: 8px; top: 10px; width: 62px; height: 30px; background: rgba(255, 255, 255, 0.45); }
+.t-default .c { left: 76px; top: 10px; width: 32px; height: 30px; }
+.t-hero { background: #1B1E26; }
+.t-hero .a { left: 10px; top: 20px; width: 60px; height: 8px; background: rgba(255, 255, 255, 0.9); }
+.t-hero .b { left: 10px; top: 33px; width: 80px; height: 4px; }
+.t-hero .c { left: 8px; right: 8px; bottom: 8px; height: 12px; border-radius: 6px; }
+.t-focus .a { left: 8px; right: 8px; bottom: 8px; height: 18px; border-radius: 8px; }
+.t-focus .b { left: 44px; top: 12px; width: 28px; height: 28px; border-radius: 8px; background: rgba(255, 255, 255, 0.55); box-shadow: 0 0 0 3px rgba(62, 145, 255, 0.9); }
+.t-focus .c { left: 12px; top: 14px; width: 20px; height: 24px; }
+.t-bar .a { left: 7px; bottom: 8px; width: 12px; height: 38px; border-radius: 6px; }
+.t-bar .b { left: 25px; right: 8px; bottom: 8px; height: 18px; border-radius: 8px; }
+.t-bar .c { left: 25px; top: 10px; width: 80px; height: 28px; background: rgba(255, 255, 255, 0.45); }
+.t-calm .a { left: 20px; top: 14px; width: 76px; height: 20px; background: rgba(255, 255, 255, 0.85); }
+.t-calm .b { left: 38px; top: 40px; width: 40px; height: 4px; }
+.t-calm .c { left: 8px; right: 8px; bottom: 6px; height: 8px; border-radius: 4px; }

@@ -199,10 +199,10 @@
   function focusRows(sheet, index, on) {
     var rows = sheet.querySelectorAll('.row');
     for (var i = 0; i < rows.length; i++) setClass(rows[i], 'focus', on && i === index);
-    var holder = sheet.querySelector('.rows');
-    if (!holder) return;
-    var visible = 7, first = Math.max(0, Math.min(rows.length - visible, index - 3));
-    holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-first * 78) + 'px)';
+    var holder = sheet.querySelector('.rows'), list = sheet.querySelector('.list');
+    if (!holder || !list || !rows[index]) return;
+    var max = Math.max(0, holder.offsetHeight - list.offsetHeight), y = Math.max(0, Math.min(max, rows[index].offsetTop - 3 * 78));
+    holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-y) + 'px)';
   }
 
   function nearest(nodes, x) {
@@ -752,13 +752,11 @@
     var unit = Prefs.temperature(), theme = Prefs.theme();
     var auto = tr('Automatic'), picked = pickedLanguage();
     var rows = [
-      {label: tr('Language'), value: picked === 'auto' ? auto : I18N.languageName(picked), opens: true, language: true,
-        step: function (d) { if (d >= 0) openLanguages(); }},
-      {label: tr('Temperature'), value: unit === 'C' ? '°C' : unit === 'F' ? '°F' : tr('unit|Automatic'),
-        step: function (d) { cycle('temperature', ['auto', 'C', 'F'], unit, d); renderPanels(); }},
+      {section: tr('Screen'), label: tr('Screen mode'), value: modeNames()[Prefs.mode()], picker: true,
+        step: function (d) { cycle('mode', MODE_IDS, Prefs.mode(), d); renderAll(); }},
       {label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
         step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }},
-      {label: tr('Weather widget'), toggle: Prefs.weather(),
+      {section: tr('Widgets'), label: tr('Weather widget'), toggle: Prefs.weather(),
         step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); }},
       {label: tr('Performance widget'), toggle: Prefs.perf(),
         step: function () { Prefs.set('perf', !Prefs.perf()); renderMini(); renderPanels(); }},
@@ -766,8 +764,6 @@
         step: function () { Prefs.set('picks', !Prefs.picks()); cards = []; renderCards(); }},
       {label: tr('Picks photos'), value: {sd: 'SD', hd: 'HD', fhd: 'Full HD'}[Prefs.photos()], dim: !Prefs.picks(),
         step: function (d) { if (Prefs.picks()) { cycle('photos', ['sd', 'hd', 'fhd'], Prefs.photos(), d); cards = []; renderCards(); } }},
-      {label: tr('Screen mode'), value: modeNames()[Prefs.mode()],
-        step: function (d) { cycle('mode', MODE_IDS, Prefs.mode(), d); renderAll(); }},
       {label: tr('Quotes widget'), toggle: Prefs.quotes(),
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
@@ -779,7 +775,11 @@
           step: function () { if (Prefs.quotes()) { Prefs.setCoin(i, !Prefs.coin(i)); Data.settingsChanged(); } }});
       })(i);
     }
-    rows.push({label: tr('Shelf'), value: '›', step: function (d) { if (d >= 0) openShelfEdit(); }});
+    rows.push({section: tr('Region'), label: tr('Language'), value: picked === 'auto' ? auto : I18N.languageName(picked), opens: true, language: true,
+      step: function (d) { if (d >= 0) openLanguages(); }});
+    rows.push({label: tr('Temperature'), value: unit === 'C' ? '°C' : unit === 'F' ? '°F' : tr('unit|Automatic'),
+      step: function (d) { cycle('temperature', ['auto', 'C', 'F'], unit, d); renderPanels(); }});
+    rows.push({section: tr('System'), label: tr('Shelf'), value: '›', step: function (d) { if (d >= 0) openShelfEdit(); }});
     rows.push({label: tr('TV Settings'), value: '›', step: function (d) { if (d >= 0) tvSettings(); }});
     return rows;
   }
@@ -799,10 +799,23 @@
     title.appendChild(document.createTextNode(tr('Home Settings')));
     var list = el('div', 'list', box), holder = el('div', 'rows', list);
     rowsNow = settingRows();
-    list.style.height = Math.min(rowsNow.length, 7) * 78 + 'px';
     for (var i = 0; i < rowsNow.length; i++) {
-      var r = rowsNow[i], row = el('div', 'row' + (r.dim ? ' dim' : ''), holder, r.label);
-      if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
+      var r = rowsNow[i];
+      if (r.section) el('div', 'sect', holder, r.section);
+      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.picker ? ' picker' : ''), holder, r.label);
+      if (r.picker) {
+        el('span', 'value', row, r.value);
+        var thumbs = el('div', 'thumbs', row);
+        for (var m = 0; m < MODE_IDS.length; m++) {
+          var th = el('div', 'thumb t-' + MODE_IDS[m] + (MODE_IDS[m] === Prefs.mode() ? ' on' : ''), thumbs);
+          el('span', 'a', th);
+          el('span', 'b', th);
+          el('span', 'c', th);
+          (function (id) {
+            th.onclick = function (e) { Prefs.set('mode', id); renderAll(); if (e && e.stopPropagation) e.stopPropagation(); };
+          })(MODE_IDS[m]);
+        }
+      } else if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
       else {
         var v = el('span', 'value', row);
         if (r.value === '›') v.textContent = '›';
