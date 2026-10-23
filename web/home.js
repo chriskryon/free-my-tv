@@ -47,13 +47,15 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     material: {dark: true, tile: 120, gap: 30, barTop: 790, barH: 190, barLeft: 96, barWidth: 1728,
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
+    hyperos: {dark: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
+              rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     glass: {light: true, tile: 124, gap: 32, barTop: 800, barH: 190, barLeft: 96, barWidth: 1728,
             rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
   // Grouped: the essentials, dark and cinematic, warm, light and soft, techy and retro; High contrast stays last.
-  var MODE_IDS = ['default', 'hero', 'bar', 'focus', 'calm', 'editorial', 'noir', 'hoku', 'orbital', 'aurora', 'material', 'lounge', 'zen', 'glass',
+  var MODE_IDS = ['default', 'hero', 'bar', 'focus', 'calm', 'editorial', 'noir', 'hoku', 'orbital', 'aurora', 'material', 'hyperos', 'lounge', 'zen', 'glass',
     'mission', 'military', 'hacker', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
@@ -61,7 +63,7 @@
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
       orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
-      military: tr('Military'), material: tr('Material dark'), glass: tr('Glass'),
+      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS',
       noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
@@ -989,8 +991,9 @@
       hacker: tr('A terminal on a black screen: green text and scanlines'),
       noir: tr('Gold on black, film strips and marquee lights'), vhs: tr('A video recorder menu: blue screen, channel numbers'),
       contrast: tr('Large white text on black, easy to read from far away'), zen: tr('Quiet paper, ink and one red dot'),
-      military: tr('Olive drab, stencil type and hazard stripes'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
+      military: tr('A naval command display: radar, sonar and grid coordinates'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
       glass: tr('Soft light, rounded widgets, a segmented control and a frosted dock'),
+      hyperos: tr('Vivid glowing wallpaper, frosted cards and an orange accent'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
 

@@ -994,14 +994,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-pixel .p3 { left: 98px; top: 16px; width: 24px; height: 24px; background: #FFD93B; box-shadow: 0 0 0 2px #101020, 3px 3px 0 2px #101020; }
 .t-pixel .p4 { left: 0; right: 0; bottom: 0; height: 20px; background: #8B4A12; border-top: 5px solid #3CC15A; }
 .t-pixel .p5 { left: 10px; bottom: 5px; width: 9px; height: 9px; background: #FFF; box-shadow: 13px 0 0 #E8433A, 26px 0 0 #FFF, 39px 0 0 #FFD93B, 52px 0 0 #FFF; }
-/* Military: olive, khaki, hazard stripes. */
-.t-military { background: -webkit-radial-gradient(50% 30%, ellipse, #232A14 0, #0F120A 70%); background: radial-gradient(ellipse at 50% 30%, #232A14 0, #0F120A 70%); }
-.t-military .p0 { left: 0; right: 0; top: 0; height: 4px; background: #F2B01E; background-image: -webkit-repeating-linear-gradient(135deg, #F2B01E 0, #F2B01E 4px, #141414 4px, #141414 8px); background-image: repeating-linear-gradient(-45deg, #F2B01E 0, #F2B01E 4px, #141414 4px, #141414 8px); }
-.t-military .p1 { left: 8px; top: 14px; width: 40px; height: 4px; background: #CDBF8F; }
-.t-military .p2 { left: 8px; top: 23px; width: 34px; height: 20px; background: #3E4A22; box-shadow: 0 0 0 1px #CDBF8F, 40px 0 0 #3E4A22, 40px 0 0 1px #CDBF8F, 80px 0 0 #3E4A22, 80px 0 0 1px #CDBF8F; }
-.t-military .p3 { left: 8px; top: 23px; width: 34px; height: 3px; background: #FF9A1F; box-shadow: 40px 0 0 #FF9A1F, 80px 0 0 #FF9A1F; }
-.t-military .p4 { left: 8px; right: 8px; bottom: 4px; height: 14px; background: #161B0D; box-shadow: 0 0 0 1px #CDBF8F; }
-.t-military .p5 { left: 12px; bottom: 7px; width: 8px; height: 8px; background: #CDBF8F; box-shadow: 12px 0 0 #CDBF8F, 24px 0 0 #FF9A1F, 36px 0 0 #CDBF8F, 48px 0 0 #CDBF8F; }
+/* Military: a naval radar display. */
+.t-military { background: #04141B; }
+.t-military .p0 { right: -14px; top: -4px; width: 86px; height: 86px; border-radius: 50%; border: 1px solid rgba(92, 225, 230, 0.5); background: transparent; box-shadow: inset 0 0 0 14px rgba(0, 0, 0, 0), inset 0 0 0 15px rgba(92, 225, 230, 0.25); }
+.t-military .p1 { left: 8px; top: 8px; width: 40px; height: 4px; background: #5CE1E6; }
+.t-military .p2 { left: 8px; top: 20px; width: 34px; height: 22px; background: #0A4A55; box-shadow: 0 0 0 1px #5CE1E6, 40px 0 0 #0A4A55, 40px 0 0 1px #5CE1E6, 80px 0 0 #0A4A55, 80px 0 0 1px #5CE1E6; }
+.t-military .p3 { left: 8px; top: 47px; width: 18px; height: 3px; background: #FFB020; box-shadow: 40px 0 0 #FFB020, 80px 0 0 #FFB020; }
+.t-military .p4 { left: 8px; right: 8px; bottom: 4px; height: 12px; background: #031016; box-shadow: 0 0 0 1px rgba(92, 225, 230, 0.6); }
+.t-military .p5 { left: 12px; bottom: 7px; width: 7px; height: 6px; background: #5CE1E6; box-shadow: 12px 0 0 #5CE1E6, 24px 0 0 #FFB020, 36px 0 0 #5CE1E6, 48px 0 0 #5CE1E6; }
 /* Material dark: gray surfaces, a soft blue. */
 .t-material { background: #202124; }
 .t-material .p0 { left: 8px; top: 8px; width: 40px; height: 5px; border-radius: 3px; background: #E8EAED; }
@@ -1030,3 +1030,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-lounge .p3 { box-shadow: 0 0 0 3px #F4EBDD, 0 0 0 5px #C9A24D; }
 .t-lounge .p4 { background: #243034; box-shadow: 0 0 0 1px rgba(201, 162, 77, 0.45); }
 .t-lounge .p5 { background: #FFC266; box-shadow: 14px 0 0 #F4EBDD, 28px 0 0 #F4EBDD, 42px 0 0 #F4EBDD, 56px 0 0 #F4EBDD; }
+/* HyperOS: a glowing wallpaper, frosted cards, an orange focus. */
+.t-hyperos { background: -webkit-linear-gradient(290deg, #0A0E2E, #2A1160); background: linear-gradient(160deg, #0A0E2E, #2A1160); }
+.t-hyperos .p0 { left: -16px; bottom: -22px; width: 70px; height: 70px; border-radius: 50%; background: -webkit-radial-gradient(center, circle closest-side, rgba(60, 140, 255, 0.8), rgba(60, 140, 255, 0)); background: radial-gradient(circle closest-side, rgba(60, 140, 255, 0.8), rgba(60, 140, 255, 0)); }
+.t-hyperos .p1 { right: -14px; top: -20px; width: 70px; height: 70px; border-radius: 50%; background: -webkit-radial-gradient(center, circle closest-side, rgba(209, 75, 255, 0.7), rgba(209, 75, 255, 0)); background: radial-gradient(circle closest-side, rgba(209, 75, 255, 0.7), rgba(209, 75, 255, 0)); }
+.t-hyperos .p2 { left: 8px; top: 8px; width: 36px; height: 5px; border-radius: 3px; background: #FFF; }
+.t-hyperos .p3 { left: 8px; top: 20px; width: 34px; height: 24px; border-radius: 9px; background: rgba(255, 255, 255, 0.22); box-shadow: 40px 0 0 rgba(255, 255, 255, 0.22), 40px 0 0 2px #FF6900, 80px 0 0 rgba(255, 255, 255, 0.22); }
+.t-hyperos .p4 { left: 8px; right: 8px; bottom: 4px; height: 14px; border-radius: 9px; background: rgba(255, 255, 255, 0.2); }
+.t-hyperos .p5 { left: 14px; bottom: 7px; width: 8px; height: 8px; border-radius: 3px; background: #FF8A3C; box-shadow: 14px 0 0 #3C8CFF, 28px 0 0 #D14BFF, 42px 0 0 #FFF, 56px 0 0 #FFF; }
