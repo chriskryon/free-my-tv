@@ -172,7 +172,7 @@
       setClass(list[i], 'on', i === st.tab);
       setClass(list[i], 'focus', st.zone === Z.TOP && st.top === i);
     }
-    list = $('side').children;
+    list = $('side').querySelectorAll('.sidebtn');
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.SIDE && st.side === i);
     list = $('cards').children;
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.CARDS && st.card === i);
@@ -430,8 +430,8 @@
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
-      r.style.left = (V.sidebar ? 40 : 80 + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.sidebar ? 370 + b * 92 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      r.style.left = (V.sidebar ? 44 : 80 + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.sidebar ? V.barTop + 15 + b * 66 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -489,22 +489,22 @@
     var d = $('drawer');
     var old = d.querySelectorAll('.panel');
     for (var o = 0; o < old.length; o++) d.removeChild(old[o]);
-    var wx = Prefs.weather(), coins = Data.activeCoins(), qt = coins.length > 0;
+    var wx = Prefs.weather(), pf = Prefs.perf();
     var split = 80 + 1760 * 0.585;
     if (wx) {
       var w = el('div', 'panel glass', d);
       w.id = 'weather';
       w.style.left = '80px';
-      w.style.width = ((qt ? split - 16 : 1840) - 80) + 'px';
+      w.style.width = ((pf ? split - 16 : 1840) - 80) + 'px';
       renderWeather(w);
     }
-    if (qt) {
+    if (pf) {
       var q = el('div', 'panel glass', d);
-      q.id = 'prices';
+      q.id = 'perf';
       var left = wx ? split + 16 : 80;
       q.style.left = left + 'px';
       q.style.width = (1840 - left) + 'px';
-      renderPrices(q, coins);
+      renderPerf(q);
     }
   }
 
@@ -533,6 +533,118 @@
     var sun = el('div', 'sun', card);
     if (w.sunrise) { var a = el('span', '', sun); sym('sunrise', a); a.appendChild(document.createTextNode(trf('Sunrise {time}', {time: Data.time(w.sunrise)}))); }
     if (w.sunset) { var b = el('span', '', sun); sym('sunset', b); b.appendChild(document.createTextNode(trf('Sunset {time}', {time: Data.time(w.sunset)}))); }
+  }
+
+  // MARK: - Performance: frames per second, memory and the screen's size, in the drawer and as a small chart by the clock
+
+  var perf = {fps: 0, frames: 0, last: 0, fpsHist: [], ref: null, mini: null};
+
+  function num(v, digits) {
+    try { return v.toLocaleString(I18N.locale(), {minimumFractionDigits: digits, maximumFractionDigits: digits}); } catch (e) { return v.toFixed(digits); }
+  }
+
+  function heap() {
+    var m = window.performance && performance.memory;
+    return m ? {used: m.usedJSHeapSize / 1048576, limit: m.jsHeapSizeLimit / 1048576} : null;
+  }
+
+  function perfModel() {
+    try { if (window.webapis && webapis.productinfo && webapis.productinfo.getRealModel) return webapis.productinfo.getRealModel(); } catch (e) {}
+    var ua = navigator.userAgent, t = /Tizen[ \/]([\d.]+)/.exec(ua);
+    if (t) return 'Tizen ' + t[1];
+    if (/Web0S|webOS/i.test(ua)) return 'webOS';
+    var c = /Chrome\/(\d+)/.exec(ua);
+    return c ? 'Chrome ' + c[1] : '';
+  }
+
+  function perfHardware() {
+    var cores = navigator.hardwareConcurrency, ram = navigator.deviceMemory;
+    return (cores ? trf('{n} cores', {n: cores}) : '—') + (ram ? ' · ~' + ram + ' GB' : '');
+  }
+
+  function fpsColor(v) {
+    var night = hasClass(body, 'night');
+    return v >= 55 ? (night ? '#30D158' : '#1E9E48') : v >= 30 ? '#E0A000' : '#E5484D';
+  }
+
+  function drawSpark(cv, data, max, color) {
+    var c = cv.getContext && cv.getContext('2d');
+    if (!c) return;
+    var w = cv.width, h = cv.height, n = 30;
+    c.clearRect(0, 0, w, h);
+    c.strokeStyle = color;
+    c.lineWidth = 2;
+    c.lineJoin = 'round';
+    c.beginPath();
+    for (var i = 0; i < data.length; i++) {
+      var x = 1 + (n - data.length + i) * (w - 2) / (n - 1), y = h - 2 - Math.min(data[i], max) / max * (h - 4);
+      if (i) c.lineTo(x, y); else c.moveTo(x, y);
+    }
+    c.stroke();
+  }
+
+  function renderPerf(card) {
+    el('div', 'head', card, tr('Performance'));
+    el('div', 'side', card, perfModel());
+    var big = el('div', 'big', card), n = el('span', '', big);
+    el('small', '', big, 'FPS');
+    el('div', 'sub', card, tr('Frames per second'));
+    var fill = el('div', 'fill', el('div', 'track', card)), cv = el('canvas', '', card);
+    cv.width = 270;
+    cv.height = 44;
+    el('div', 'split', card);
+    var labels = [tr('App memory'), tr('Free memory'), tr('Elements on screen'), tr('Hardware')], vals = [];
+    for (var i = 0; i < 4; i++) {
+      var r = el('div', 'row', card, labels[i]);
+      r.style.top = (84 + i * 48) + 'px';
+      vals.push(el('span', 'v', r));
+    }
+    vals[3].textContent = perfHardware();
+    perf.ref = {n: n, fill: fill, cv: cv, vals: vals};
+    updatePerf();
+  }
+
+  function updatePerf() {
+    var fps = perf.fps, color = fpsColor(fps), h = heap();
+    var mini = $('perfmini');
+    if (mini) {
+      mini.firstChild.textContent = fps + ' FPS';
+      drawSpark(mini.lastChild, perf.fpsHist, 60, color);
+    }
+    var r = perf.ref;
+    if (!r || !r.n.parentNode) { perf.ref = null; return; }
+    r.n.textContent = fps;
+    r.fill.style.width = Math.min(100, fps / 60 * 100) + '%';
+    r.fill.style.background = color;
+    drawSpark(r.cv, perf.fpsHist, 60, color);
+    r.vals[0].textContent = h ? num(h.used, 1) + ' MB' : '—';
+    r.vals[1].textContent = h ? num(h.limit - h.used, 0) + ' MB' : '—';
+    r.vals[2].textContent = document.getElementsByTagName('*').length;
+  }
+
+  function perfLoop(t) {
+    perf.frames++;
+    if (!perf.last) perf.last = t;
+    if (t - perf.last >= 1000) {
+      perf.fps = Math.round(perf.frames * 1000 / (t - perf.last));
+      perf.frames = 0;
+      perf.last = t;
+      perf.fpsHist.push(perf.fps);
+      if (perf.fpsHist.length > 30) perf.fpsHist.shift();
+      updatePerf();
+    }
+    requestAnimationFrame(perfLoop);
+  }
+
+  function renderMini() {
+    setClass(body, 'no-perf', !Prefs.perf());
+    if ($('perfmini')) return;
+    var m = el('div', '', $('top'));
+    m.id = 'perfmini';
+    el('span', 'fps', m);
+    var cv = el('canvas', '', m);
+    cv.width = 140;
+    cv.height = 34;
   }
 
   function renderPrices(card, coins) {
@@ -648,6 +760,8 @@
         step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }},
       {label: tr('Weather widget'), toggle: Prefs.weather(),
         step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); }},
+      {label: tr('Performance widget'), toggle: Prefs.perf(),
+        step: function () { Prefs.set('perf', !Prefs.perf()); renderMini(); renderPanels(); }},
       {label: tr('Picks widget'), toggle: Prefs.picks(),
         step: function () { Prefs.set('picks', !Prefs.picks()); cards = []; renderCards(); }},
       {label: tr('Picks photos'), value: {sd: 'SD', hd: 'HD', fhd: 'Full HD'}[Prefs.photos()], dim: !Prefs.picks(),
@@ -658,7 +772,7 @@
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
     var names = ['Bitcoin', 'Ethereum', 'Solana', tr('Dollar')];
-    var count = Data.currency === 'BRL' ? 4 : 3;
+    var count = !Prefs.quotes() ? 0 : Data.currency === 'BRL' ? 4 : 3;   // no coin rows while the widget is off
     for (var i = 0; i < count; i++) {
       (function (i) {
         rows.push({label: names[i], toggle: Prefs.quotes() && Prefs.coin(i), dim: !Prefs.quotes(),
@@ -1105,6 +1219,7 @@
 
   function renderAll() {
     applyMode();
+    renderMini();
     var hint = $('hint');
     if (!hint.firstChild) { sym('chevron_down', hint); el('span', '', hint, tr('Weather and inputs')); }
     renderTop();
@@ -1175,6 +1290,7 @@
   I18N.set(Prefs.language());
   fit();
   renderTop();
+  requestAnimationFrame(perfLoop);
   loadApps(function () {
     renderAll();
     Data.refresh();

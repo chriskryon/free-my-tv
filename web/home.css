@@ -731,3 +731,32 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .box .title { font-size: 42px; }
 .box .row { border-radius: 26px; background: rgba(255, 255, 255, 0.06); }
 .toggle { border-radius: 22px; }
+
+/* Performance: a small chart by the clock, and the card in the drawer. */
+#perfmini { position: absolute; right: 80px; top: 152px; height: 34px; color: #6E6E73; font-size: 20px; font-weight: 600; white-space: nowrap; font-feature-settings: 'tnum'; }
+#perfmini .fps { display: inline-block; vertical-align: top; line-height: 34px; margin-right: 12px; }
+#perfmini canvas { width: 140px; height: 34px; vertical-align: top; }
+.night #perfmini { color: rgba(255, 255, 255, 0.62); }
+.no-perf #perfmini { display: none; }
+#perf .big { position: absolute; left: 34px; top: 62px; font-size: 100px; font-weight: 300; line-height: 100px; font-feature-settings: 'tnum'; }
+#perf .big small { margin-left: 12px; font-size: 34px; font-weight: 400; color: #6E6E73; }
+#perf .sub { position: absolute; left: 34px; top: 172px; font-size: 26px; font-weight: 500; white-space: nowrap; }
+#perf .track { position: absolute; left: 34px; top: 216px; width: 270px; height: 8px; border-radius: 4px; background: rgba(0, 0, 0, 0.1); overflow: hidden; }
+#perf .fill { height: 8px; border-radius: 4px; width: 0; }
+#perf canvas { position: absolute; left: 34px; top: 240px; width: 270px; height: 44px; }
+#perf .split { position: absolute; left: 340px; top: 34px; bottom: 34px; width: 2px; background: rgba(0, 0, 0, 0.1); }
+#perf .row { position: absolute; left: 372px; right: 34px; height: 30px; line-height: 30px; font-size: 23px; font-weight: 500; white-space: nowrap; }
+#perf .row .v { position: absolute; right: 0; font-weight: 600; font-feature-settings: 'tnum'; }
+.night #perf .big small { color: rgba(255, 255, 255, 0.6); }
+.night #perf .track, .night #perf .split { background: rgba(255, 255, 255, 0.14); }
+
+/* Slightly rounder corners in every mode. */
+.card .img, .card .img::after, #more .mcell .img { border-radius: 26px; }
+.card::before, .mcell::before { border-radius: 33px; }
+.panel { border-radius: 36px; }
+.key { border-radius: 24px; }
+.key::before { border-radius: 31px; }
+#platter { border-radius: 50px; }
+#settings .box, #shelfedit .box, #langpick .box { border-radius: 48px; }
+/* The hardware line is long ("4 cores · ~1 GB"): a smaller type. */
+#perf .row:last-child .v { font-size: 18px; }
