@@ -539,7 +539,7 @@
 
   // MARK: - Performance: frames per second, memory and the screen's size, in the drawer and as a small chart by the clock
 
-  var perf = {fps: 0, frames: 0, last: 0, fpsHist: [], ref: null, mini: null, low: 0, slow: false};
+  var perf = {fps: 0, frames: 0, last: 0, fpsHist: [], ref: null, mini: null, window: [], good: 0, relapses: 0, slow: false};
 
   function num(v, digits) {
     try { return v.toLocaleString(I18N.locale(), {minimumFractionDigits: digits, maximumFractionDigits: digits}); } catch (e) { return v.toFixed(digits); }
@@ -624,6 +624,32 @@
     r.vals[2].textContent = document.getElementsByTagName('*').length;
   }
 
+  /**
+   * Adaptive motion, with hysteresis so it never flickers. Off after 10 of the last 12 seconds under 30 FPS; back on only
+   * after a steady run at 55 FPS or more, 60 s the first time and twice as long after each relapse (up to 8 minutes), since
+   * the animations are part of what slows a weak TV. Nothing counts while hidden, with the screensaver up, or in the first
+   * 20 s (loading). Returns true when `p.slow` changed.
+   */
+  function watchSpeed(p, fps, t, idle) {
+    if (idle || t < 20000 || !fps) return false;
+    p.window.push(fps < 30);
+    if (p.window.length > 12) p.window.shift();
+    if (!p.slow) {
+      var low = 0;
+      for (var i = 0; i < p.window.length; i++) if (p.window[i]) low++;
+      if (low < 10) return false;
+      p.slow = true;
+      p.good = 0;
+      p.relapses++;
+      return true;
+    }
+    p.good = fps >= 55 ? p.good + 1 : 0;
+    if (p.good < Math.min(480, 60 * Math.pow(2, p.relapses - 1))) return false;
+    p.slow = false;
+    p.window = [];
+    return true;
+  }
+
   function perfLoop(t) {
     perf.frames++;
     if (!perf.last) perf.last = t;
@@ -633,11 +659,7 @@
       perf.last = t;
       perf.fpsHist.push(perf.fps);
       if (perf.fpsHist.length > 30) perf.fpsHist.shift();
-      // Under 30 FPS for 10 seconds: the TV is struggling, so the ambient animations go off by themselves.
-      if (!perf.slow && !saverOn) {
-        if (perf.fps > 0 && perf.fps < 30) perf.low++; else perf.low = Math.max(0, perf.low - 1);
-        if (perf.low >= 10) { perf.slow = true; applyLook(); }
-      }
+      if (watchSpeed(perf, perf.fps, t, document.hidden || saverOn)) applyLook();
       updatePerf();
     }
     requestAnimationFrame(perfLoop);
