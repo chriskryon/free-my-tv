@@ -134,11 +134,11 @@
 
   // MARK: - Focus
 
-  var Z = {TOP: 'top', CARDS: 'cards', SHELF: 'shelf', DRAWER: 'drawer', APPS: 'apps', SETTINGS: 'settings', EDIT: 'edit', LANG: 'lang'};
-  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, shelf: 0, drawer: 0, grid: 0, row: 0, edit: 0, lang: 0};
+  var Z = {TOP: 'top', CARDS: 'cards', SHELF: 'shelf', DRAWER: 'drawer', APPS: 'apps', MORE: 'more', SETTINGS: 'settings', EDIT: 'edit', LANG: 'lang'};
+  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, shelf: 0, drawer: 0, grid: 0, more: 0, row: 0, edit: 0, lang: 0};
   var cards = [];
 
-  function sheetOpen() { return st.zone === Z.APPS || st.zone === Z.SETTINGS || st.zone === Z.EDIT || st.zone === Z.LANG; }
+  function sheetOpen() { return st.zone === Z.APPS || st.zone === Z.MORE || st.zone === Z.SETTINGS || st.zone === Z.EDIT || st.zone === Z.LANG; }
 
   function updateFocus() {
     var i, list;
@@ -154,10 +154,13 @@
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.CARDS && st.card === i);
     list = $('tiles').children;
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.SHELF && st.shelf === i);
+    setClass($('hint'), 'on', st.zone === Z.SHELF);   // the way to the drawer: inputs, weather, shortcuts
     list = document.querySelectorAll('#drawer .key');
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.DRAWER && st.drawer === i);
     list = document.querySelectorAll('#apps .cell');
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.APPS && st.grid === i);
+    list = document.querySelectorAll('#more .mcell');
+    for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.MORE && st.more === i);
     var rows = Math.max(1, Math.ceil(others.length / 5)), r = Math.floor(st.grid / 5), first = Math.max(0, Math.min(rows - 3, r - 1));
     $('apps').lastChild.style.webkitTransform = $('apps').lastChild.style.transform = 'translateY(' + (-first * 239) + 'px)';
     focusRows($('settings'), st.row, st.zone === Z.SETTINGS);
@@ -228,25 +231,39 @@
 
   // MARK: - Picks and background
 
+  /** TMDB's sizes for the picks: the hero and the two small cards, by the photo quality in settings (HD by default). */
+  function photoSize(hero) {
+    var q = Prefs.photos();
+    return q === 'sd' ? 'w300' : q === 'fhd' ? (hero ? 'w1280' : 'w780') : (hero ? 'w780' : 'w300');
+  }
+
   function renderCards() {
-    var list = Data.picks(TAB_KIND[st.tab]);
+    var list = Prefs.picks() ? Data.picks(TAB_KIND[st.tab]) : [];
     var holder = $('cards');
     setClass(body, 'no-picks', !list.length);
     var same = list.length === cards.length;
     for (var i = 0; same && i < list.length; i++) same = list[i].id === cards[i].id && list[i].backdrop === cards[i].backdrop && list[i].meta === cards[i].meta;
-    if (same && holder.children.length === list.length) return;
+    if (same && holder.children.length === list.length + (list.length ? 1 : 0)) return;
     cards = list;
     holder.innerHTML = '';
-    var rects = [[80, 1040], [1160, 320], [1520, 320]];
+    var rects = [[80, 780], [900, 360], [1280, 360]];
     for (var c = 0; c < list.length; c++) {
       var p = list[c], card = el('div', 'card', holder);
       card.style.left = rects[c][0] + 'px';
       card.style.width = rects[c][1] + 'px';
       var img = el('div', 'img', card);
-      img.style.backgroundImage = 'url(' + Data.image(p.backdrop, c === 0 ? 'w1280' : 'w780') + ')';
+      img.style.backgroundImage = 'url(' + Data.image(p.backdrop, photoSize(c === 0)) + ')';
       el('div', 'name', card, p.title);
       if (c === 0 && p.meta) el('div', 'meta', card, p.meta);
       hover(card, Z.CARDS, c);
+    }
+    if (list.length) {
+      var more = el('div', 'card more', holder);
+      more.style.left = '1660px';
+      more.style.width = '180px';
+      sym('chevron_right', el('div', 'img', more));
+      el('div', 'name', more, tr('See more'));
+      hover(more, Z.CARDS, list.length);
     }
     st.card = Math.min(st.card, Math.max(0, list.length - 1));
     if (!list.length && st.zone === Z.CARDS) st.zone = Z.SHELF;
@@ -280,7 +297,8 @@
 
   function renderClock() {
     var d = new Date(), c = $('clock');
-    c.firstChild.textContent = formatDate('format|h:mm', d.getTime());
+    var sec = d.getSeconds();
+    c.firstChild.textContent = formatDate('format|h:mm', d.getTime()) + ':' + (sec < 10 ? '0' : '') + sec;
     c.lastChild.textContent = formatDate('format|EEEE, MMMM d', d.getTime());
   }
 
@@ -454,8 +472,42 @@
     updateFocus();
   }
 
+  // MARK: - See more: a grid of more picks, loaded when it opens
+
+  var moreList = [];
+
+  function openMore() {
+    st.zone = Z.MORE;
+    st.more = 0;
+    renderMore();
+    setClass($('more'), 'open', true);
+    Data.loadMore(TAB_KIND[st.tab], function () {
+      if (st.zone !== Z.MORE) return;
+      renderMore();
+      updateFocus();
+    });
+    updateFocus();
+  }
+
+  function renderMore() {
+    var sheet = $('more'), grid = sheet.lastChild, size = Prefs.photos() === 'fhd' ? 'w780' : 'w300';
+    sheet.firstChild.textContent = tr('See more');
+    grid.innerHTML = '';
+    moreList = Data.more(TAB_KIND[st.tab]);
+    st.more = Math.min(st.more, Math.max(0, moreList.length - 1));
+    for (var i = 0; i < moreList.length; i++) {
+      var cell = el('div', 'mcell', grid), img = el('div', 'img', cell);
+      cell.style.left = (140 + (i % 4) * 420) + 'px';
+      cell.style.top = (190 + Math.floor(i / 4) * 270) + 'px';
+      img.style.backgroundImage = 'url(' + Data.image(moreList[i].backdrop, size) + ')';
+      el('div', 'name', cell, moreList[i].title);
+      hover(cell, Z.MORE, i);
+    }
+  }
+
   function closeSheets() {
     setClass($('apps'), 'open', false);
+    setClass($('more'), 'open', false);
     setClass($('settings'), 'open', false);
     setClass($('shelfedit'), 'open', false);
     setClass($('langpick'), 'open', false);
@@ -478,6 +530,10 @@
         step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }},
       {label: tr('Weather widget'), toggle: Prefs.weather(),
         step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); }},
+      {label: tr('Picks widget'), toggle: Prefs.picks(),
+        step: function () { Prefs.set('picks', !Prefs.picks()); cards = []; renderCards(); }},
+      {label: tr('Picks photos'), value: {sd: 'SD', hd: 'HD', fhd: 'Full HD'}[Prefs.photos()], dim: !Prefs.picks(),
+        step: function (d) { if (Prefs.picks()) { cycle('photos', ['sd', 'hd', 'fhd'], Prefs.photos(), d); cards = []; renderCards(); } }},
       {label: tr('Quotes widget'), toggle: Prefs.quotes(),
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
@@ -675,6 +731,7 @@
         else openSettings();
         return;
       case Z.CARDS:
+        if (st.card >= cards.length) { openMore(); return; }
         var p = cards[st.card], app = p && Data.appFor(p.app);
         if (app) launcher(app.id, app.title)();
         return;
@@ -686,6 +743,10 @@
         return;
       case Z.APPS:
         if (others[st.grid]) launcher(others[st.grid].id, others[st.grid].title)();
+        return;
+      case Z.MORE:
+        var mp = moreList[st.more], mapp = mp && Data.appFor(mp.app);
+        if (mapp) launcher(mapp.id, mapp.title)();
         return;
       case Z.SETTINGS:
         if (rowsNow[st.row]) { rowsNow[st.row].step(1); if (st.zone === Z.SETTINGS) renderSettings(); }
@@ -717,7 +778,7 @@
         }
         break;
       case Z.CARDS:
-        if (dx) st.card = Math.max(0, Math.min(cards.length - 1, st.card + dx));
+        if (dx) st.card = Math.max(0, Math.min(cards.length, st.card + dx));
         else if (dy < 0) { st.zone = Z.TOP; st.top = st.tab; }
         else if (shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(tiles, centerX(cardNodes[st.card])); }
         break;
@@ -737,6 +798,10 @@
       case Z.APPS:
         var g = st.grid + dx + dy * 5;
         if (g >= 0 && g < others.length && (dx === 0 || Math.floor(g / 5) === Math.floor(st.grid / 5))) st.grid = g;
+        break;
+      case Z.MORE:
+        var mg = st.more + dx + dy * 4;
+        if (mg >= 0 && mg < moreList.length && (dx === 0 || Math.floor(mg / 4) === Math.floor(st.more / 4))) st.more = mg;
         break;
       case Z.SETTINGS:
         if (dy) st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row + dy));
@@ -768,7 +833,7 @@
   /** The pointer focuses what it's over (the Magic Remote, or a mouse when previewing). */
   function hover(node, zone, index) {
     node.onmouseover = function () {
-      if (saverOn || (sheetOpen() !== (zone === Z.APPS || zone === Z.SETTINGS || zone === Z.EDIT || zone === Z.LANG))) return;
+      if (saverOn || (sheetOpen() !== (zone === Z.APPS || zone === Z.MORE || zone === Z.SETTINGS || zone === Z.EDIT || zone === Z.LANG))) return;
       if (zone === Z.DRAWER && st.zone !== Z.DRAWER) return;
       if (zone !== Z.DRAWER && st.zone === Z.DRAWER && zone !== Z.SHELF) return;
       if (zone === Z.SHELF && st.zone === Z.DRAWER) closeDrawer();
@@ -778,6 +843,7 @@
       else if (zone === Z.SHELF) st.shelf = index;
       else if (zone === Z.DRAWER) st.drawer = index;
       else if (zone === Z.APPS) st.grid = index;
+      else if (zone === Z.MORE) st.more = index;
       else if (zone === Z.SETTINGS) st.row = index;
       else if (zone === Z.EDIT) st.edit = index;
       else if (zone === Z.LANG) st.lang = index;
@@ -800,7 +866,22 @@
   // MARK: - Night, clock, screensaver
 
   function checkNight() {
-    setClass(body, 'night', Data.isNight(Date.now()));
+    var now = Date.now(), night = Data.isNight(now);
+    // Afternoon: in the 3 hours before sunset the sky fades to night; from halfway the text and surfaces switch too.
+    var ramp = 0;
+    if (!night && Prefs.theme() === 'auto') {
+      var d = new Date(now), mins = d.getHours() * 60 + d.getMinutes(), w = Data.weather;
+      var set = w && w.sunset ? new Date(w.sunset).getHours() * 60 + new Date(w.sunset).getMinutes() : 1080;
+      ramp = Math.max(0, Math.min(1, (mins - (set - 180)) / 180));
+    }
+    setClass(body, 'night', night || ramp >= 0.5);
+    var sky = $('sky');
+    sky.querySelector('.night').style.opacity = night ? '' : String(ramp);
+    sky.querySelector('.veil').style.opacity = night ? '' : String(1 - ramp);
+    // The light in the sky follows the hour: pale blue in the morning, deeper later, indigo at night.
+    var hr = new Date(now).getHours();
+    setClass(body, 'ph-morning', !night && hr < 11);
+    setClass(body, 'ph-golden', !night && hr >= 15);
   }
 
   var saverOn = false, idleAt = Date.now(), saverIndex = 0, saverTimer = 0, SAVER_AFTER = 5 * 60000;
@@ -876,6 +957,8 @@
   // MARK: - Start
 
   function renderAll() {
+    var hint = $('hint');
+    if (!hint.firstChild) sym('chevron_down', hint);
     renderTop();
     renderQuotes();
     cards = [];
@@ -948,8 +1031,8 @@
     renderAll();
     Data.refresh();
   });
+  setInterval(renderClock, 1000);
   setInterval(function () {
-    renderClock();
     checkNight();
     Data.refresh();
     if (!saverOn && !sheetOpen() && Date.now() - idleAt > SAVER_AFTER) showSaver();

@@ -526,3 +526,161 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* The Magic Remote's pointer: no text selection, no outlines. */
 * { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+/*
+ * MARK: - Samsung look (One UI / Tizen home): flat, quiet surfaces, no glass. A small title, text tabs, 16:9 picks and
+ * shelf tiles with a white ring on focus. Day is clean white-grey, night is near-black. Loaded last so it wins.
+ */
+#sky .day { background: #F1F3F7; }
+#sky .night { background: #0A0C11; }
+#sky .veil { background: rgba(242, 243, 245, 0.88); }
+.night #sky .veil { background: rgba(10, 10, 12, 0.9); }
+
+#title { font-size: 44px; font-weight: 500; letter-spacing: -0.01em; top: 70px; left: 80px; }
+
+#tabs { left: 62px; top: 150px; height: 56px; }
+.tab { height: 56px; line-height: 56px; border-radius: 28px; font-size: 26px; padding: 0 22px; }
+.tab.focus { background: #FFF; transform: scale(1.04); -webkit-transform: scale(1.04); box-shadow: 0 0 0 3px #1D1D1F; }
+.night .tab.focus { background: #FFF; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35); }
+
+.round { top: 64px; width: 60px; height: 60px; border-radius: 30px; background: rgba(0, 0, 0, 0.06); box-shadow: none; }
+.round .sym { left: 16px; top: 16px; }
+.round.focus { background: #FFF; transform: scale(1.12); -webkit-transform: scale(1.12); box-shadow: 0 0 0 3px #1D1D1F; }
+.round .tip { top: 76px; }
+.night .round { background: rgba(255, 255, 255, 0.1); box-shadow: none; }
+.night .round.focus { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4); }
+
+.card .img, .card .img::after { border-radius: 14px; }
+.card .img { box-shadow: none; }
+.card .img::after { box-shadow: inset 0 0 0 4px #FFF; background: none; }
+.card.focus { transform: scale(1.04); -webkit-transform: scale(1.04); }
+.card.focus .img { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+.card .name { font-size: 28px; font-weight: 500; }
+.card .meta { font-size: 22px; }
+
+#platter { background: none; box-shadow: none; }
+.night #platter { background: none; box-shadow: none; }
+.tile { border-radius: 14px; box-shadow: none; }
+.tile.focus { transform: scale(1.1); -webkit-transform: scale(1.1); box-shadow: 0 0 0 4px #FFF, 0 18px 36px rgba(0, 0, 0, 0.4); }
+.tile::after { display: none; }
+
+.glass, .night .glass { background: #FFF; box-shadow: none; }
+.night .glass { background: #1C1C20; }
+.key, .panel { border-radius: 18px; }
+.key.focus { background: #FFF; box-shadow: 0 0 0 4px #FFF, 0 16px 34px rgba(0, 0, 0, 0.4); transform: scale(1.05); -webkit-transform: scale(1.05); }
+
+#settings .box, #shelfedit .box, #langpick .box { background: #1C1C20; border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+.box .row { border-radius: 14px; }
+.box .row.focus { background: #FFF; color: #111; box-shadow: none; }
+.box .row.focus .value, .box .row.focus .value .chev { color: #555; }
+#saver .clock { background: rgba(0, 0, 0, 0.35); box-shadow: none; border-radius: 28px; }
+
+/* Light of the day: two soft blue glows drift slowly under the content (transform only); the blue deepens with the hour. */
+#sky .glow {
+  position: absolute;
+  width: 1500px;
+  height: 1500px;
+  border-radius: 750px;
+  opacity: 0.75;
+  background: -webkit-radial-gradient(center, rgba(150, 190, 255, 0.8), rgba(150, 190, 255, 0) 65%); background: radial-gradient(circle, rgba(150, 190, 255, 0.8), rgba(150, 190, 255, 0) 65%);
+  -webkit-transition: opacity 3s;
+  transition: opacity 3s;
+}
+#sky .glow.a { left: -500px; top: -700px; -webkit-animation: glow-a 90s ease-in-out infinite alternate; animation: glow-a 90s ease-in-out infinite alternate; }
+#sky .glow.b { left: 1000px; top: 300px; -webkit-animation: glow-b 120s ease-in-out infinite alternate; animation: glow-b 120s ease-in-out infinite alternate; }
+.ph-morning #sky .glow { background: -webkit-radial-gradient(center, rgba(185, 212, 255, 0.85), rgba(185, 212, 255, 0) 65%); background: radial-gradient(circle, rgba(185, 212, 255, 0.85), rgba(185, 212, 255, 0) 65%); }
+.ph-golden #sky .glow { background: -webkit-radial-gradient(center, rgba(105, 140, 255, 0.7), rgba(105, 140, 255, 0) 65%); background: radial-gradient(circle, rgba(105, 140, 255, 0.7), rgba(105, 140, 255, 0) 65%); }
+.night #sky .glow { opacity: 0.4; background: -webkit-radial-gradient(center, rgba(40, 80, 210, 0.8), rgba(40, 80, 210, 0) 65%); background: radial-gradient(circle, rgba(40, 80, 210, 0.8), rgba(40, 80, 210, 0) 65%); }
+.drawer-open #sky .glow { opacity: 0.4; }
+@-webkit-keyframes glow-a { from { -webkit-transform: translate(0, 0); } to { -webkit-transform: translate(700px, 300px); } }
+@keyframes glow-a { from { transform: translate(0, 0); } to { transform: translate(700px, 300px); } }
+@-webkit-keyframes glow-b { from { -webkit-transform: translate(0, 0); } to { -webkit-transform: translate(-800px, -350px); } }
+@keyframes glow-b { from { transform: translate(0, 0); } to { transform: translate(-800px, -350px); } }
+.night .tile.focus { box-shadow: 0 0 0 4px #FFF, 0 18px 36px rgba(0, 0, 0, 0.6); }
+
+/* With picks, the clock is a small time and date beside the buttons; without them it stays the big one. */
+#clock { display: block; left: auto; right: 340px; top: 58px; width: 400px; white-space: nowrap; text-align: right; font-size: 46px; font-weight: 300; letter-spacing: 0; }
+#clock .date { font-size: 20px; margin-top: 4px; }
+.no-picks #clock { left: 76px; right: auto; top: 300px; width: auto; text-align: left; font-size: 176px; font-weight: 200; letter-spacing: -0.01em; }
+.no-picks #clock .date { font-size: 40px; margin-top: 18px; }
+
+/* Lower picks: the first is the hero, the others stay quiet until focused. */
+.card { top: 320px; height: 300px; }
+.card .name { top: 322px; }
+.card .meta { top: 364px; }
+.card .img { -webkit-transition: box-shadow 0.22s, opacity 0.25s; transition: box-shadow 0.22s, opacity 0.25s; }
+.card + .card:not(.focus) .img { opacity: 0.5; }
+.card + .card:not(.focus) .name { opacity: 0.6; }
+
+/* Samsung blue as the one accent: the selected tab, the switches and the settings title. */
+.tab.on { color: #1B5BE0; }
+.night .tab.on { color: #7DB2FF; }
+.toggle.on { background: #3E91FF; }
+.box .title .sym { color: #7DB2FF; }
+
+/* Focus in translucent Samsung blue instead of the white ring: a thin line and a soft halo. */
+.card .img::after { box-shadow: inset 0 0 0 3px rgba(62, 145, 255, 0.9); background: none; }
+.card.focus .img { box-shadow: 0 0 0 7px rgba(62, 145, 255, 0.3), 0 24px 46px rgba(0, 0, 0, 0.3); }
+.tile.focus, .night .tile.focus { box-shadow: 0 0 0 4px rgba(62, 145, 255, 0.9), 0 0 0 10px rgba(62, 145, 255, 0.28), 0 18px 36px rgba(0, 0, 0, 0.4); }
+
+.round.focus { background: rgba(62, 145, 255, 0.18); color: #1B5BE0; box-shadow: 0 0 0 3px rgba(62, 145, 255, 0.85), 0 0 0 9px rgba(62, 145, 255, 0.22); }
+.night .round.focus { background: rgba(62, 145, 255, 0.32); color: #FFF; box-shadow: 0 0 0 3px rgba(125, 178, 255, 0.9), 0 0 0 9px rgba(62, 145, 255, 0.25); }
+.round.focus .tip { color: #1B5BE0; }
+.night .round.focus .tip { color: #D6E6FF; }
+
+.tab.focus { background: rgba(62, 145, 255, 0.16); color: #1B5BE0; box-shadow: 0 0 0 3px rgba(62, 145, 255, 0.85); }
+.night .tab.focus { background: rgba(62, 145, 255, 0.3); color: #FFF; box-shadow: 0 0 0 3px rgba(125, 178, 255, 0.9); }
+
+.key.focus { background: rgba(62, 145, 255, 0.2); color: #1B5BE0; box-shadow: 0 0 0 3px rgba(62, 145, 255, 0.85), 0 0 0 9px rgba(62, 145, 255, 0.22); }
+.night .key.focus { background: rgba(62, 145, 255, 0.34); color: #FFF; box-shadow: 0 0 0 3px rgba(125, 178, 255, 0.9), 0 0 0 9px rgba(62, 145, 255, 0.25); }
+
+.box .row.focus { background: rgba(62, 145, 255, 0.3); color: #FFF; box-shadow: inset 0 0 0 2px rgba(125, 178, 255, 0.85); }
+.box .row.focus .value, .box .row.focus .value .chev { color: #D6E6FF; }
+
+/* Focus ring with a gap: a 2px line 5px outside the element, plus a soft halo (a pseudo-element, so it follows the radius). */
+.card::before, .tile::before, .round::before, .tab::before, .key::before, .mcell::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: -7px;
+  right: -7px;
+  bottom: -7px;
+  border: 2px solid rgba(62, 145, 255, 0.95);
+  border-radius: 21px;
+  box-shadow: 0 0 24px rgba(62, 145, 255, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: opacity 0.17s;
+  transition: opacity 0.17s;
+}
+.round::before { border-radius: 50%; left: -6px; top: -6px; right: -6px; bottom: -6px; }
+.tab::before { border-radius: 35px; }
+.key::before { border-radius: 25px; }
+.card.focus::before, .tile.focus::before, .round.focus::before, .tab.focus::before, .key.focus::before, .mcell.focus::before { opacity: 1; }
+.tile { overflow: visible; }
+.card .img::after { box-shadow: none; }
+.card.focus .img { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28); }
+.tile.focus, .night .tile.focus { box-shadow: 0 18px 36px rgba(0, 0, 0, 0.4); }
+.round.focus, .night .round.focus { box-shadow: none; }
+.tab.focus, .night .tab.focus { box-shadow: none; }
+.key.focus, .night .key.focus { box-shadow: none; }
+
+/* "See more": the card at the end of the picks, and the grid it opens. */
+.card.more .img { background-color: rgba(62, 145, 255, 0.1); box-shadow: none; }
+.card.more .sym { position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; color: #1B5BE0; }
+.night .card.more .sym { color: #7DB2FF; }
+.card.more .name { left: 0; width: 100%; text-align: center; font-size: 26px; }
+#more .mcell { position: absolute; width: 380px; height: 214px; -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2); transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+#more .mcell .img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; border-radius: 14px; background-color: #26262B; background-size: cover; background-position: center; }
+#more .mcell .name { position: absolute; left: 0; right: 0; top: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 24px; font-weight: 500; color: rgba(255, 255, 255, 0.7); }
+#more .mcell.focus { -webkit-transform: scale(1.04); transform: scale(1.04); z-index: 2; }
+#more .mcell.focus .name { color: #FFF; }
+#more { background: rgba(10, 12, 18, 0.95); }
+
+/* A quiet arrow under the shelf while it has focus: down is where the inputs, the weather and the settings are. */
+#hint { position: absolute; left: 50%; top: 1030px; width: 40px; height: 32px; margin-left: -20px; color: #6E6E73; opacity: 0; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; }
+#hint.on { opacity: 0.8; -webkit-animation: hint-bob 1.8s ease-in-out infinite; animation: hint-bob 1.8s ease-in-out infinite; }
+#hint .sym { position: absolute; left: 4px; top: 0; width: 32px; height: 32px; }
+.night #hint { color: rgba(255, 255, 255, 0.7); }
+@-webkit-keyframes hint-bob { 0%, 100% { -webkit-transform: translateY(0); } 50% { -webkit-transform: translateY(6px); } }
+@keyframes hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }

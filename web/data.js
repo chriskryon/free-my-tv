@@ -48,6 +48,8 @@ var Prefs = (function () {
     theme: function () { return pick('theme', 'auto'); },
     weather: function () { return pick('weather', true); },
     quotes: function () { return pick('quotes', CONFIG.showCrypto !== false); },
+    picks: function () { return pick('picks', true); },
+    photos: function () { return pick('photos', 'hd'); },
     coin: function (i) { var c = pick('coins', null); return c ? c[i] !== false : true; },
     shelf: function () { return pick('shelf', null); },
     set: function (name, value) { v[name] = value; save(); this.version++; },
@@ -488,6 +490,33 @@ var Data = (function () {
     }
   }
 
+  /** "See more": up to 12 more picks of the tab's kind that are on an app of this TV, apart from the ones on the home screen. */
+  var MORE_MAX = 12;
+
+  function moreOf(kind, playable) {
+    var cur = {}, shown = now(kind), out = [];
+    for (var i = 0; i < shown.length; i++) cur[keyOf(shown[i])] = true;
+    for (var j = 0; j < picks.length && out.length < (playable ? MORE_MAX : 16); j++) {
+      var p = picks[j];
+      if ((kind === null || kind === p.kind) && !cur[keyOf(p)] && (playable ? p.detailed && p.app && appFor(p.app) : !p.detailed)) out.push(p);
+    }
+    return out;
+  }
+
+  var loadingMore = false;
+
+  /** Fetches the details of the next candidates one by one (only when the sheet opens), calling update as each arrives. */
+  function loadMore(kind, update) {
+    if (!KEY || loadingMore) return;
+    var todo = moreOf(kind, false);
+    if (!todo.length) return;
+    loadingMore = true;
+    each(todo, function (x, next) {
+      if (moreOf(kind, true).length >= MORE_MAX) { next(); return; }
+      details(x, function () { update(); next(); });
+    }, function () { loadingMore = false; saveRecs(); update(); });
+  }
+
   /** This hour's picks for the three tabs, without repeats (the screensaver shows them too). */
   function all() {
     var out = [], seen = {}, kinds = [null, 'movie', 'tv'];
@@ -524,6 +553,8 @@ var Data = (function () {
     hasKey: function () { return !!KEY; },
     recsError: function () { return recsError; },
     picks: now,
+    more: function (kind) { return moreOf(kind, true); },
+    loadMore: loadMore,
     showcase: all,
     image: function (path, size) { return path ? 'https://image.tmdb.org/t/p/' + (size || 'w1280') + path : ''; },
 
