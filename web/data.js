@@ -50,6 +50,7 @@ var Prefs = (function () {
     quotes: function () { return pick('quotes', CONFIG.showCrypto !== false); },
     picks: function () { return pick('picks', true); },
     photos: function () { return pick('photos', 'hd'); },
+    mode: function () { return pick('mode', 'default'); },
     coin: function (i) { var c = pick('coins', null); return c ? c[i] !== false : true; },
     shelf: function () { return pick('shelf', null); },
     set: function (name, value) { v[name] = value; save(); this.version++; },

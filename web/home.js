@@ -12,8 +12,29 @@
 
   function $(id) { return document.getElementById(id); }
 
-  /** Optional look variants (heroi.html, barra.html, calmo.html set window.VARIANT); without it everything is as before. */
-  var V = window.VARIANT || {};
+  /** Screen modes: the default look plus four. V holds the current one's numbers; body gets a class m-<id> for modes.css. */
+  var MODES = {
+    'default': {},
+    hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
+    focus: {},
+    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true},
+    calm: {calm: true}
+  };
+  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm'];
+  var V = {};
+
+  function modeNames() {
+    return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'), calm: tr('Calm mode')};
+  }
+
+  /** The saved mode, or ?mode=hero in the address (to preview one). */
+  function applyMode() {
+    var q = /[?&]mode=(\w+)/.exec(location.search), id = q ? q[1] : Prefs.mode();
+    if (!MODES[id]) id = 'default';
+    V = MODES[id];
+    heroId = null;
+    for (var i = 0; i < MODE_IDS.length; i++) setClass(body, 'm-' + MODE_IDS[i], MODE_IDS[i] === id);
+  }
 
   function el(tag, cls, parent, text) {
     var e = document.createElement(tag);
@@ -266,11 +287,11 @@
   }
 
   /** heroi.html: the focused pick fills the screen, with its title over the photo. */
-  var heroId = null, heroFront = 0;
+  var heroId = null, heroFront = 0;   // heroId is read by applyMode (hoisted var)
 
   function renderHero() {
-    if (!V.hero) return;
     var h = $('hero');
+    if (!V.hero) { if (h) h.style.display = 'none'; return; }
     if (!h) {
       h = el('div', '', null);
       h.id = 'hero';
@@ -281,6 +302,7 @@
       el('div', 'hmeta', h);
       $('home').parentNode.insertBefore(h, $('home'));
     }
+    h.style.display = '';
     var i = st.zone === Z.CARDS && st.card < cards.length ? st.card : 0, p = cards[i];
     setClass(h, 'on', !!p);
     if (!p || p.id === heroId) return;
@@ -330,10 +352,11 @@
   /** The bar: a side panel (Live TV, inputs, All Apps, Settings) on the left, the apps after it. */
   function renderShelf() {
     var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
+    if (V.rail) { panelW = 0; lead = 0; }
     var avail = 1760 - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
     var tw = Math.min(V.tile || 140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
-    var left = 80 + pad + panelW + lead, mid = barTop + barH / 2;
+    var left = 80 + pad + panelW + lead + (V.rail ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = '80px';
     platter.style.width = '1760px';
@@ -344,9 +367,9 @@
     side.innerHTML = '';
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
-      var r = el('button', 'sidebtn r' + Math.floor(b / 2), side);
-      r.style.left = (80 + pad + (b % 2) * 84) + 'px';
-      r.style.top = (mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
+      r.style.left = (V.rail ? 14 : 80 + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.rail ? 330 + b * 74 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -567,6 +590,8 @@
         step: function () { Prefs.set('picks', !Prefs.picks()); cards = []; renderCards(); }},
       {label: tr('Picks photos'), value: {sd: 'SD', hd: 'HD', fhd: 'Full HD'}[Prefs.photos()], dim: !Prefs.picks(),
         step: function (d) { if (Prefs.picks()) { cycle('photos', ['sd', 'hd', 'fhd'], Prefs.photos(), d); cards = []; renderCards(); } }},
+      {label: tr('Screen mode'), value: modeNames()[Prefs.mode()],
+        step: function (d) { cycle('mode', MODE_IDS, Prefs.mode(), d); renderAll(); }},
       {label: tr('Quotes widget'), toggle: Prefs.quotes(),
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
@@ -805,7 +830,7 @@
     var tiles = $('tiles').children, cardNodes = $('cards').children;
     switch (st.zone) {
       case Z.SHELF:
-        if (dx < 0 && st.shelf === 0) { st.zone = Z.SIDE; st.side = 1; break; }
+        if (dx < 0 && st.shelf === 0) { st.zone = Z.SIDE; st.side = V.rail ? 3 : 1; break; }
         if (dx) st.shelf = Math.max(0, Math.min(shelf.length - 1, st.shelf + dx));
         else if (dy > 0) { openDrawer(); return; }
         else if (dy < 0) {
@@ -814,6 +839,15 @@
         }
         break;
       case Z.SIDE:
+        if (V.rail) {
+          if (dy) st.side = Math.max(0, Math.min(3, st.side + dy));
+          else if (dx > 0) {
+            if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
+            else if (shelf.length) { st.zone = Z.SHELF; st.shelf = 0; }
+            else { st.zone = Z.TOP; st.top = st.tab; }
+          }
+          break;
+        }
         if (dx > 0 && st.side % 2 === 1) { if (shelf.length) { st.zone = Z.SHELF; st.shelf = 0; } }
         else if (dx) st.side = Math.max(st.side - st.side % 2, Math.min(st.side - st.side % 2 + 1, st.side + dx));
         else if (dy > 0) { if (st.side < 2) st.side += 2; else { openDrawer(); return; } }
@@ -824,12 +858,14 @@
         }
         break;
       case Z.CARDS:
+        if (dx < 0 && st.card === 0 && V.rail) { st.zone = Z.SIDE; st.side = 0; break; }
         if (dx) st.card = Math.max(0, Math.min(cards.length, st.card + dx));
         else if (dy < 0) { st.zone = Z.TOP; st.top = st.tab; }
         else if (shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(tiles, centerX(cardNodes[st.card])); }
         break;
       case Z.TOP:
         if (dx) {
+          if (dx < 0 && st.top === 0 && V.rail) { st.zone = Z.SIDE; st.side = 0; break; }
           st.top = Math.max(0, Math.min(2, st.top + dx));
           selectTab(st.top);   // as on Apple TV: focusing a tab selects it
         } else if (dy > 0) {
@@ -1004,6 +1040,7 @@
   // MARK: - Start
 
   function renderAll() {
+    applyMode();
     var hint = $('hint');
     if (!hint.firstChild) { sym('chevron_down', hint); el('span', '', hint, tr('Weather and inputs')); }
     renderTop();

@@ -1,0 +1,59 @@
+/* The four screen modes besides the default look: each rule is scoped to its body class (m-hero, m-focus, m-bar, m-calm). */
+
+/* hero */
+.m-hero #hero { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #0A0C11; opacity: 0; -webkit-transition: opacity 0.5s; transition: opacity 0.5s; }
+.m-hero #hero.on { opacity: 1; }
+.m-hero.drawer-open #hero.on { opacity: 0.4; }
+.m-hero #hero .ph { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background-size: cover; background-position: center top; opacity: 0; -webkit-transition: opacity 0.8s; transition: opacity 0.8s; }
+.m-hero #hero .ph.on { opacity: 1; }
+.m-hero #hero .scrim {
+  position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: -webkit-linear-gradient(top, rgba(8, 10, 14, 0.7), rgba(8, 10, 14, 0) 26%), -webkit-linear-gradient(left, rgba(8, 10, 14, 0.92), rgba(8, 10, 14, 0.45) 55%, rgba(8, 10, 14, 0.1));
+  background: linear-gradient(180deg, rgba(8, 10, 14, 0.7), rgba(8, 10, 14, 0) 26%), linear-gradient(90deg, rgba(8, 10, 14, 0.92), rgba(8, 10, 14, 0.45) 55%, rgba(8, 10, 14, 0.1)); }
+.m-hero #hero .scrim::after {
+  content: ''; position: absolute; left: 0; top: 0; width: 1920px; height: 1080px;
+  background: -webkit-linear-gradient(bottom, rgba(8, 10, 14, 0.96), rgba(8, 10, 14, 0) 55%);
+  background: linear-gradient(0deg, rgba(8, 10, 14, 0.96), rgba(8, 10, 14, 0) 55%); }
+.m-hero #hero .htitle { position: absolute; left: 80px; bottom: 585px; width: 1000px; font-size: 76px; font-weight: 600; line-height: 1.05; letter-spacing: -0.02em; color: #FFF; -webkit-transition: opacity 0.2s; transition: opacity 0.2s; }
+.m-hero #hero .hmeta { position: absolute; left: 80px; bottom: 535px; width: 1000px; font-size: 30px; font-weight: 500; color: rgba(255, 255, 255, 0.78); -webkit-transition: opacity 0.2s; transition: opacity 0.2s; }
+.m-hero.drawer-open #hero .htitle, .m-hero.drawer-open #hero .hmeta { opacity: 0; }
+.m-hero #sky { opacity: 0; }
+.m-hero .card { top: 570px; height: 170px; }
+.m-hero .card .name { top: 186px; font-size: 24px; }
+.m-hero .card .meta { display: none; }
+.m-hero .card + .card:not(.focus) .img { opacity: 0.6; }
+.m-hero .card.more .name { top: 186px; }
+.m-hero .card .img::after { display: none; }
+
+/* focus */
+.m-focus .tile, .m-focus .card, .m-focus .sidebtn, .m-focus .tab, .m-focus .key, .m-focus #more .mcell {
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s, background-color 0.2s, opacity 0.3s;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s, background-color 0.2s, opacity 0.3s; }
+.m-focus .tile.focus, .m-focus.night .tile.focus { -webkit-transform: translateY(-12px) scale(1.14); transform: translateY(-12px) scale(1.14); box-shadow: 0 34px 46px rgba(0, 0, 0, 0.38); }
+.m-focus .card.focus { -webkit-transform: translateY(-10px) scale(1.06); transform: translateY(-10px) scale(1.06); }
+.m-focus .card.focus .img { box-shadow: 0 36px 54px rgba(0, 0, 0, 0.36); }
+.m-focus .sidebtn.focus { -webkit-transform: translateY(-4px) scale(1.12); transform: translateY(-4px) scale(1.12); }
+.m-focus .tab.focus { -webkit-transform: translateY(-3px) scale(1.08); transform: translateY(-3px) scale(1.08); }
+.m-focus .card::before, .m-focus .tile::before, .m-focus .sidebtn::before, .m-focus .tab::before, .m-focus .key::before, .m-focus .mcell::before { box-shadow: 0 0 36px rgba(62, 145, 255, 0.5); }
+.m-focus #tiles .tile:not(.focus) { opacity: 0.88; }
+
+/* bar */
+.m-bar .tile { border-radius: 38px; }
+.m-bar .tile::before { border-radius: 45px; }
+.m-bar .tile .word { font-size: 26px; }
+.m-bar .tile .nm { position: absolute; left: -30px; right: -30px; top: 100%; margin-top: 22px; text-align: center; font-size: 25px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #1D1D1F; opacity: 0; -webkit-transition: opacity 0.2s; transition: opacity 0.2s; }
+.m-bar.night .tile .nm { color: #F5F5F7; }
+.m-bar .tile.focus .nm { opacity: 1; }
+.m-bar #platter { border-radius: 56px; }
+.m-bar .sidebtn { width: 58px; height: 58px; border-radius: 20px; }
+.m-bar .sidebtn::before { border-radius: 27px; }
+.m-bar .sidebtn .sym { left: 14px; top: 14px; width: 30px; height: 30px; }
+.m-bar .sidebtn.ra .tip { left: 76px; top: 16px; margin-left: 0; width: auto; text-align: left; font-size: 24px; }
+.m-bar #clock { font-size: 66px; top: 44px; }
+.m-bar #clock .date { font-size: 24px; }
+.m-bar #hint { top: 1042px; }
+
+/* calm */
+.m-calm #tabs, .m-calm #quotes, .m-calm #title { display: none; }
+.m-calm.no-picks #clock { left: 0; right: auto; width: 1920px; top: 250px; text-align: center; font-size: 280px; font-weight: 200; letter-spacing: -0.02em; }
+.m-calm.no-picks #clock .date { font-size: 52px; margin-top: 26px; font-weight: 400; }
