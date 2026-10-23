@@ -684,3 +684,33 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .night #hint { color: rgba(255, 255, 255, 0.7); }
 @-webkit-keyframes hint-bob { 0%, 100% { -webkit-transform: translateY(0); } 50% { -webkit-transform: translateY(6px); } }
 @keyframes hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* The bar: one translucent rounded container, the side panel on the left and the apps after it. No blur (old TVs). */
+#platter { border-radius: 40px; background: rgba(255, 255, 255, 0.5); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85), 0 14px 34px rgba(0, 0, 0, 0.06); }
+.night #platter { background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+#side { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.sidebtn {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #1D1D1F;
+  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2), background-color 0.17s;
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2), background-color 0.17s;
+}
+.sidebtn .sym { position: absolute; left: 21px; top: 21px; width: 30px; height: 30px; }
+.sidebtn .tip { position: absolute; left: 50%; width: 300px; margin-left: -150px; text-align: center; font-size: 22px; font-weight: 600; white-space: nowrap; opacity: 0; color: #1B5BE0; -webkit-transition: opacity 0.14s; transition: opacity 0.14s; pointer-events: none; }
+.sidebtn.r0 .tip { top: -50px; }
+.sidebtn.r1 .tip { top: 82px; }
+.sidebtn.focus { background: rgba(62, 145, 255, 0.18); color: #1B5BE0; -webkit-transform: scale(1.06); transform: scale(1.06); }
+.sidebtn.focus .tip { opacity: 1; }
+.night .sidebtn { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.92); }
+.night .sidebtn.focus { background: rgba(62, 145, 255, 0.32); color: #FFF; }
+.night .sidebtn .tip { color: #D6E6FF; }
+.sidebtn::before { content: ''; position: absolute; left: -7px; top: -7px; right: -7px; bottom: -7px; border: 2px solid rgba(62, 145, 255, 0.95); border-radius: 31px; box-shadow: 0 0 24px rgba(62, 145, 255, 0.35); opacity: 0; pointer-events: none; -webkit-transition: opacity 0.17s; transition: opacity 0.17s; }
+.sidebtn.focus::before { opacity: 1; }
+
+/* The clock takes the corner the round buttons left. */
+#clock { right: 80px; }
+.no-picks #clock { right: auto; }
