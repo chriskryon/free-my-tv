@@ -364,6 +364,7 @@ var Data = (function () {
       }
       if (p.service && p.app) parts.push(p.service);
       p.meta = parts.join(' · ');
+      p.overview = o.overview || '';
       title(p, o, function () {
         p.detailed = true;
         done(null);
@@ -464,7 +465,7 @@ var Data = (function () {
     if (st === stamp && failedAt && t - failedAt < 10 * 60000 && t >= failedAt) return;
     var stale = st !== stamp || p !== period || t - listAt > 6 * 3600000 || t < listAt || !picks.length || listLang !== I18N.lang;
     var wanted = all(), missing = false;
-    for (var i = 0; i < wanted.length; i++) missing = missing || !wanted[i].detailed;
+    for (var i = 0; i < wanted.length; i++) missing = missing || !wanted[i].detailed || wanted[i].overview === undefined;
     if (!stale && !missing) return;
     fetchingRecs = true;
     stamp = st;
@@ -475,7 +476,7 @@ var Data = (function () {
       changed();
     }
     function detailWanted() {
-      var todo = all().filter(function (x) { return !x.detailed; });
+      var todo = all().filter(function (x) { return !x.detailed || x.overview === undefined; });
       each(todo, function (x, next) { details(x, function () { next(); }); }, function () { finish(null); });
     }
     if (stale) {

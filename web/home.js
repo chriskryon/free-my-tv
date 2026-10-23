@@ -16,9 +16,9 @@
   var MODES = {
     'default': {},
     hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
-    focus: {},
-    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true, sidebar: true, barLeft: 340, barWidth: 1500,
-          rects: [[380, 640], [1052, 300], [1384, 300]], moreLeft: 1716, moreWidth: 124},
+    focus: {glide: true},
+    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true, sidebar: true, barLeft: 160, barWidth: 1680,
+          rects: [[200, 720], [960, 340], [1340, 340]], moreLeft: 1720, moreWidth: 120},
     calm: {calm: true}
   };
   var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm'];
@@ -193,6 +193,7 @@
     if (langHint) langHint.textContent = (st.lang + 1) + ' / ' + languageChoices().length + '  ·  ' + tr('OK picks, Back cancels.');
     setClass(body, 'drawer-open', st.zone === Z.DRAWER);
     renderHero();
+    moveGlide();
   }
 
   function focusRows(sheet, index, on) {
@@ -287,8 +288,8 @@
     renderHero();
   }
 
-  /** heroi.html: the focused pick fills the screen, with its title over the photo. */
-  var heroId = null, heroFront = 0;   // heroId is read by applyMode (hoisted var)
+  /** Hero mode: the focused pick fills the screen, with its title, genre, synopsis, a Watch pill and a dot per pick. */
+  var heroId = null, heroFront = 0;   // heroId is also reset by applyMode (hoisted var)
 
   function renderHero() {
     var h = $('hero');
@@ -299,14 +300,27 @@
       el('div', 'ph', h);
       el('div', 'ph', h);
       el('div', 'scrim', h);
-      el('div', 'htitle', h);
-      el('div', 'hmeta', h);
+      var copy = el('div', 'hcopy', h);
+      el('div', 'htitle', copy);
+      el('div', 'hmeta', copy);
+      el('div', 'hover', copy);
+      var row = el('div', 'hrow', copy);
+      el('div', 'hbtn', row);
+      el('div', 'hdots', row);
       $('home').parentNode.insertBefore(h, $('home'));
     }
     h.style.display = '';
     var i = st.zone === Z.CARDS && st.card < cards.length ? st.card : 0, p = cards[i];
     setClass(h, 'on', !!p);
-    if (!p || p.id === heroId) return;
+    setClass(h, 'cardfocus', st.zone === Z.CARDS);
+    if (!p) return;
+    var dots = h.querySelector('.hdots');
+    if (dots.children.length !== cards.length) {
+      dots.innerHTML = '';
+      for (var d = 0; d < cards.length; d++) el('span', '', dots);
+    }
+    for (var k = 0; k < dots.children.length; k++) setClass(dots.children[k], 'on', k === i);
+    if (p.id === heroId) return;
     heroId = p.id;
     var layers = h.querySelectorAll('.ph');
     heroFront = 1 - heroFront;
@@ -315,6 +329,36 @@
     setClass(layers[1 - heroFront], 'on', false);
     h.querySelector('.htitle').textContent = p.title;
     h.querySelector('.hmeta').textContent = p.meta || '';
+    h.querySelector('.hover').textContent = p.overview || '';
+    var app = p.app && Data.appFor(p.app), btn = h.querySelector('.hbtn');
+    btn.textContent = app ? trf('Watch on {app}', {app: app.title}) : '';
+    setClass(btn, 'none', !app);
+  }
+
+  /** Spring-focus mode: one ring glides from the focused item to the next. */
+  function moveGlide() {
+    var g = $('glide');
+    if (!V.glide) { if (g) g.style.display = 'none'; return; }
+    if (!g) { g = el('div', '', $('home')); g.id = 'glide'; }
+    g.style.display = '';
+    var f = document.querySelector('#tabs .focus, #cards .focus, #tiles .focus, #side .focus');
+    if (!f || st.zone === Z.DRAWER || sheetOpen()) { setClass(g, 'on', false); return; }
+    var x = 0, y = 0, e = f, home = $('home'), pad = 10;
+    while (e && e !== home) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
+    var rounded = f.querySelector('.img') || f, r = parseFloat(getComputedStyle(rounded).borderRadius) || 20;
+    g.style.width = (f.offsetWidth + 2 * pad - 4) + 'px';
+    g.style.height = (f.offsetHeight + 2 * pad - 4) + 'px';
+    g.style.borderRadius = (r + pad) + 'px';
+    g.style.webkitTransform = g.style.transform = 'translate(' + (x - pad) + 'px,' + (y - pad) + 'px)';
+    setClass(g, 'on', true);
+  }
+
+  /** A short press on the focused item when OK is pressed (spring-focus mode). */
+  function pulse() {
+    var f = document.querySelector('.tile.focus, .card.focus, .tab.focus, .sidebtn.focus');
+    if (!f) return;
+    setClass(f, 'press', true);
+    setTimeout(function () { setClass(f, 'press', false); }, 170);
   }
 
   var bgUrl = null, bgFront = 'bgA';
@@ -346,6 +390,22 @@
     var sec = d.getSeconds();
     c.firstChild.textContent = formatDate('format|h:mm', d.getTime()) + ':' + (sec < 10 ? '0' : '') + sec;
     c.lastChild.textContent = formatDate('format|EEEE, MMMM d', d.getTime());
+    renderCalmWeather();
+  }
+
+  var calmKey = '';
+
+  /** Calm mode: the weather as one quiet line under the date. */
+  function renderCalmWeather() {
+    var e = $('calmwx'), w = Data.weather;
+    if (!e) { e = el('div', '', $('home')); e.id = 'calmwx'; }
+    if (!V.calm || !w) { e.innerHTML = ''; calmKey = ''; return; }
+    var key = w.code + ':' + w.temp + ':' + w.isDay;
+    if (key === calmKey) return;
+    calmKey = key;
+    e.innerHTML = '';
+    sym(Data.symbol(w.code, w.isDay), e);
+    e.appendChild(document.createTextNode(Data.degrees(w.temp) + '   ' + Data.condition(w.code, w.isDay)));
   }
 
   // MARK: - Shelf
@@ -366,12 +426,12 @@
     $('quotes').style.right = '80px';
     var side = $('side');
     side.innerHTML = '';
-    if (V.sidebar) { el('div', 'sidepanel', side); el('div', 'sidebrand', side, 'Free My TV'); }
+    if (V.sidebar) el('div', 'sidepanel', side);
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
-      r.style.left = (V.sidebar ? 44 : 80 + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.sidebar ? 300 + b * 92 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      r.style.left = (V.sidebar ? 40 : 80 + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.sidebar ? 370 + b * 92 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -783,6 +843,7 @@
   }
 
   function activate() {
+    if (V.glide) pulse();
     switch (st.zone) {
       case Z.TOP:
         return;
@@ -842,6 +903,7 @@
         break;
       case Z.SIDE:
         if (V.rail) {
+          if (dy > 0 && st.side === 3) { openDrawer(); return; }
           if (dy) st.side = Math.max(0, Math.min(3, st.side + dy));
           else if (dx > 0) {
             if (cards.length) { st.zone = Z.CARDS; st.card = 0; }
