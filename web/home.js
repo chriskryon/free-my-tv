@@ -17,7 +17,8 @@
     'default': {},
     hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
     focus: {},
-    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true},
+    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true, sidebar: true, barLeft: 340, barWidth: 1500,
+          rects: [[380, 640], [1052, 300], [1384, 300]], moreLeft: 1716, moreWidth: 124},
     calm: {calm: true}
   };
   var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm'];
@@ -274,7 +275,7 @@
     if (list.length) {
       var more = el('div', 'card more', holder);
       more.style.left = (V.moreLeft || 1660) + 'px';
-      more.style.width = '180px';
+      more.style.width = (V.moreWidth || 180) + 'px';
       sym('chevron_right', el('div', 'img', more));
       el('div', 'name', more, tr('See more'));
       hover(more, Z.CARDS, list.length);
@@ -353,23 +354,24 @@
   function renderShelf() {
     var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
     if (V.rail) { panelW = 0; lead = 0; }
-    var avail = 1760 - 2 * pad - panelW - lead;
+    var avail = (V.barWidth || 1760) - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
     var tw = Math.min(V.tile || 140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
-    var left = 80 + pad + panelW + lead + (V.rail ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
+    var left = (V.barLeft || 80) + pad + panelW + lead + (V.rail ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
     var platter = $('platter');
-    platter.style.left = '80px';
-    platter.style.width = '1760px';
+    platter.style.left = (V.barLeft || 80) + 'px';
+    platter.style.width = (V.barWidth || 1760) + 'px';
     platter.style.top = barTop + 'px';
     platter.style.height = barH + 'px';
     $('quotes').style.right = '80px';
     var side = $('side');
     side.innerHTML = '';
+    if (V.sidebar) { el('div', 'sidepanel', side); el('div', 'sidebrand', side, 'Free My TV'); }
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
-      r.style.left = (V.rail ? 14 : 80 + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.rail ? 330 + b * 74 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      r.style.left = (V.sidebar ? 44 : 80 + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.sidebar ? 300 + b * 92 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);

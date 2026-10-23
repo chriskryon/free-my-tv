@@ -45,15 +45,26 @@
 .m-bar.night .tile .nm { color: #F5F5F7; }
 .m-bar .tile.focus .nm { opacity: 1; }
 .m-bar #platter { border-radius: 56px; }
-.m-bar .sidebtn { width: 58px; height: 58px; border-radius: 20px; }
-.m-bar .sidebtn::before { border-radius: 27px; }
-.m-bar .sidebtn .sym { left: 14px; top: 14px; width: 30px; height: 30px; }
-.m-bar .sidebtn.ra .tip { left: 76px; top: 16px; margin-left: 0; width: auto; text-align: left; font-size: 24px; }
 .m-bar #clock { font-size: 66px; top: 44px; }
 .m-bar #clock .date { font-size: 24px; }
-.m-bar #hint { top: 1042px; }
 
 /* calm */
 .m-calm #tabs, .m-calm #quotes, .m-calm #title { display: none; }
 .m-calm.no-picks #clock { left: 0; right: auto; width: 1920px; top: 250px; text-align: center; font-size: 280px; font-weight: 200; letter-spacing: -0.02em; }
 .m-calm.no-picks #clock .date { font-size: 52px; margin-top: 26px; font-weight: 400; }
+
+/* bar: a real sidebar down the left, with the four entries as icon and label; the content sits to its right. */
+.m-bar #title { left: 380px; }
+.m-bar #tabs { left: 354px; }
+.m-bar .sidepanel { position: absolute; left: 24px; top: 24px; width: 276px; height: 1032px; border-radius: 44px; background: rgba(255, 255, 255, 0.55); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.85), 0 18px 40px rgba(0, 0, 0, 0.06); }
+.m-bar.night .sidepanel { background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.m-bar .sidebrand { position: absolute; left: 52px; top: 74px; white-space: nowrap; font-size: 28px; font-weight: 700; letter-spacing: -0.01em; color: #1D1D1F; }
+.m-bar.night .sidebrand { color: #F5F5F7; }
+.m-bar .sidebtn { width: 236px; height: 76px; border-radius: 26px; background: transparent; text-align: left; }
+.m-bar .sidebtn .sym { left: 20px; top: 23px; width: 30px; height: 30px; }
+.m-bar .sidebtn .tip { left: 66px; top: 0; width: auto; margin-left: 0; line-height: 76px; text-align: left; white-space: nowrap; font-size: 23px; font-weight: 600; opacity: 1; color: inherit; }
+.m-bar .sidebtn.focus { background: rgba(62, 145, 255, 0.18); color: #1B5BE0; -webkit-transform: none; transform: none; }
+.m-bar.night .sidebtn.focus { background: rgba(62, 145, 255, 0.32); color: #FFF; }
+.m-bar .sidebtn::before { border-radius: 33px; }
+.m-bar.drawer-open #side { opacity: 0; }
+.m-bar #hint { left: 1090px; top: 1042px; }
