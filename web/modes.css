@@ -1549,22 +1549,20 @@ body.m-glass #more .mchip.focus { background: #007AFF; color: #FFF; }
 .m-lounge .tile.focus .nm { color: #FFC266; }
 .m-lounge #hint { color: #B5A992; }
 
-/* Militar: a naval command display. A radar with a sweeping line, sonar-tinted pictures, grid coordinates, amber for data. */
+/* Militar: a naval command display. A chart of crosses with column letters and a few contacts, sonar-tinted pictures, grid coordinates, amber for data. */
 .m-military { font-family: Bahnschrift, 'Franklin Gothic Medium', 'Helvetica Neue', sans-serif; }
 .m-military #sky .night { background: -webkit-linear-gradient(top, #04141B, #020A0F); background: linear-gradient(#04141B, #020A0F); }
 .m-military #sky canvas { display: none; }
 .m-military #sky .veil { background: rgba(2, 10, 14, 0.4); }
-.m-military #sky .glow { opacity: 1; border-radius: 50%; }
-.m-military #sky .glow.a { left: 1000px; top: 20px; width: 1000px; height: 1000px; border: 2px solid rgba(92, 225, 230, 0.32); -webkit-animation: none; animation: none;
-  background-image: -webkit-repeating-radial-gradient(center, circle closest-side, rgba(92, 225, 230, 0.2) 0, rgba(92, 225, 230, 0.2) 2px, transparent 2px, transparent 100px);
-  background-image: repeating-radial-gradient(circle closest-side, rgba(92, 225, 230, 0.2) 0, rgba(92, 225, 230, 0.2) 2px, transparent 2px, transparent 100px); }
-.m-military #sky .glow.b { left: 1500px; top: 519px; width: 500px; height: 3px; border-radius: 0; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; -webkit-transform: rotate(-38deg); transform: rotate(-38deg); -webkit-animation: none; animation: none;
-  background: -webkit-linear-gradient(left, rgba(92, 225, 230, 0.9), rgba(92, 225, 230, 0)); background: linear-gradient(90deg, rgba(92, 225, 230, 0.9), rgba(92, 225, 230, 0));; }
-@-webkit-keyframes sweep { from { -webkit-transform: rotate(0deg); } to { -webkit-transform: rotate(360deg); } }
-@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.radar-on.m-military #sky .glow.b { -webkit-animation: sweep 12s steps(48) infinite; animation: sweep 12s steps(48) infinite; }
-.m-military #sky::after { content: 'A B C D E F G H I J K L M N O P Q R'; position: absolute; left: 96px; top: 8px; width: 1728px; height: 20px; overflow: hidden; white-space: nowrap; border-bottom: 1px solid rgba(92, 225, 230, 0.25);
-  font: 700 13px/16px 'Courier New', Courier, monospace; letter-spacing: 80px; color: rgba(92, 225, 230, 0.5); }
+.m-military #sky .glow { opacity: 1; border-radius: 0; -webkit-animation: none; animation: none; }
+/* the chart: a header of column letters and a few contacts (the first glow), a field of crosses (the sky's ::after) */
+.m-military #sky .glow.a { left: 96px; top: 8px; width: 1728px; height: 20px; background: none; border-bottom: 1px solid rgba(92, 225, 230, 0.25); }
+.m-military #sky .glow.a::after { content: 'A B C D E F G H I J K L M N O P Q R'; font: 700 13px/16px 'Courier New', Courier, monospace; letter-spacing: 80px; white-space: nowrap; color: rgba(92, 225, 230, 0.5); }
+.m-military #sky .glow.a::before { content: '\25CF'; position: absolute; left: 0; top: 40px; font-size: 14px; line-height: 14px; color: transparent;
+  text-shadow: 300px 260px 0 #FFB020, 820px 380px 0 #5CE1E6, 1260px 150px 0 #5CE1E6, 1500px 520px 0 #FFB020, 560px 610px 0 #5CE1E6, 1000px 700px 0 #FFB020, 1650px 330px 0 #5CE1E6, 170px 470px 0 #5CE1E6; }
+.m-military #sky .glow.b { display: none; }
+.m-military #sky::after { content: '++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++\A++++++++++++++++++++++++++++++++++++++++'; position: absolute; left: 0; top: 36px; width: 1920px; height: 1044px; overflow: hidden; white-space: pre;
+  font: 18px/47px 'Courier New', Courier, monospace; letter-spacing: 37px; color: rgba(92, 225, 230, 0.2); }
 .m-military #title { left: 96px; top: 54px; font-size: 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.24em; color: #5CE1E6; }
 .m-military #title::before { content: '\25B8 '; color: #FFB020; }
 .m-military #tabs { left: 70px; top: 148px; text-transform: uppercase; letter-spacing: 0.14em; }

@@ -751,7 +751,6 @@
   function applyLook() {
     setClass(body, 'reduce-motion', Prefs.reduce() || perf.slow);
     setClass(body, 'text-l', Prefs.large());
-    setClass(body, 'radar-on', Prefs.radar() && !(Prefs.reduce() || perf.slow));
   }
 
   function renderMini() {
@@ -992,7 +991,7 @@
       hacker: tr('A terminal on a black screen: green text and scanlines'),
       noir: tr('Gold on black, film strips and marquee lights'), vhs: tr('A video recorder menu: blue screen, channel numbers'),
       contrast: tr('Large white text on black, easy to read from far away'), zen: tr('Quiet paper, ink and one red dot'),
-      military: tr('A naval command display: radar, sonar and grid coordinates'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
+      military: tr('A naval command display: sonar tints, a chart grid and contacts'), material: tr('A dark phone-style theme: gray surfaces and a soft blue accent'),
       glass: tr('Soft light, rounded widgets, a segmented control and a frosted dock'),
       hyperos: tr('Vivid glowing wallpaper, frosted cards and a blue accent'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
@@ -1006,7 +1005,6 @@
       step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }});
     out.push({label: tr('Reduce motion'), toggle: Prefs.reduce(), step: function () { Prefs.set('reduce', !Prefs.reduce()); applyLook(); }});
     out.push({label: tr('Larger text'), toggle: Prefs.large(), step: function () { Prefs.set('large', !Prefs.large()); applyLook(); }});
-    if (Prefs.mode() === 'military') out.push({label: tr('Animated radar'), toggle: Prefs.radar(), step: function () { Prefs.set('radar', !Prefs.radar()); applyLook(); }});
     return out;
   }
 
