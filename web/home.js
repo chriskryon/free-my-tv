@@ -159,11 +159,11 @@
 
   // MARK: - Focus
 
-  var Z = {TOP: 'top', CARDS: 'cards', SIDE: 'side', SHELF: 'shelf', DRAWER: 'drawer', APPS: 'apps', MORE: 'more', SETTINGS: 'settings', EDIT: 'edit', LANG: 'lang'};
-  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, side: 0, shelf: 0, drawer: 0, grid: 0, more: 0, row: 0, edit: 0, lang: 0};
+  var Z = {TOP: 'top', CARDS: 'cards', SIDE: 'side', SHELF: 'shelf', DRAWER: 'drawer', APPS: 'apps', MORE: 'more', SETTINGS: 'settings', EDIT: 'edit', LANG: 'lang', MODEPICK: 'modepick'};
+  var st = {zone: Z.SHELF, top: 0, tab: 0, card: 0, side: 0, shelf: 0, drawer: 0, grid: 0, more: 0, row: 0, edit: 0, lang: 0, mp: 0};
   var cards = [];
 
-  function sheetOpen() { return st.zone === Z.APPS || st.zone === Z.MORE || st.zone === Z.SETTINGS || st.zone === Z.EDIT || st.zone === Z.LANG; }
+  function sheetOpen() { return st.zone === Z.APPS || st.zone === Z.MORE || st.zone === Z.SETTINGS || st.zone === Z.EDIT || st.zone === Z.LANG || st.zone === Z.MODEPICK; }
 
   function updateFocus() {
     var i, list;
@@ -190,6 +190,7 @@
     focusRows($('settings'), st.row, st.zone === Z.SETTINGS);
     focusRows($('shelfedit'), st.edit, st.zone === Z.EDIT);
     focusRows($('langpick'), st.lang, st.zone === Z.LANG);
+    focusRows($('modepick'), st.mp, st.zone === Z.MODEPICK);
     if (langHint) langHint.textContent = (st.lang + 1) + ' / ' + languageChoices().length + '  ·  ' + tr('OK picks, Back cancels.');
     setClass(body, 'drawer-open', st.zone === Z.DRAWER);
     renderHero();
@@ -751,6 +752,7 @@
     setClass($('settings'), 'open', false);
     setClass($('shelfedit'), 'open', false);
     setClass($('langpick'), 'open', false);
+    setClass($('modepick'), 'open', false);
     langHint = null;
     st.zone = Z.SHELF;
     updateFocus();
@@ -763,16 +765,11 @@
       bar: tr('Side menu and names under the apps'), calm: tr('A big clock and little else')};
   }
 
-  /** The five screen modes as choices (with a drawing each), then the theme, reduced motion and larger text. */
+  /** The screen mode (it opens its own menu), the theme, reduced motion and larger text. */
   function screenRows(theme, auto) {
-    var names = modeNames(), descs = modeDescs(), out = [];
-    for (var i = 0; i < MODE_IDS.length; i++) {
-      (function (id, first) {
-        out.push({section: first ? tr('Screen mode') : undefined, label: names[id], desc: descs[id], choice: id, selected: Prefs.mode() === id,
-          step: function (d) { if (d >= 0) { Prefs.set('mode', id); renderAll(); } }});
-      })(MODE_IDS[i], i === 0);
-    }
-    out.push({section: tr('Screen'), label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
+    var out = [{section: tr('Screen'), label: tr('Screen mode'), value: modeNames()[Prefs.mode()], opens: true, modes: true,
+      step: function (d) { if (d >= 0) openModes(); }}];
+    out.push({label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
       step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }});
     out.push({label: tr('Reduce motion'), toggle: Prefs.reduce(), step: function () { Prefs.set('reduce', !Prefs.reduce()); applyLook(); }});
     out.push({label: tr('Larger text'), toggle: Prefs.large(), step: function () { Prefs.set('large', !Prefs.large()); applyLook(); }});
@@ -830,13 +827,8 @@
     for (var i = 0; i < rowsNow.length; i++) {
       var r = rowsNow[i];
       if (r.section) el('div', 'sect', holder, r.section);
-      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.choice ? ' choice' : ''), holder, r.label);
-      if (r.choice) {
-        var th = el('div', 'thumb t-' + r.choice, row);
-        for (var m = 0; m < 6; m++) el('span', 'p' + m, th);
-        el('div', 'desc', row, r.desc);
-        if (r.selected) sym('check', row).className += ' tick';
-      } else if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
+      var row = el('div', 'row' + (r.dim ? ' dim' : ''), holder, r.label);
+      if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
       else {
         var v = el('span', 'value', row);
         if (r.value === '›') v.textContent = '›';
@@ -854,6 +846,57 @@
     st.row = 0;
     renderSettings();
     setClass($('settings'), 'open', true);
+    updateFocus();
+  }
+
+  // MARK: - Screen mode: its own menu, with a drawing for each mode; moving through it previews the mode, Back puts the old one back
+
+  var modeBefore = 'default';
+
+  function renderModes() {
+    var box = $('modepick').firstChild, names = modeNames(), descs = modeDescs();
+    box.innerHTML = '';
+    var title = el('div', 'title', box);
+    sym('tv_settings', title);
+    title.appendChild(document.createTextNode(tr('Screen mode')));
+    var list = el('div', 'list', box), holder = el('div', 'rows', list);
+    for (var i = 0; i < MODE_IDS.length; i++) {
+      var id = MODE_IDS[i], row = el('div', 'row choice', holder, names[id]);
+      var th = el('div', 'thumb t-' + id, row);
+      for (var m = 0; m < 6; m++) el('span', 'p' + m, th);
+      el('div', 'desc', row, descs[id]);
+      if (id === Prefs.mode()) sym('check', row).className += ' tick';
+      hover(row, Z.MODEPICK, i);
+    }
+    el('div', 'hint', box, tr('OK picks, Back cancels.'));
+    updateFocus();
+  }
+
+  function openModes() {
+    setClass($('settings'), 'open', false);
+    modeBefore = Prefs.mode();
+    st.zone = Z.MODEPICK;
+    st.mp = Math.max(0, MODE_IDS.indexOf(modeBefore));
+    renderModes();
+    setClass($('modepick'), 'open', true);
+    updateFocus();
+  }
+
+  /** The mode under the focus is shown on the home behind the menu as you move. */
+  function previewMode() {
+    var id = MODE_IDS[st.mp];
+    if (id === Prefs.mode()) return;
+    Prefs.set('mode', id);
+    renderAll();
+    renderModes();
+  }
+
+  /** OK keeps the mode, Back puts the old one back. Either way, back to Home Settings on the Screen mode row. */
+  function closeModes(pick) {
+    setClass($('modepick'), 'open', false);
+    if (!pick && Prefs.mode() !== modeBefore) { Prefs.set('mode', modeBefore); renderAll(); }
+    openSettings();
+    for (var i = 0; i < rowsNow.length; i++) if (rowsNow[i].modes) st.row = i;
     updateFocus();
   }
 
@@ -1025,6 +1068,9 @@
       case Z.EDIT:
         editShelf(0);
         return;
+      case Z.MODEPICK:
+        closeModes(true);
+        return;
       case Z.LANG:
         closeLanguages(true);
         return;
@@ -1108,6 +1154,9 @@
         if (dy) st.edit = Math.max(0, Math.min(apps.length - 1, st.edit + dy));
         else if (dx) editShelf(dx);
         break;
+      case Z.MODEPICK:
+        if (dy) { st.mp = Math.max(0, Math.min(MODE_IDS.length - 1, st.mp + dy)); previewMode(); return; }
+        break;
       case Z.LANG:
         if (dy) st.lang = Math.max(0, Math.min(languageChoices().length - 1, st.lang + dy));
         break;
@@ -1118,6 +1167,7 @@
   function back() {
     if (st.zone === Z.EDIT) { setClass($('shelfedit'), 'open', false); openSettings(); st.row = rowsNow.length - 2; updateFocus(); return; }
     if (st.zone === Z.LANG) { closeLanguages(false); return; }
+    if (st.zone === Z.MODEPICK) { closeModes(false); return; }
     if (sheetOpen()) { closeSheets(); return; }
     if (st.zone === Z.DRAWER) { closeDrawer(); return; }
     if (st.zone !== Z.SHELF && shelf.length) { st.zone = Z.SHELF; updateFocus(); return; }
@@ -1127,7 +1177,7 @@
   /** The pointer focuses what it's over (the Magic Remote, or a mouse when previewing). */
   function hover(node, zone, index) {
     node.onmouseover = function () {
-      if (saverOn || (sheetOpen() !== (zone === Z.APPS || zone === Z.MORE || zone === Z.SETTINGS || zone === Z.EDIT || zone === Z.LANG))) return;
+      if (saverOn || (sheetOpen() !== (zone === Z.APPS || zone === Z.MORE || zone === Z.SETTINGS || zone === Z.EDIT || zone === Z.LANG || zone === Z.MODEPICK))) return;
       if (zone === Z.DRAWER && st.zone !== Z.DRAWER) return;
       if (zone !== Z.DRAWER && st.zone === Z.DRAWER && zone !== Z.SHELF && zone !== Z.SIDE) return;
       if (zone === Z.SHELF && st.zone === Z.DRAWER) closeDrawer();
@@ -1142,6 +1192,7 @@
       else if (zone === Z.SETTINGS) st.row = index;
       else if (zone === Z.EDIT) st.edit = index;
       else if (zone === Z.LANG) st.lang = index;
+      else if (zone === Z.MODEPICK) st.mp = index;
       updateFocus();
     };
     node.onclick = function () { node.onmouseover(); activate(); };

@@ -449,7 +449,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .cell.focus .face { -webkit-transform: scale(1.08); transform: scale(1.08); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55), inset 0 0 0 2px rgba(255, 255, 255, 0.4); }
 .cell.focus .label { color: #FFF; }
 
-#settings .box, #shelfedit .box, #langpick .box {
+#settings .box, #shelfedit .box, #langpick .box, #modepick .box {
   position: absolute;
   left: 560px;
   top: 150px;
@@ -569,7 +569,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .key, .panel { border-radius: 18px; }
 .key.focus { background: #FFF; box-shadow: 0 0 0 4px #FFF, 0 16px 34px rgba(0, 0, 0, 0.4); transform: scale(1.05); -webkit-transform: scale(1.05); }
 
-#settings .box, #shelfedit .box, #langpick .box { background: #1C1C20; border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+#settings .box, #shelfedit .box, #langpick .box, #modepick .box { background: #1C1C20; border-radius: 28px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
 .box .row { border-radius: 14px; }
 .box .row.focus { background: #FFF; color: #111; box-shadow: none; }
 .box .row.focus .value, .box .row.focus .value .chev { color: #555; }
@@ -727,7 +727,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #platter { border-radius: 46px; }
 .sidebtn { border-radius: 28px; }
 .sidebtn::before { border-radius: 35px; }
-#settings .box, #shelfedit .box, #langpick .box { border-radius: 44px; }
+#settings .box, #shelfedit .box, #langpick .box, #modepick .box { border-radius: 44px; }
 .box .title { font-size: 42px; }
 .box .row { border-radius: 26px; background: rgba(255, 255, 255, 0.06); }
 .toggle { border-radius: 22px; }
@@ -757,19 +757,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .key { border-radius: 24px; }
 .key::before { border-radius: 31px; }
 #platter { border-radius: 50px; }
-#settings .box, #shelfedit .box, #langpick .box { border-radius: 48px; }
+#settings .box, #shelfedit .box, #langpick .box, #modepick .box { border-radius: 48px; }
 /* The hardware line is long ("4 cores · ~1 GB"): a smaller type. */
 #perf .row:last-child .v { font-size: 18px; }
 
 /* Home Settings: a panel docked to the right, in sections; the mode as a row of five small drawings. */
-#settings { background: rgba(0, 0, 0, 0.32); }
-#settings .box {
+#settings, #modepick { background: rgba(0, 0, 0, 0.32); }
+#settings .box, #modepick .box {
   left: 1164px; top: 0; width: 756px; height: 1080px; padding: 40px 32px 28px;
   border-radius: 48px 0 0 48px;
   -webkit-transform: translateX(90px); transform: translateX(90px);
   -webkit-transition: -webkit-transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1); transition: transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
-#settings.open .box { -webkit-transform: none; transform: none; }
+#settings.open .box, #modepick.open .box { -webkit-transform: none; transform: none; }
 #settings .list { height: 850px; }
 .box .sect { margin: 22px 18px 10px; font-size: 24px; font-weight: 600; color: rgba(255, 255, 255, 0.5); }
 .box .rows .sect:first-child { margin-top: 6px; }
@@ -847,3 +847,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #saver .clock .wx { margin-top: 12px; font-size: 34px; font-weight: 500; color: rgba(255, 255, 255, 0.88); text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4); }
 #saver .clock .wx .sym { width: 40px; height: 40px; vertical-align: -8px; margin-right: 12px; }
 #saver .clock .title { margin-top: 30px; font-size: 26px; color: rgba(255, 255, 255, 0.6); }
+
+#modepick .row.choice { height: 142px; padding-left: 236px; padding-top: 22px; margin-bottom: 12px; font-size: 32px; }
+#modepick .row.choice .desc { left: 236px; top: 70px; font-size: 22px; }
+#modepick .row.choice .thumb { left: 22px; top: 17px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(1.42); transform: scale(1.42); }
+#modepick .row.choice .tick { top: 50px; }
