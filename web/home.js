@@ -12,6 +12,9 @@
 
   function $(id) { return document.getElementById(id); }
 
+  /** Optional look variants (heroi.html, barra.html, calmo.html set window.VARIANT); without it everything is as before. */
+  var V = window.VARIANT || {};
+
   function el(tag, cls, parent, text) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -167,6 +170,7 @@
     focusRows($('langpick'), st.lang, st.zone === Z.LANG);
     if (langHint) langHint.textContent = (st.lang + 1) + ' / ' + languageChoices().length + '  ·  ' + tr('OK picks, Back cancels.');
     setClass(body, 'drawer-open', st.zone === Z.DRAWER);
+    renderHero();
   }
 
   function focusRows(sheet, index, on) {
@@ -227,7 +231,7 @@
   }
 
   function renderCards() {
-    var list = Prefs.picks() ? Data.picks(TAB_KIND[st.tab]) : [];
+    var list = Prefs.picks() && !V.calm ? Data.picks(TAB_KIND[st.tab]) : [];
     var holder = $('cards');
     setClass(body, 'no-picks', !list.length);
     var same = list.length === cards.length;
@@ -235,7 +239,7 @@
     if (same && holder.children.length === list.length + (list.length ? 1 : 0)) return;
     cards = list;
     holder.innerHTML = '';
-    var rects = [[80, 780], [900, 360], [1280, 360]];
+    var rects = V.rects || [[80, 780], [900, 360], [1280, 360]];
     for (var c = 0; c < list.length; c++) {
       var p = list[c], card = el('div', 'card', holder);
       card.style.left = rects[c][0] + 'px';
@@ -248,7 +252,7 @@
     }
     if (list.length) {
       var more = el('div', 'card more', holder);
-      more.style.left = '1660px';
+      more.style.left = (V.moreLeft || 1660) + 'px';
       more.style.width = '180px';
       sym('chevron_right', el('div', 'img', more));
       el('div', 'name', more, tr('See more'));
@@ -258,6 +262,36 @@
     if (!list.length && st.zone === Z.CARDS) st.zone = Z.SHELF;
     backdrop(list.length ? Data.image(list[0].backdrop, 'w300') : '');
     updateFocus();
+    renderHero();
+  }
+
+  /** heroi.html: the focused pick fills the screen, with its title over the photo. */
+  var heroId = null, heroFront = 0;
+
+  function renderHero() {
+    if (!V.hero) return;
+    var h = $('hero');
+    if (!h) {
+      h = el('div', '', null);
+      h.id = 'hero';
+      el('div', 'ph', h);
+      el('div', 'ph', h);
+      el('div', 'scrim', h);
+      el('div', 'htitle', h);
+      el('div', 'hmeta', h);
+      $('home').parentNode.insertBefore(h, $('home'));
+    }
+    var i = st.zone === Z.CARDS && st.card < cards.length ? st.card : 0, p = cards[i];
+    setClass(h, 'on', !!p);
+    if (!p || p.id === heroId) return;
+    heroId = p.id;
+    var layers = h.querySelectorAll('.ph');
+    heroFront = 1 - heroFront;
+    layers[heroFront].style.backgroundImage = 'url(' + Data.image(p.backdrop, Prefs.photos() === 'fhd' ? 'w1280' : 'w780') + ')';
+    setClass(layers[heroFront], 'on', true);
+    setClass(layers[1 - heroFront], 'on', false);
+    h.querySelector('.htitle').textContent = p.title;
+    h.querySelector('.hmeta').textContent = p.meta || '';
   }
 
   var bgUrl = null, bgFront = 'bgA';
@@ -295,10 +329,10 @@
 
   /** The bar: a side panel (Live TV, inputs, All Apps, Settings) on the left, the apps after it. */
   function renderShelf() {
-    var n = shelf.length, gap = 40, pad = 28, panelW = 156, lead = 36, barTop = 800, barH = 200;
+    var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
     var avail = 1760 - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
-    var tw = Math.min(140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
+    var tw = Math.min(V.tile || 140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
     var left = 80 + pad + panelW + lead, mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = '80px';
@@ -326,6 +360,7 @@
       t.style.width = tw + 'px';
       t.style.height = th + 'px';
       face(shelf[i], t, wordFit(shelf[i].title, tw, 30));
+      if (V.names) el('div', 'nm', t, shelf[i].title);
       hover(t, Z.SHELF, i);
     }
     st.shelf = Math.min(st.shelf, Math.max(0, n - 1));
@@ -878,7 +913,7 @@
   // MARK: - Night, clock, screensaver
 
   function checkNight() {
-    var now = Date.now(), night = Data.isNight(now);
+    var now = Date.now(), night = V.dark || Data.isNight(now);
     // Afternoon: in the 3 hours before sunset the sky fades to night; from halfway the text and surfaces switch too.
     var ramp = 0;
     if (!night && Prefs.theme() === 'auto') {

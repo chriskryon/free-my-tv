@@ -1,0 +1,30 @@
+/* barra.html: bigger app icons with their name under the focused one, a taller bar and a larger clock. */
+.tile { border-radius: 38px; }
+.tile::before { border-radius: 45px; }
+.tile .word { font-size: 26px; }
+.tile .nm {
+  position: absolute;
+  left: -30px;
+  right: -30px;
+  top: 100%;
+  margin-top: 22px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1D1D1F;
+  opacity: 0;
+  -webkit-transition: opacity 0.2s;
+  transition: opacity 0.2s;
+}
+.night .tile .nm { color: #F5F5F7; }
+.tile.focus .nm { opacity: 1; }
+#platter { border-radius: 56px; }
+.sidebtn { width: 84px; height: 84px; border-radius: 30px; }
+.sidebtn::before { border-radius: 37px; }
+.sidebtn .sym { left: 27px; top: 27px; width: 30px; height: 30px; }
+#clock { font-size: 66px; top: 44px; }
+#clock .date { font-size: 24px; }
+#hint { top: 1042px; }

@@ -1,0 +1,4 @@
+/* calmo.html: almost empty. A very large clock and the bar; the tabs, the quotes and the picks are gone. */
+#tabs, #quotes, #title { display: none; }
+.no-picks #clock { left: 0; right: auto; width: 1920px; top: 250px; text-align: center; font-size: 280px; font-weight: 200; letter-spacing: -0.02em; }
+.no-picks #clock .date { font-size: 52px; margin-top: 26px; font-weight: 400; }
