@@ -822,20 +822,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-hero .p3 { left: 10px; bottom: 22px; width: 24px; height: 13px; background: rgba(255, 255, 255, 0.4); box-shadow: 28px 0 0 rgba(255, 255, 255, 0.25), 56px 0 0 rgba(255, 255, 255, 0.25); }
 .t-hero .p4 { left: 8px; right: 8px; bottom: 6px; height: 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.14); }
 .t-hero .p5 { right: 10px; top: 10px; width: 5px; height: 5px; border-radius: 3px; background: #FFF; box-shadow: -9px 0 0 rgba(255, 255, 255, 0.4); }
-/* focus: tiles with one lifted and ringed */
-.t-focus .p0 { left: 9px; top: 8px; width: 24px; height: 4px; background: #1D1D1F; }
-.t-focus .p1 { left: 9px; top: 18px; width: 58px; height: 26px; border-radius: 6px; background: #5B6B86; }
-.t-focus .p2 { left: 72px; top: 14px; width: 30px; height: 34px; border-radius: 8px; background: #7C8BA6; box-shadow: 0 0 0 3px rgba(62, 145, 255, 0.95), 0 0 12px rgba(62, 145, 255, 0.6); }
-.t-focus .p3 { left: 106px; top: 18px; width: 18px; height: 26px; border-radius: 6px; background: #A9B4C8; }
-.t-focus .p4 { left: 9px; right: 9px; bottom: 7px; height: 14px; border-radius: 7px; background: rgba(255, 255, 255, 0.9); }
-.t-focus .p5 { left: 15px; bottom: 10px; width: 14px; height: 8px; border-radius: 3px; background: #3E91FF; box-shadow: 18px 0 0 #1D1D1F, 36px 0 0 #E5484D; }
-/* bar: a slim side menu with the bar next to it */
-.t-bar .p0 { left: 28px; top: 8px; width: 24px; height: 4px; background: #1D1D1F; }
-.t-bar .p1 { left: 28px; top: 18px; width: 62px; height: 30px; border-radius: 6px; background: #5B6B86; }
-.t-bar .p2 { left: 94px; top: 18px; width: 30px; height: 30px; border-radius: 6px; background: #A9B4C8; }
-.t-bar .p3 { left: 6px; bottom: 6px; width: 14px; height: 42px; border-radius: 7px; background: rgba(255, 255, 255, 0.95); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08); }
-.t-bar .p4 { left: 28px; right: 8px; bottom: 6px; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.9); }
-.t-bar .p5 { left: 32px; bottom: 9px; width: 14px; height: 10px; border-radius: 4px; background: #3E91FF; box-shadow: 20px 0 0 #1D1D1F, 40px 0 0 #E5484D; }
+/* focus: a dark stage, round icons, a warm ring */
+.t-focus { background: -webkit-linear-gradient(top, #1B1030, #0A0712); background: linear-gradient(#1B1030, #0A0712); }
+.t-focus .p0 { left: 20px; bottom: 14px; width: 14px; height: 14px; border-radius: 50%; background: #6B5A92; box-shadow: 22px 0 0 #6B5A92, 66px 0 0 #6B5A92, 88px 0 0 #6B5A92; }
+.t-focus .p1 { left: 41px; bottom: 11px; width: 20px; height: 20px; border-radius: 50%; background: #3A2A66; box-shadow: 0 0 0 2px #FFC83D; }
+.t-focus .p2 { left: 12px; top: 8px; width: 36px; height: 24px; border-radius: 8px; background: #4B3A78; }
+.t-focus .p3 { left: 54px; top: 6px; width: 40px; height: 28px; border-radius: 9px; background: #7C68B0; }
+.t-focus .p4 { left: 100px; top: 8px; width: 20px; height: 24px; border-radius: 8px; background: #4B3A78; }
+.t-focus .p5 { display: none; }
+/* bar: warm paper, a labeled side card, every app with its name */
+.t-bar { background: #F4EDE3; }
+.t-bar .p0 { left: 6px; bottom: 6px; width: 30px; height: 36px; border-radius: 6px; background: #FFFBF5; box-shadow: 0 0 0 1px rgba(42, 32, 24, 0.1); }
+.t-bar .p1 { left: 11px; bottom: 33px; width: 20px; height: 3px; background: #D2552B; box-shadow: 0 8px 0 #BDB0A0, 0 16px 0 #BDB0A0; }
+.t-bar .p2 { left: 42px; top: 8px; width: 52px; height: 26px; border-radius: 7px; background: #8A7E70; }
+.t-bar .p3 { left: 98px; top: 8px; width: 26px; height: 26px; border-radius: 7px; background: #C9BBA8; }
+.t-bar .p4 { left: 42px; right: 6px; bottom: 6px; height: 24px; border-radius: 8px; background: #FFFBF5; }
+.t-bar .p5 { left: 47px; bottom: 15px; width: 12px; height: 10px; border-radius: 3px; background: #D2552B; box-shadow: 16px 0 0 #2A2018, 32px 0 0 #3F6FB5, 48px 0 0 #2A2018; }
 /* calm: a big clock and almost nothing else */
 .t-calm { background: #15171C; }
 .t-calm .p0 { left: 20px; top: 14px; width: 92px; height: 24px; border-radius: 6px; background: rgba(255, 255, 255, 0.85); }
@@ -917,3 +919,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #modepick .row.choice .mode-option-name { display: block; overflow: hidden; text-overflow: ellipsis; }
 #modepick .row.choice .tick { position: absolute; right: 20px; top: 22px; width: 32px; height: 32px; color: #8DBAFF; }
 .text-l #modepick .row.choice { font-size: 30px; }
+/* Mission: near-black, thin lines, one blue accent. */
+.t-mission { background: #05070A; }
+.t-mission .p0 { left: 8px; top: 9px; width: 34px; height: 24px; background: #1C2532; box-shadow: 40px 0 0 #1C2532, 80px 0 0 #1C2532; }
+.t-mission .p1 { left: 48px; top: 9px; width: 34px; height: 24px; box-shadow: 0 0 0 1px #3BA0FF; }
+.t-mission .p2 { left: 8px; right: 8px; top: 41px; height: 1px; background: #5C6B7F; }
+.t-mission .p3 { left: 8px; top: 40px; width: 44px; height: 3px; background: #3BA0FF; }
+.t-mission .p4 { left: 8px; right: 8px; bottom: 5px; height: 16px; background: #0E131A; box-shadow: 0 0 0 1px #2A3442; }
+.t-mission .p5 { left: 12px; bottom: 9px; width: 9px; height: 9px; background: #E6EDF5; box-shadow: 14px 0 0 #E6EDF5, 28px 0 0 #E6EDF5, 42px 0 0 #3BA0FF, 56px 0 0 #E6EDF5; }

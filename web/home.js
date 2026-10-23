@@ -16,9 +16,9 @@
   var MODES = {
     'default': {},
     hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
-    focus: {glide: true},
-    bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true, sidebar: true, barLeft: 160, barWidth: 1680,
-          rects: [[200, 720], [960, 340], [1340, 340]], moreLeft: 1720, moreWidth: 120},
+    focus: {glide: true, dark: true},
+    bar: {tile: 150, gap: 28, names: true, barTop: 734, barH: 290, rail: true, sidebar: true, sideLeft: 64, sideTop: 758, sidePitch: 62, light: true,
+          barLeft: 360, barWidth: 1500, rects: [[360, 560], [950, 340], [1320, 340]], moreLeft: 1690, moreWidth: 170},
     calm: {calm: true},
     editorial: {hero: true, dark: true, editorial: true, tile: 116, gap: 32, barTop: 858, barH: 176, barLeft: 160, barWidth: 1600,
                 rects: [[80, 1000], [1160, 300], [1480, 300]], moreLeft: 1160, moreWidth: 300},
@@ -27,16 +27,18 @@
            rects: [[420, 600], [1040, 260], [1320, 260]], moreLeft: 1600, moreWidth: 240},
     orbital: {hero: true, dark: true, tile: 112, gap: 32, barTop: 850, barH: 180, barLeft: 96, barWidth: 1728,
               rects: [[96, 330], [460, 330], [824, 330]], moreLeft: 1188, moreWidth: 220},
+    mission: {dark: true, tile: 120, gap: 24, barTop: 760, barH: 176, barLeft: 96, barWidth: 1728,
+              rects: [[96, 520], [656, 520], [1216, 520]], moreLeft: 1760, moreWidth: 64},
     aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
              rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora'];
+  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora', 'mission'];
   var V = {};
 
   function modeNames() {
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
-      orbital: 'Orbital', aurora: 'Aurora'};
+      orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission')};
   }
 
   /** The saved mode, or ?mode=hero in the address (to preview one). */
@@ -165,7 +167,8 @@
       if (!out.length) out = apps.slice(0, MAX_SHELF);
     }
     shelf = out;
-    others = apps.filter(function (x) { return shelf.indexOf(x) < 0; });
+    // All Apps: every app, the shelf's first (the name `others` is from when it listed only the rest)
+    others = shelf.concat(apps.filter(function (x) { return shelf.indexOf(x) < 0; }));
   }
 
   // MARK: - Focus
@@ -386,7 +389,7 @@
     if (!f || st.zone === Z.DRAWER || sheetOpen()) { setClass(g, 'on', false); glideBox = null; return; }
     var x = 0, y = 0, e = f, home = $('home'), pad = 10;
     while (e && e !== home) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
-    var rounded = f.querySelector('.img') || f, r = parseFloat(getComputedStyle(rounded).borderRadius) || 20;
+    var rounded = f.querySelector('.img') || f, br = getComputedStyle(rounded).borderRadius, r = /%/.test(br) ? parseFloat(br) / 100 * Math.min(rounded.offsetWidth, rounded.offsetHeight) : parseFloat(br) || 20;
     var box = {x: x - pad, y: y - pad, w: f.offsetWidth + 2 * pad - 4, h: f.offsetHeight + 2 * pad - 4}, from = glideBox;
     g.style.width = box.w + 'px';
     g.style.height = box.h + 'px';
@@ -850,7 +853,8 @@
       editorial: tr('A large photo with its story beside it'),
       hoku: tr('Warm colors and a relaxed app dock'),
       orbital: tr('A cinematic mission-control view'),
-      aurora: tr('Northern lights over a quiet night')};
+      aurora: tr('Northern lights over a quiet night'),
+      mission: tr('A spacecraft touchscreen: thin lines, one blue accent')};
   }
 
   /** The screen mode (it opens its own menu), the theme, reduced motion and larger text. */
@@ -1403,7 +1407,7 @@
     var now = Date.now(), night = V.dark || (!V.light && Data.isNight(now));
     // Afternoon: in the 3 hours before sunset the sky fades to night; from halfway the text and surfaces switch too.
     var ramp = 0;
-    if (!night && Prefs.theme() === 'auto') {
+    if (!night && !V.light && Prefs.theme() === 'auto') {
       var d = new Date(now), mins = d.getHours() * 60 + d.getMinutes(), w = Data.weather;
       var set = w && w.sunset ? new Date(w.sunset).getHours() * 60 + new Date(w.sunset).getMinutes() : 1080;
       var rise = w && w.sunrise ? new Date(w.sunrise).getHours() * 60 + new Date(w.sunrise).getMinutes() : 360;
