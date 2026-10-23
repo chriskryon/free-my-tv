@@ -2008,3 +2008,136 @@ body.m-tvos #more .mchip.focus { background: #FFF; color: #000; }
   background: -webkit-linear-gradient(315deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 48%); background: linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 48%); }
 .m-tvos #hint { top: 1040px; color: rgba(255, 255, 255, 0.55); }
 .m-tvos.no-picks #clock { left: 96px; right: auto; top: 320px; text-align: left; font-size: 170px; }
+
+/* Switch: bright, playful and direct, with large games in the middle and four round controls below. */
+.m-switch { font-family: 'Segoe UI', Arial, sans-serif; }
+.m-switch #sky .day { background: -webkit-linear-gradient(top, #F8FAFD, #E8EDF3); background: linear-gradient(#F8FAFD, #E8EDF3); }
+.m-switch #sky .night, .m-switch #sky canvas { display: none; }
+.m-switch #sky .veil { background: transparent; }
+.m-switch #sky .glow { opacity: 0; }
+.m-switch #title { left: 80px; top: 42px; font-size: 48px; font-weight: 700; color: #273240; }
+.m-switch #tabs { left: 62px; top: 105px; }
+.m-switch .tab { height: 48px; line-height: 48px; padding: 0 22px; border-radius: 8px; color: #67717D; font-size: 22px; font-weight: 700; }
+.m-switch .tab.on { color: #E60012; }
+.m-switch .tab.focus { background: #E60012; color: #FFF; box-shadow: none; }
+.m-switch .tab.focus::before { display: none; }
+.m-switch #clock { top: 42px; color: #273240; font-size: 36px; font-weight: 600; }
+.m-switch #clock .date { color: #75808C; font-size: 18px; }
+.m-switch .card { top: 174px; height: 154px; }
+.m-switch .card .img, .m-switch .card .img::after { border-radius: 8px; }
+.m-switch .card .img { box-shadow: 0 8px 22px rgba(28, 42, 58, 0.18); }
+.m-switch .card .img::after { background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.62)); background: linear-gradient(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.62)); opacity: 1; box-shadow: none; }
+.m-switch .card .name { left: 18px; right: 18px; top: auto; bottom: 14px; max-width: none; color: #FFF; font-size: 24px; font-weight: 700; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); z-index: 1; }
+.m-switch .card .meta { display: none; }
+.m-switch .card.focus { -webkit-transform: scale(1.035); transform: scale(1.035); }
+.m-switch .card.focus .img { box-shadow: 0 0 0 5px #E60012, 0 14px 28px rgba(28, 42, 58, 0.24); }
+.m-switch .card.more .img { background: #DDE3EA; }
+.m-switch .card.more .sym { color: #45515E; }
+.m-switch .card.more .name { display: none; }
+.m-switch #platter { border-radius: 18px; background: rgba(255, 255, 255, 0.72); box-shadow: inset 0 0 0 1px rgba(52, 66, 82, 0.12), 0 16px 38px rgba(45, 59, 74, 0.1); }
+.m-switch .tile { border-radius: 10px; box-shadow: 0 8px 18px rgba(36, 50, 66, 0.2); -webkit-transition: -webkit-transform 0.16s; transition: transform 0.16s; }
+.m-switch .tile::after { display: none; }
+.m-switch .tile::before { left: -8px; top: -8px; right: -8px; bottom: -8px; border: 5px solid #E60012; border-radius: 16px; box-shadow: 0 0 0 2px #FFF; }
+.m-switch .tile.focus { -webkit-transform: scale(1.055); transform: scale(1.055); box-shadow: 0 16px 28px rgba(36, 50, 66, 0.28); }
+.m-switch .tile.focus::before { -webkit-animation: switch-pulse 1.35s ease-in-out infinite; animation: switch-pulse 1.35s ease-in-out infinite; }
+.m-switch .tile .nm { position: absolute; left: -24px; right: -24px; top: 100%; margin-top: 14px; color: #273240; text-align: center; font-size: 22px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; -webkit-transition: opacity 0.14s; transition: opacity 0.14s; }
+.m-switch .tile.focus .nm { opacity: 1; }
+.m-switch .sidebtn { width: 76px; height: 76px; border-radius: 50%; background: #FFF; color: #45515E; box-shadow: inset 0 0 0 2px #CDD4DC, 0 6px 14px rgba(43, 56, 70, 0.12); }
+.m-switch .sidebtn .sym { left: 21px; top: 21px; width: 34px; height: 34px; }
+.m-switch .sidebtn::before { left: -6px; top: -6px; right: -6px; bottom: -6px; border: 4px solid #00A8E8; border-radius: 50%; box-shadow: none; }
+.m-switch .sidebtn.focus { background: #00A8E8; color: #FFF; -webkit-transform: scale(1.08); transform: scale(1.08); }
+.m-switch .sidebtn .tip, .m-switch .sidebtn.r0 .tip { top: 88px; color: #45515E; font-size: 19px; }
+.m-switch #hint { top: 1018px; color: #6C7783; }
+.m-switch.no-picks #clock { left: 80px; right: auto; top: 190px; font-size: 150px; }
+@-webkit-keyframes switch-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes switch-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+/* Xbox: a dense black dashboard, lime focus and an asymmetric two-row game grid. */
+.m-xbox { font-family: 'Segoe UI', Arial, sans-serif; }
+.m-xbox #sky .day, .m-xbox #sky .night { background: -webkit-linear-gradient(145deg, #07140C, #020403 58%, #0A0D0B); background: linear-gradient(145deg, #07140C, #020403 58%, #0A0D0B); }
+.m-xbox #sky canvas { opacity: 0.12; }
+.m-xbox #sky .veil { background: rgba(0, 7, 3, 0.86); }
+.m-xbox #sky .glow { opacity: 0; }
+body.m-xbox #title { left: 172px; top: 42px; color: #F4F8F5; font-size: 50px; font-weight: 700; }
+.m-xbox #tabs { left: 150px; top: 110px; }
+.m-xbox .tab { border-radius: 3px; color: #96A39A; font-size: 23px; font-weight: 700; }
+.m-xbox .tab.on { color: #FFF; }
+.m-xbox .tab.focus { background: #9BF00B; color: #081005; box-shadow: none; }
+.m-xbox .tab.focus::before { display: none; }
+.m-xbox #clock { top: 44px; color: #FFF; font-size: 36px; }
+.m-xbox #clock .date { color: #8B9890; font-size: 18px; }
+.m-xbox .card { top: 174px; height: 108px; }
+.m-xbox .card .img, .m-xbox .card .img::after { border-radius: 2px; }
+.m-xbox .card .img { box-shadow: none; }
+.m-xbox .card .name, .m-xbox .card .meta { display: none; }
+.m-xbox .card.focus { -webkit-transform: scale(1.025); transform: scale(1.025); }
+.m-xbox .card.focus .img { box-shadow: 0 0 0 4px #9BF00B; }
+.m-xbox .card.more .img { background: #172019; }
+.m-xbox .card.more .sym { color: #9BF00B; }
+.m-xbox #platter { border-radius: 2px; background: rgba(10, 18, 12, 0.72); box-shadow: inset 0 0 0 1px rgba(155, 240, 11, 0.15); }
+.m-xbox .sidepanel { position: absolute; left: 88px; top: 326px; width: 2px; height: 430px; background: rgba(155, 240, 11, 0.2); }
+.m-xbox .sidebtn { width: 72px; height: 72px; border-radius: 2px; background: #121A14; color: #C8D0CB; box-shadow: inset 0 0 0 1px #2B352E; }
+.m-xbox .sidebtn.focus { background: #9BF00B; color: #071004; -webkit-transform: translateX(8px); transform: translateX(8px); }
+.m-xbox .sidebtn::before { display: none; }
+.m-xbox .sidebtn .tip, .m-xbox .sidebtn.ra .tip { left: 90px; top: 10px; width: auto; margin-left: 0; padding: 0 16px; height: 52px; line-height: 52px; border-radius: 2px; background: #9BF00B; color: #071004; text-align: left; opacity: 0; }
+.m-xbox .sidebtn.focus .tip { opacity: 1; }
+.m-xbox .tile { border-radius: 2px; box-shadow: none; -webkit-transition: -webkit-transform 0.14s; transition: transform 0.14s; }
+.m-xbox .tile::after { display: none; }
+.m-xbox .tile::before { left: -6px; top: -6px; right: -6px; bottom: -6px; border: 5px solid #9BF00B; border-radius: 2px; box-shadow: 0 0 24px rgba(155, 240, 11, 0.3); }
+.m-xbox .tile.focus, .m-xbox.night .tile.focus { -webkit-transform: scale(1.025); transform: scale(1.025); box-shadow: 0 18px 32px rgba(0, 0, 0, 0.5); }
+.m-xbox .tile .nm { position: absolute; left: 0; right: 0; bottom: 0; height: 48px; padding: 0 18px; line-height: 48px; color: #FFF; background: rgba(0, 0, 0, 0.72); font-size: 21px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-xbox .tile.focus .nm { background: #9BF00B; color: #071004; }
+.m-xbox #hint { top: 1018px; color: #829087; }
+.m-xbox.no-picks #clock { left: 172px; right: auto; top: 196px; font-size: 100px; }
+
+/* Switch and Xbox carry their palette through the drawer, settings and full-screen lists. */
+body.m-switch .sheet { color: #273240; }
+body.m-switch #settings .box, body.m-switch #shelfedit .box, body.m-switch #langpick .box, body.m-switch #modepick .box { background: #F7F9FC; }
+body.m-switch #settings .setting-items, body.m-switch #settings .category-panel { background: #E9EEF4; }
+body.m-switch #settings .sect, body.m-switch #settings .hint, body.m-switch #modepick .hint, body.m-switch .box .hint, body.m-switch #settings .category-row { color: #697582; }
+body.m-switch .box .title .sym, body.m-switch .box .row.choice .tick { color: #E60012; }
+body.m-switch #settings .row.focus, body.m-switch .box .row.focus, body.m-switch #settings .category-row.focus { background: #E60012; color: #FFF; box-shadow: none; }
+body.m-switch #settings .row.focus .value, body.m-switch #settings .row.focus .value .chev, body.m-switch .box .row.focus .value, body.m-switch .box .row.focus .value .chev { color: #FFF; }
+body.m-switch .toggle.on { background: #00A8E8; }
+body.m-switch #settings .category-row.selected { background: #DCE4EC; color: #273240; }
+body.m-switch #settings .category-icon { background: #DCE4EC; color: #E60012; }
+body.m-switch #more, body.m-switch #apps { background: rgba(244, 247, 250, 0.97); }
+body.m-switch #more .mcell .img { background-color: #DDE4EB; }
+body.m-switch #more .mcell .name, body.m-switch .cell .label { color: #65717D; }
+body.m-switch #more .mcell::before, body.m-switch .cell.focus .face { border-color: #E60012; box-shadow: 0 0 0 4px #E60012; }
+body.m-switch .glass { background: #FFF; color: #273240; box-shadow: inset 0 0 0 1px #CED6DE, 0 8px 20px rgba(37, 51, 66, 0.1); }
+body.m-switch .key.focus { background: #00A8E8; color: #FFF; }
+body.m-switch .key::before { border-color: #00A8E8; box-shadow: none; }
+
+body.m-xbox .sheet { color: #F3F7F4; }
+body.m-xbox #settings .box, body.m-xbox #shelfedit .box, body.m-xbox #langpick .box, body.m-xbox #modepick .box { background: #080D09; }
+body.m-xbox #settings .setting-items, body.m-xbox #settings .category-panel { background: #111813; }
+body.m-xbox #settings .sect, body.m-xbox #settings .hint, body.m-xbox #modepick .hint, body.m-xbox .box .hint, body.m-xbox #settings .category-row { color: #849087; }
+body.m-xbox .box .title .sym, body.m-xbox .box .row.choice .tick { color: #9BF00B; }
+body.m-xbox #settings .row.focus, body.m-xbox .box .row.focus, body.m-xbox #settings .category-row.focus { background: #9BF00B; color: #071004; box-shadow: none; }
+body.m-xbox #settings .row.focus .value, body.m-xbox #settings .row.focus .value .chev, body.m-xbox .box .row.focus .value, body.m-xbox .box .row.focus .value .chev { color: #071004; }
+body.m-xbox .toggle.on { background: #9BF00B; }
+body.m-xbox #settings .category-row.selected { background: #1E2A20; color: #FFF; }
+body.m-xbox #settings .category-icon { background: #1E2A20; color: #9BF00B; }
+body.m-xbox #more, body.m-xbox #apps { background: rgba(3, 7, 4, 0.97); }
+body.m-xbox #more .mcell .img { background-color: #151D17; }
+body.m-xbox #more .mcell .name, body.m-xbox .cell .label { color: #849087; }
+body.m-xbox #more .mcell::before { border-color: #9BF00B; box-shadow: none; }
+body.m-xbox .cell.focus .face { box-shadow: 0 0 0 4px #9BF00B; }
+body.m-xbox .glass { background: #111813; color: #F3F7F4; box-shadow: inset 0 0 0 1px #28342B; }
+body.m-xbox .key.focus { background: #9BF00B; color: #071004; }
+body.m-xbox .key::before { border-color: #9BF00B; box-shadow: none; }
+
+/* Editorial fixes: a real action button, one aligned See more control and a calm drawer transition. */
+.m-editorial #hero { -webkit-transition: opacity 0.2s; transition: opacity 0.2s; }
+.m-editorial.drawer-open #hero { opacity: 0; }
+.m-editorial #hero .hrow { margin-top: 22px; height: 58px; }
+.m-editorial #hero .hbtn { box-sizing: border-box; max-width: 430px; height: 58px; line-height: 58px; padding: 0 28px 0 52px; border-radius: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; position: relative; }
+.m-editorial #hero .hbtn::before { content: '▶'; position: absolute; left: 22px; top: 0; height: 58px; line-height: 58px; font-size: 18px; }
+.m-editorial .card.more { top: 764px; height: 52px; }
+.m-editorial .card.more .img { border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(188, 216, 255, 0.16); }
+.m-editorial .card.more .name { left: 20px; line-height: 52px; font-size: 21px; font-weight: 600; }
+.m-editorial .card.more .sym { right: 20px; width: 26px; height: 26px; margin-top: -13px; }
+.m-editorial .card.more.focus { -webkit-transform: none; transform: none; }
+.m-editorial .card.more.focus .img { background: #DCEBFF; box-shadow: none; }
+.m-editorial .card.more.focus .name, .m-editorial .card.more.focus .sym { color: #142337; }

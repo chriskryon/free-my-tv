@@ -249,5 +249,7 @@
  "Chameleon": "Kameleontti",
  "The whole screen takes the color of the title in focus": "Koko näyttö saa valitun nimikkeen värin",
  "Apps on top like games, the art of the title behind and activity cards below": "Sovellukset ylhäällä kuin pelit, nimikkeen kuva taustalla ja toimintakortit alhaalla",
- "A top shelf, big rounded app icons and a glassy shine on focus": "Ylähylly, isot pyöreät sovelluskuvakkeet ja lasimainen kiilto valitussa"
+ "A top shelf, big rounded app icons and a glassy shine on focus": "Ylähylly, isot pyöreät sovelluskuvakkeet ja lasimainen kiilto valitussa",
+ "Bright game tiles with quick controls below": "Kirkkaat peliruudut ja pikatoiminnot niiden alla",
+ "A bold green dashboard with an uneven game grid": "Rohkea vihreä näkymä epäsäännöllisellä peliruudukolla"
 }

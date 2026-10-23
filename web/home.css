@@ -877,6 +877,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-aurora .p3 { left: 10px; top: 52px; width: 22px; height: 3px; background: #8BF0D0; box-shadow: 40px 0 0 rgba(255, 255, 255, 0.4), 80px 0 0 rgba(255, 255, 255, 0.4); }
 .t-aurora .p4 { left: 8px; right: 8px; bottom: 5px; height: 11px; border-radius: 6px; background: rgba(255, 255, 255, 0.12); }
 .t-aurora .p5 { left: 14px; bottom: 8px; width: 9px; height: 5px; border-radius: 2px; background: #7CFFD6; box-shadow: 13px 0 0 rgba(255, 255, 255, 0.5), 26px 0 0 rgba(255, 255, 255, 0.5), 39px 0 0 rgba(255, 255, 255, 0.5); }
+/* Switch: bright game cards, red focus and round controls. */
+.t-switch { background: #EEF2F6; }
+.t-switch .p0 { left: 8px; top: 7px; width: 44px; height: 4px; background: #35404C; }
+.t-switch .p1 { left: 8px; top: 16px; width: 66px; height: 16px; border-radius: 2px; background: #6B7C8F; box-shadow: 70px 0 0 #A8B4C0; }
+.t-switch .p2 { left: 8px; top: 39px; width: 18px; height: 18px; border-radius: 3px; background: #20252A; box-shadow: 22px 0 0 #EF3340, 44px 0 0 #0070D1, 66px 0 0 #F2A900, 88px 0 0 #28A745, 110px 0 0 #5B4FA3; }
+.t-switch .p3 { left: 25px; top: 36px; width: 24px; height: 24px; border: 2px solid #E60012; border-radius: 5px; background: transparent; }
+.t-switch .p4 { left: 46px; bottom: 4px; width: 9px; height: 9px; border-radius: 50%; background: #FFF; box-shadow: 15px 0 0 #FFF, 30px 0 0 #FFF, 45px 0 0 #FFF; }
+.t-switch .p5 { display: none; }
+/* Xbox: black and green, with an asymmetric dashboard grid. */
+.t-xbox { background: -webkit-linear-gradient(315deg, #0B2413, #020403 70%); background: linear-gradient(135deg, #0B2413, #020403 70%); }
+.t-xbox .p0 { left: 8px; top: 7px; width: 42px; height: 4px; background: #F4F8F5; }
+.t-xbox .p1 { left: 8px; top: 18px; width: 8px; height: 10px; border-radius: 1px; background: #152219; box-shadow: 0 14px 0 #152219, 0 28px 0 #152219; }
+.t-xbox .p2 { left: 22px; top: 18px; width: 46px; height: 21px; border-radius: 1px; background: #1F6F38; box-shadow: 50px 0 0 #24322A; }
+.t-xbox .p3 { left: 22px; top: 43px; width: 26px; height: 21px; border-radius: 1px; background: #2D4032; box-shadow: 30px 0 0 #107C10, 64px 0 0 #24322A, 94px 0 0 #2D4032; }
+.t-xbox .p4 { left: 18px; top: 14px; width: 54px; height: 29px; border: 2px solid #9BF00B; border-radius: 1px; background: transparent; }
+.t-xbox .p5 { right: 8px; top: 7px; width: 16px; height: 3px; background: #9BF00B; }
 
 /* Reduced motion (chosen, or automatic when the TV stays under 30 FPS): the ambient animations stop. */
 .reduce-motion #sky .glow { -webkit-animation: none; animation: none; }
@@ -908,13 +924,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #saver .clock .title { margin-top: 30px; font-size: 26px; color: rgba(255, 255, 255, 0.6); }
 
 #modepick .mode-preview { position: relative; height: 284px; margin: 0 8px 18px; border-radius: 28px; overflow: hidden; background: #252C3A; }
+#modepick .box .title { height: 74px; line-height: 48px; box-sizing: border-box; }
 #modepick .mode-preview .thumb { position: absolute; left: 26px; top: 27px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(3.05); transform: scale(3.05); }
 #modepick .mode-caption { position: absolute; left: 456px; right: 24px; top: 48px; }
 #modepick .mode-name { font-size: 31px; font-weight: 700; line-height: 38px; white-space: normal; }
 #modepick .mode-desc { margin-top: 16px; font-size: 21px; font-weight: 500; line-height: 29px; color: #B6C5D8; }
 #modepick .list { height: 500px; }
+#modepick .rows { padding-bottom: 417px; }
 #modepick .row.choice { height: 76px; margin-bottom: 7px; padding: 0 58px 0 126px; border-radius: 18px; box-sizing: border-box; background: #252C3A; font-size: 27px; line-height: 76px; overflow: hidden; }
 #modepick .row.choice.focus { background: rgba(62, 145, 255, 0.36); box-shadow: inset 0 0 0 2px #8DBAFF; }
+#modepick .row.choice.mode-cursor { position: absolute; left: 0; right: 0; top: 0; z-index: 2; pointer-events: none; }
 #modepick .row.choice .thumb { position: absolute; left: 18px; top: 13px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(0.67); transform: scale(0.67); }
 #modepick .row.choice .mode-option-name { display: block; overflow: hidden; text-overflow: ellipsis; }
 #modepick .row.choice .tick { position: absolute; right: 20px; top: 22px; width: 32px; height: 32px; color: #8DBAFF; }

@@ -20,8 +20,8 @@
     bar: {tile: 150, gap: 28, names: true, barTop: 734, barH: 290, rail: true, sidebar: true, sideLeft: 64, sideTop: 758, sidePitch: 62, light: true,
           barLeft: 360, barWidth: 1500, rects: [[96, 640], [766, 400], [1196, 400]], moreLeft: 1626, moreWidth: 198},
     calm: {calm: true},
-    editorial: {hero: true, dark: true, editorial: true, tile: 116, gap: 32, barTop: 858, barH: 176, barLeft: 160, barWidth: 1600,
-                rects: [[80, 1000], [1160, 300], [1480, 300]], moreLeft: 1160, moreWidth: 300},
+    editorial: {hero: true, dark: true, editorial: true, tile: 116, gap: 32, barTop: 828, barH: 216, barLeft: 160, barWidth: 1600,
+                rects: [[80, 1000], [1160, 300], [1480, 300]], moreLeft: 1160, moreWidth: 620},
     hoku: {dark: true, rail: true, sidebar: true, sideLeft: 56, sideTop: 300, sidePitch: 84, cols: 5, ratio: 0.5625, tile: 280, gap: 18, rowGap: 18,
            barTop: 604, barH: 340, barLeft: 420, barWidth: 1440,
            rects: [[420, 600], [1040, 260], [1320, 260]], moreLeft: 1600, moreWidth: 240},
@@ -49,6 +49,12 @@
                rects: [[96, 520], [646, 520], [1196, 520]], moreLeft: 1746, moreWidth: 78},
     console: {hero: true, dark: true, appsTop: true, dockRow: true, dockX: 96, labelBelow: true, tile: 96, gap: 18, barTop: 120, barH: 120,
               rects: [[96, 400], [516, 400], [936, 400]], moreLeft: 1356, moreWidth: 180},
+    switch: {light: true, names: true, optionsBelow: true, optionLeft: 718, optionTop: 748, tile: 176, gap: 24, barTop: 374, barH: 486, barLeft: 64, barWidth: 1792,
+             rects: [[80, 820], [920, 350], [1290, 350]], moreLeft: 1660, moreWidth: 180},
+    xbox: {dark: true, names: true, xbox: true, rail: true, sidebar: true, sideLeft: 54, sideTop: 360, sidePitch: 108, cols: 4, barTop: 316, barH: 604, barLeft: 132, barWidth: 1724,
+           tileRects: [[172, 350, 420, 222], [614, 350, 252, 222], [888, 350, 252, 222], [1162, 350, 510, 222],
+                       [172, 594, 252, 222], [446, 594, 420, 222], [888, 594, 510, 222], [1420, 594, 252, 222]],
+           rects: [[172, 540], [734, 360], [1116, 360]], moreLeft: 1498, moreWidth: 174},
     tvos: {hero: true, dark: true, cols: 5, ratio: 0.6, tile: 300, gap: 30, rowGap: 26, barTop: 640, barH: 380, barLeft: 96, barWidth: 1728,
            rects: [[96, 300], [416, 300], [736, 300]], moreLeft: 1056, moreWidth: 160},
     chameleon: {dark: true, chameleon: true, dockRow: true, tile: 128, gap: 24, barTop: 838, barH: 160,
@@ -62,7 +68,7 @@
   };
   // Most modern first (today's phone and OS looks, then the cinematic and editorial ones, then the techy and classic ones);
   // Android, iOS and HyperOS stay together, and Living room, VHS, Pixel and High contrast close the list.
-  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'tvos', 'console', 'chameleon', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
+  var MODE_IDS = ['default', 'hero', 'material', 'glass', 'hyperos', 'tvos', 'console', 'switch', 'xbox', 'chameleon', 'aurora', 'editorial', 'focus', 'bar', 'hoku', 'calm', 'orbital', 'mission', 'military',
     'noir', 'zen', 'hacker', 'lounge', 'vhs', 'pixel', 'contrast'];
   var V = {};
 
@@ -70,7 +76,7 @@
     return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
       calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
       orbital: 'Orbital', aurora: 'Aurora', mission: tr('Mission'), hacker: 'Hacker',
-      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS', tvos: 'tvOS', console: 'PS5', chameleon: tr('Chameleon'),
+      military: tr('Military'), material: 'Android', glass: 'iOS', hyperos: 'HyperOS', tvos: 'tvOS', console: 'PS5', switch: 'Switch', xbox: 'Xbox', chameleon: tr('Chameleon'),
       noir: tr('Noir cinema'), vhs: tr('VHS channel'), contrast: tr('High contrast'), zen: 'Zen', lounge: tr('Living room'), pixel: 'Pixel'};
   }
 
@@ -254,12 +260,15 @@
   }
 
   function focusRows(sheet, index, on) {
-    var rows = sheet.querySelectorAll('.row');
-    for (var i = 0; i < rows.length; i++) setClass(rows[i], 'focus', on && i === index);
+    var rows = sheet.querySelectorAll('.rows .row'), pinned = sheet.id === 'modepick';
+    for (var i = 0; i < rows.length; i++) setClass(rows[i], 'focus', on && !pinned && i === index);
+    var cursor = sheet.querySelector('.mode-cursor');
+    if (cursor) setClass(cursor, 'focus', on);
     var holder = sheet.querySelector('.rows'), list = sheet.querySelector('.list');
     if (!holder || !list || !rows[index]) return;
     var max = Math.max(0, holder.offsetHeight - list.offsetHeight);
-    var y = Math.max(0, Math.min(max, rows[index].offsetTop + rows[index].offsetHeight / 2 - list.offsetHeight / 2));
+    var target = pinned ? rows[index].offsetTop : rows[index].offsetTop + rows[index].offsetHeight / 2 - list.offsetHeight / 2;
+    var y = Math.max(0, Math.min(max, target));
     holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-y) + 'px)';
   }
 
@@ -641,12 +650,12 @@
   function renderShelf() {
     if (V.dockRow) { renderDock(); return; }
     var n = shelf.length, gap = V.gap || 40, pad = 28, panelW = 156, lead = 36, barTop = V.barTop || 800, barH = V.barH || 200;
-    if (V.rail || V.dockRow) { panelW = 0; lead = 0; }
+    if (V.rail || V.dockRow || V.optionsBelow) { panelW = 0; lead = 0; }
     var avail = (V.barWidth || 1760) - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
     var tw = Math.min(V.tile || 140, (avail - Math.max(0, (V.cols || n) - 1) * gap) / Math.max(1, V.cols || n)), th = V.ratio ? Math.round(tw * V.ratio) : tw;
     var cols = V.cols || n, rows = Math.max(1, Math.ceil(n / cols)), rowGap = V.rowGap || 0;
-    var left = (V.barLeft || 80) + pad + panelW + lead + ((V.rail || V.dockRow) && !V.cols ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
+    var left = (V.barLeft || 80) + pad + panelW + lead + ((V.rail || V.dockRow || V.optionsBelow) && !V.cols ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = (V.barLeft || 80) + 'px';
     platter.style.width = (V.barWidth || 1760) + 'px';
@@ -658,9 +667,9 @@
     if (V.sidebar || V.dockRow) el('div', 'sidepanel', side);
     var defs = sideDefs();
     for (var b = 0; b < 4; b++) {
-      var r = el('button', 'sidebtn r' + (V.rail ? 'a' : V.dockRow ? 0 : Math.floor(b / 2)), side);
-      r.style.left = (V.dockRow ? V.dockLeft + 18 + b * 68 : V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.dockRow ? mid - 28 : V.sidebar ? (V.sideTop !== undefined ? V.sideTop : V.barTop + 15) + b * (V.sidePitch || 66) : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      var r = el('button', 'sidebtn r' + (V.rail ? 'a' : V.dockRow || V.optionsBelow ? 0 : Math.floor(b / 2)), side);
+      r.style.left = (V.optionsBelow ? V.optionLeft + b * 122 : V.dockRow ? V.dockLeft + 18 + b * 68 : V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.optionsBelow ? V.optionTop : V.dockRow ? mid - 28 : V.sidebar ? (V.sideTop !== undefined ? V.sideTop : V.barTop + 15) + b * (V.sidePitch || 66) : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -669,12 +678,13 @@
     tiles.innerHTML = '';
     for (var i = 0; i < n; i++) {
       var t = el('div', 'tile', tiles);
-      var col = i % cols, row = Math.floor(i / cols);
-      t.style.left = (left + col * (tw + gap)) + 'px';
-      t.style.top = (mid - (rows * th + (rows - 1) * rowGap) / 2 + row * (th + rowGap)) + 'px';
-      t.style.width = tw + 'px';
-      t.style.height = th + 'px';
-      face(shelf[i], t, wordFit(shelf[i].title, tw, 30));
+      var col = i % cols, row = Math.floor(i / cols), rect = V.tileRects && V.tileRects[i];
+      var tileW = rect ? rect[2] : tw, tileH = rect ? rect[3] : th;
+      t.style.left = (rect ? rect[0] : left + col * (tw + gap)) + 'px';
+      t.style.top = (rect ? rect[1] : mid - (rows * th + (rows - 1) * rowGap) / 2 + row * (th + rowGap)) + 'px';
+      t.style.width = tileW + 'px';
+      t.style.height = tileH + 'px';
+      face(shelf[i], t, wordFit(shelf[i].title, tileW, 30));
       if (V.names) el('div', 'nm', t, shelf[i].title);
       hover(t, Z.SHELF, i);
     }
@@ -1142,6 +1152,8 @@
       hyperos: tr('Vivid glowing wallpaper, frosted cards and a blue accent'),
       chameleon: tr('The whole screen takes the color of the title in focus'),
       console: tr('Apps on top like games, the art of the title behind and activity cards below'),
+      switch: tr('Bright game tiles with quick controls below'),
+      xbox: tr('A bold green dashboard with an uneven game grid'),
       tvos: tr('A top shelf, big rounded app icons and a glassy shine on focus'),
       lounge: tr('Warm lamp light, wood and framed pictures'), pixel: tr('An 8-bit world: sky, grass and chunky borders')};
   }
@@ -1294,19 +1306,38 @@
 
   var modeBefore = 'default';
 
+  /** Keep the picker in place while only its large preview changes. */
+  function updateModePreview() {
+    var selected = MODE_IDS[st.mp], preview = $('modepick').querySelector('.mode-preview');
+    if (!preview) return;
+    preview.querySelector('.thumb').className = 'thumb t-' + selected;
+    preview.querySelector('.mode-name').textContent = modeNames()[selected];
+    preview.querySelector('.mode-desc').textContent = modeDescs()[selected];
+    var cursor = $('modepick').querySelector('.mode-cursor');
+    if (!cursor) return;
+    cursor.querySelector('.thumb').className = 'thumb t-' + selected;
+    cursor.querySelector('.mode-option-name').textContent = modeNames()[selected];
+    cursor.querySelector('.tick').style.display = selected === modeBefore ? '' : 'none';
+  }
+
   function renderModes() {
-    var box = $('modepick').firstChild, names = modeNames(), descs = modeDescs(), selected = MODE_IDS[st.mp];
+    var box = $('modepick').firstChild, names = modeNames();
     box.innerHTML = '';
     var title = el('div', 'title', box);
     sym('tv_settings', title);
     title.appendChild(document.createTextNode(tr('Screen mode')));
     var preview = el('div', 'mode-preview', box);
-    var large = el('div', 'thumb t-' + selected, preview);
+    var large = el('div', 'thumb', preview);
     for (var p = 0; p < 6; p++) el('span', 'p' + p, large);
     var caption = el('div', 'mode-caption', preview);
-    el('div', 'mode-name', caption, names[selected]);
-    el('div', 'mode-desc', caption, descs[selected]);
-    var list = el('div', 'list', box), holder = el('div', 'rows', list);
+    el('div', 'mode-name', caption);
+    el('div', 'mode-desc', caption);
+    var list = el('div', 'list', box), cursor = el('div', 'row choice mode-cursor', list);
+    var cursorThumb = el('div', 'thumb', cursor);
+    for (var c = 0; c < 6; c++) el('span', 'p' + c, cursorThumb);
+    el('span', 'mode-option-name', cursor);
+    sym('check', cursor).className += ' tick';
+    var holder = el('div', 'rows', list);
     for (var i = 0; i < MODE_IDS.length; i++) {
       var id = MODE_IDS[i], row = el('div', 'row choice', holder);
       var th = el('div', 'thumb t-' + id, row);
@@ -1316,6 +1347,7 @@
       hover(row, Z.MODEPICK, i);
     }
     el('div', 'hint', box, tr('OK picks, Back cancels.'));
+    updateModePreview();
     updateFocus();
   }
 
@@ -1332,10 +1364,17 @@
   /** The mode under the focus is shown on the home behind the menu as you move. */
   function previewMode() {
     var id = MODE_IDS[st.mp];
-    if (id === Prefs.mode()) return;
+    updateModePreview();
+    if (id === Prefs.mode()) { updateFocus(); return; }
     Prefs.set('mode', id);
-    renderAll();
-    renderModes();
+    applyMode();
+    applyLook();
+    cards = [];
+    renderCards();
+    renderShelf();
+    renderClock();
+    checkNight();
+    updateFocus();
   }
 
   /** OK keeps the mode, Back puts the old one back. Either way, back to Home Settings on the Screen mode row. */
@@ -1542,7 +1581,7 @@
     switch (st.zone) {
       case Z.SHELF:
         var cols = V.cols || shelf.length || 1, srow = Math.floor(st.shelf / cols), rowEnd = Math.min(shelf.length - 1, srow * cols + cols - 1);
-        if (dx < 0 && st.shelf % cols === 0) { st.zone = Z.SIDE; st.side = V.rail || V.dockRow ? 3 : 1; break; }
+        if (dx < 0 && st.shelf % cols === 0 && !V.optionsBelow) { st.zone = Z.SIDE; st.side = V.rail || V.dockRow ? 3 : 1; break; }
         if (dx) st.shelf = Math.max(srow * cols, Math.min(rowEnd, st.shelf + dx));
         else if (dy > 0 && V.appsTop) {
           if (cards.length) { st.zone = Z.CARDS; st.card = nearest(cardNodes, centerX(tiles[st.shelf])); }
@@ -1551,6 +1590,7 @@
         else if (dy > 0) {
           if (st.shelf + cols < shelf.length) st.shelf += cols;
           else if (srow < Math.floor((shelf.length - 1) / cols)) st.shelf = shelf.length - 1;
+          else if (V.optionsBelow) { st.zone = Z.SIDE; st.side = Math.min(3, Math.max(0, Math.round(st.shelf / Math.max(1, shelf.length - 1) * 3))); }
           else { openDrawer(); return; }
         } else if (dy < 0) {
           if (srow > 0) st.shelf -= cols;
@@ -1559,6 +1599,12 @@
         }
         break;
       case Z.SIDE:
+        if (V.optionsBelow) {
+          if (dx) st.side = Math.max(0, Math.min(3, st.side + dx));
+          else if (dy < 0 && shelf.length) { st.zone = Z.SHELF; st.shelf = Math.min(shelf.length - 1, Math.round(st.side / 3 * Math.max(0, shelf.length - 1))); }
+          else if (dy > 0) { openDrawer(); return; }
+          break;
+        }
         if (V.dockRow) {   // the four option buttons in one row, left of the apps
           if (dx > 0 && st.side === 3) { if (shelf.length) { st.zone = Z.SHELF; st.shelf = 0; } }
           else if (dx) st.side = Math.max(0, Math.min(3, st.side + dx));
