@@ -12,20 +12,31 @@
 
   function $(id) { return document.getElementById(id); }
 
-  /** Screen modes: the default look plus four. V holds the current one's numbers; body gets a class m-<id> for modes.css. */
+  /** Screen modes: V holds the current one's numbers; body gets a class m-<id> for modes.css. */
   var MODES = {
     'default': {},
     hero: {hero: true, dark: true, rects: [[80, 300], [400, 300], [720, 300]], moreLeft: 1040},
     focus: {glide: true},
     bar: {tile: 168, gap: 24, names: true, barTop: 750, barH: 280, rail: true, sidebar: true, barLeft: 160, barWidth: 1680,
           rects: [[200, 720], [960, 340], [1340, 340]], moreLeft: 1720, moreWidth: 120},
-    calm: {calm: true}
+    calm: {calm: true},
+    editorial: {hero: true, dark: true, editorial: true, tile: 116, gap: 32, barTop: 858, barH: 176, barLeft: 160, barWidth: 1600,
+                rects: [[80, 1000], [1160, 300], [1480, 300]], moreLeft: 1160, moreWidth: 300},
+    hoku: {dark: true, rail: true, sidebar: true, sideLeft: 56, sideTop: 300, sidePitch: 84, cols: 5, ratio: 0.5625, tile: 280, gap: 18, rowGap: 18,
+           barTop: 604, barH: 340, barLeft: 420, barWidth: 1440,
+           rects: [[420, 600], [1040, 260], [1320, 260]], moreLeft: 1600, moreWidth: 240},
+    orbital: {hero: true, dark: true, tile: 112, gap: 32, barTop: 850, barH: 180, barLeft: 96, barWidth: 1728,
+              rects: [[96, 330], [460, 330], [824, 330]], moreLeft: 1188, moreWidth: 220},
+    aurora: {dark: true, tile: 120, gap: 32, barTop: 800, barH: 180, barLeft: 96, barWidth: 1728,
+             rects: [[96, 420], [556, 420], [1016, 420]], moreLeft: 1476, moreWidth: 348}
   };
-  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm'];
+  var MODE_IDS = ['default', 'hero', 'focus', 'bar', 'calm', 'editorial', 'hoku', 'orbital', 'aurora'];
   var V = {};
 
   function modeNames() {
-    return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'), calm: tr('Calm mode')};
+    return {'default': tr('Standard'), hero: tr('Immersive hero'), focus: tr('Spring focus'), bar: tr('Bar with names'),
+      calm: tr('Calm mode'), editorial: tr('Editorial cinema'), hoku: 'Hoku',
+      orbital: 'Orbital', aurora: 'Aurora'};
   }
 
   /** The saved mode, or ?mode=hero in the address (to preview one). */
@@ -187,7 +198,7 @@
     for (i = 0; i < list.length; i++) setClass(list[i], 'focus', st.zone === Z.MORE && st.more === i);
     var rows = Math.max(1, Math.ceil(others.length / 5)), r = Math.floor(st.grid / 5), first = Math.max(0, Math.min(rows - 3, r - 1));
     $('apps').lastChild.style.webkitTransform = $('apps').lastChild.style.transform = 'translateY(' + (-first * 239) + 'px)';
-    focusRows($('settings'), st.row, st.zone === Z.SETTINGS);
+    focusSettings();
     focusRows($('shelfedit'), st.edit, st.zone === Z.EDIT);
     focusRows($('langpick'), st.lang, st.zone === Z.LANG);
     focusRows($('modepick'), st.mp, st.zone === Z.MODEPICK);
@@ -204,6 +215,22 @@
     if (!holder || !list || !rows[index]) return;
     var max = Math.max(0, holder.offsetHeight - list.offsetHeight);
     var y = Math.max(0, Math.min(max, rows[index].offsetTop + rows[index].offsetHeight / 2 - list.offsetHeight / 2));
+    holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-y) + 'px)';
+  }
+
+  function focusSettings() {
+    var sheet = $('settings'), categorized = Prefs.menuStyle() === 'categories';
+    if (!categorized) { focusRows(sheet, st.row, st.zone === Z.SETTINGS); return; }
+    var cats = sheet.querySelectorAll('.category-row'), options = sheet.querySelectorAll('.option-row');
+    for (var i = 0; i < cats.length; i++) {
+      setClass(cats[i], 'selected', i === settingsCategory);
+      setClass(cats[i], 'focus', st.zone === Z.SETTINGS && settingsPane === 0 && i === settingsCategory);
+    }
+    for (i = 0; i < options.length; i++) setClass(options[i], 'focus', st.zone === Z.SETTINGS && settingsPane === 1 && i === st.row);
+    var holder = sheet.querySelector('.option-rows'), list = sheet.querySelector('.option-list');
+    if (!holder || !list || !options[st.row] || settingsPane !== 1) return;
+    var max = Math.max(0, holder.offsetHeight - list.offsetHeight);
+    var y = Math.max(0, Math.min(max, options[st.row].offsetTop + options[st.row].offsetHeight / 2 - list.offsetHeight / 2));
     holder.style.webkitTransform = holder.style.transform = 'translateY(' + (-y) + 'px)';
   }
 
@@ -325,10 +352,16 @@
     if (p.id === heroId) return;
     heroId = p.id;
     var layers = h.querySelectorAll('.ph');
-    heroFront = 1 - heroFront;
-    layers[heroFront].style.backgroundImage = 'url(' + Data.image(p.backdrop, Prefs.photos() === 'fhd' ? 'w1280' : 'w780') + ')';
-    setClass(layers[heroFront], 'on', true);
-    setClass(layers[1 - heroFront], 'on', false);
+    if (V.editorial) {
+      layers[0].style.backgroundImage = layers[1].style.backgroundImage = '';
+      setClass(layers[0], 'on', false);
+      setClass(layers[1], 'on', false);
+    } else {
+      heroFront = 1 - heroFront;
+      layers[heroFront].style.backgroundImage = 'url(' + Data.image(p.backdrop, Prefs.photos() === 'fhd' ? 'w1280' : 'w780') + ')';
+      setClass(layers[heroFront], 'on', true);
+      setClass(layers[1 - heroFront], 'on', false);
+    }
     h.querySelector('.htitle').textContent = p.title;
     h.querySelector('.hmeta').textContent = p.meta || '';
     h.querySelector('.hover').textContent = p.overview || '';
@@ -338,20 +371,33 @@
   }
 
   /** Spring-focus mode: one ring glides from the focused item to the next. */
+  var glideBox = null;
+
+  function glideNoTransition(g, off) {
+    g.style.webkitTransition = g.style.transition = off ? 'none' : '';
+  }
+
   function moveGlide() {
     var g = $('glide');
     if (!V.glide) { if (g) g.style.display = 'none'; return; }
     if (!g) { g = el('div', '', $('home')); g.id = 'glide'; }
     g.style.display = '';
     var f = document.querySelector('#tabs .focus, #cards .focus, #tiles .focus, #side .focus');
-    if (!f || st.zone === Z.DRAWER || sheetOpen()) { setClass(g, 'on', false); return; }
+    if (!f || st.zone === Z.DRAWER || sheetOpen()) { setClass(g, 'on', false); glideBox = null; return; }
     var x = 0, y = 0, e = f, home = $('home'), pad = 10;
     while (e && e !== home) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
     var rounded = f.querySelector('.img') || f, r = parseFloat(getComputedStyle(rounded).borderRadius) || 20;
-    g.style.width = (f.offsetWidth + 2 * pad - 4) + 'px';
-    g.style.height = (f.offsetHeight + 2 * pad - 4) + 'px';
+    var box = {x: x - pad, y: y - pad, w: f.offsetWidth + 2 * pad - 4, h: f.offsetHeight + 2 * pad - 4}, from = glideBox;
+    g.style.width = box.w + 'px';
+    g.style.height = box.h + 'px';
     g.style.borderRadius = (r + pad) + 'px';
-    g.style.webkitTransform = g.style.transform = 'translate(' + (x - pad) + 'px,' + (y - pad) + 'px)';
+    // Only transform animates: the ring takes its new size at once and starts from the old size and place (scaled), then glides.
+    glideNoTransition(g, true);
+    g.style.webkitTransform = g.style.transform = from ? 'translate(' + from.x + 'px,' + from.y + 'px) scale(' + from.w / box.w + ',' + from.h / box.h + ')' : 'translate(' + box.x + 'px,' + box.y + 'px)';
+    void g.offsetWidth;
+    glideNoTransition(g, false);
+    g.style.webkitTransform = g.style.transform = 'translate(' + box.x + 'px,' + box.y + 'px)';
+    glideBox = box;
     setClass(g, 'on', true);
   }
 
@@ -418,8 +464,9 @@
     if (V.rail) { panelW = 0; lead = 0; }
     var avail = (V.barWidth || 1760) - 2 * pad - panelW - lead;
     // Rounded squares, as the app icons of One UI: never larger than 140.
-    var tw = Math.min(V.tile || 140, (avail - Math.max(0, n - 1) * gap) / Math.max(1, n)), th = tw;
-    var left = (V.barLeft || 80) + pad + panelW + lead + (V.rail ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
+    var tw = Math.min(V.tile || 140, (avail - Math.max(0, (V.cols || n) - 1) * gap) / Math.max(1, V.cols || n)), th = V.ratio ? Math.round(tw * V.ratio) : tw;
+    var cols = V.cols || n, rows = Math.max(1, Math.ceil(n / cols)), rowGap = V.rowGap || 0;
+    var left = (V.barLeft || 80) + pad + panelW + lead + (V.rail && !V.cols ? Math.max(0, (avail - (n * tw + Math.max(0, n - 1) * gap)) / 2) : 0), mid = barTop + barH / 2;
     var platter = $('platter');
     platter.style.left = (V.barLeft || 80) + 'px';
     platter.style.width = (V.barWidth || 1760) + 'px';
@@ -432,8 +479,8 @@
     var defs = [['live_tv', tr('light|Live TV')], ['hdmi', tr('HDMI Inputs')], ['apps', tr('All Apps')], ['settings', tr('light|Settings')]];
     for (var b = 0; b < 4; b++) {
       var r = el('button', 'sidebtn r' + (V.rail ? 'a' : Math.floor(b / 2)), side);
-      r.style.left = (V.sidebar ? 44 : 80 + pad + (b % 2) * 84) + 'px';
-      r.style.top = (V.sidebar ? V.barTop + 15 + b * 66 : mid - 78 + Math.floor(b / 2) * 84) + 'px';
+      r.style.left = (V.sidebar ? (V.sideLeft || 44) : (V.barLeft || 80) + pad + (b % 2) * 84) + 'px';
+      r.style.top = (V.sidebar ? (V.sideTop !== undefined ? V.sideTop : V.barTop + 15) + b * (V.sidePitch || 66) : mid - 78 + Math.floor(b / 2) * 84) + 'px';
       sym(defs[b][0], r);
       el('div', 'tip', r, defs[b][1]);
       hover(r, Z.SIDE, b);
@@ -442,8 +489,9 @@
     tiles.innerHTML = '';
     for (var i = 0; i < n; i++) {
       var t = el('div', 'tile', tiles);
-      t.style.left = (left + i * (tw + gap)) + 'px';
-      t.style.top = (mid - th / 2) + 'px';
+      var col = i % cols, row = Math.floor(i / cols);
+      t.style.left = (left + col * (tw + gap)) + 'px';
+      t.style.top = (mid - (rows * th + (rows - 1) * rowGap) / 2 + row * (th + rowGap)) + 'px';
       t.style.width = tw + 'px';
       t.style.height = th + 'px';
       face(shelf[i], t, wordFit(shelf[i].title, tw, 30));
@@ -783,9 +831,26 @@
 
   // MARK: - Home Settings
 
+  var settingsCategory = 0, settingsPane = 0;
+  function settingSectionNames() { return [tr('Screen'), tr('Widgets'), tr('Region'), tr('System')]; }
+
+  function menuStyleName() { return Prefs.menuStyle() === 'categories' ? tr('Categories') : tr('Standard'); }
+
+  function changeMenuStyle() {
+    var categorized = Prefs.menuStyle() !== 'categories';
+    Prefs.set('menuStyle', categorized ? 'categories' : 'standard');
+    settingsCategory = 0;
+    settingsPane = 0;
+    st.row = categorized ? 0 : settingRows().length - 1;
+  }
+
   function modeDescs() {
     return {'default': tr('Picks and the apps bar'), hero: tr('Full-screen photo with the synopsis'), focus: tr('A focus ring that glides'),
-      bar: tr('Side menu and names under the apps'), calm: tr('A big clock and little else')};
+      bar: tr('Side menu and names under the apps'), calm: tr('A big clock and little else'),
+      editorial: tr('A large photo with its story beside it'),
+      hoku: tr('Warm colors and a relaxed app dock'),
+      orbital: tr('A cinematic mission-control view'),
+      aurora: tr('Northern lights over a quiet night')};
   }
 
   /** The screen mode (it opens its own menu), the theme, reduced motion and larger text. */
@@ -829,7 +894,17 @@
       step: function (d) { cycle('temperature', ['auto', 'C', 'F'], unit, d); renderPanels(); }});
     rows.push({section: tr('System'), label: tr('Shelf'), value: '›', step: function (d) { if (d >= 0) openShelfEdit(); }});
     rows.push({label: tr('TV Settings'), value: '›', step: function (d) { if (d >= 0) tvSettings(); }});
+    rows.push({label: tr('Menu style'), value: menuStyleName(), step: changeMenuStyle});
     return rows;
+  }
+
+  function categoryRows() {
+    var full = settingRows(), groups = [], section = -1, i;
+    for (i = 0; i < full.length; i++) {
+      if (full[i].section) { section++; groups[section] = []; }
+      groups[section].push(full[i]);
+    }
+    return groups;
   }
 
   function cycle(name, values, current, d) {
@@ -839,14 +914,65 @@
 
   var rowsNow = [];
 
+  function settingRow(parent, r, i, categorized) {
+    var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.toggle !== undefined ? ' has-toggle' : ' has-value') + (categorized ? ' option-row' : ''), parent);
+    el('span', 'row-label', row, r.label);
+    if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
+    else {
+      var v = el('span', 'value', row);
+      if (r.value === '›') v.textContent = '›';
+      else if (r.opens || categorized) { v.appendChild(document.createTextNode(r.value)); el('span', 'chev', v, '›'); }
+      else { el('span', 'chev', v, '‹'); v.appendChild(document.createTextNode(r.value)); el('span', 'chev', v, '›'); }
+    }
+    if (categorized) {
+      row.onmouseover = function () { st.zone = Z.SETTINGS; settingsPane = 1; st.row = i; updateFocus(); };
+      row.onclick = function () { row.onmouseover(); activate(); };
+    } else hover(row, Z.SETTINGS, i);
+  }
+
   function renderSettings() {
     var box = $('settings').firstChild;
     box.innerHTML = '';
     var title = el('div', 'title', box);
-    sym('settings', title);
+    var categorized = Prefs.menuStyle() === 'categories';
+    setClass($('settings'), 'categorized', categorized);
+    sym('home', title);
     title.appendChild(document.createTextNode(tr('Home Settings')));
+    if (categorized) {
+      var groups = categoryRows(), labels = settingSectionNames();
+      settingsCategory = Math.max(0, Math.min(labels.length - 1, settingsCategory));
+      rowsNow = groups[settingsCategory];
+      st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row));
+      var layout = el('div', 'category-layout', box), nav = el('div', 'category-nav', layout);
+      var icons = ['tv_settings', 'sparkles', 'sunny', 'settings'];
+      for (var c = 0; c < labels.length; c++) {
+        (function (index) {
+          var cat = el('div', 'category-row', nav);
+          sym(icons[index], el('span', 'category-icon', cat));
+          el('span', 'category-label', cat, labels[index]);
+          sym('chevron_right', cat).className += ' category-chevron';
+          cat.onmouseover = function () {
+            st.zone = Z.SETTINGS;
+            if (settingsCategory !== index || settingsPane !== 0) {
+              settingsCategory = index; settingsPane = 0; st.row = 0; renderSettings();
+            } else updateFocus();
+          };
+          cat.onclick = function () { settingsCategory = index; settingsPane = 1; st.row = 0; renderSettings(); };
+        })(c);
+      }
+      var panel = el('div', 'category-panel', layout);
+      panel.style.height = Math.min(830, 108 + rowsNow.length * 76) + 'px';
+      el('div', 'category-heading', panel, labels[settingsCategory]);
+      var optionList = el('div', 'list option-list', panel), optionHolder = el('div', 'rows option-rows', optionList);
+      optionList.style.height = Math.min(736, 8 + rowsNow.length * 76) + 'px';
+      var items = el('div', 'setting-items', optionHolder);
+      for (var o = 0; o < rowsNow.length; o++) settingRow(items, rowsNow[o], o, true);
+      updateFocus();
+      return;
+    }
     var list = el('div', 'list', box), holder = el('div', 'rows', list);
     rowsNow = settingRows();
+    st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row));
     var group = null, items = null;
     for (var i = 0; i < rowsNow.length; i++) {
       var r = rowsNow[i];
@@ -855,22 +981,15 @@
         el('div', 'sect', group, r.section);
         items = el('div', 'setting-items', group);
       }
-      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.toggle !== undefined ? ' has-toggle' : ' has-value'), items);
-      el('span', 'row-label', row, r.label);
-      if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
-      else {
-        var v = el('span', 'value', row);
-        if (r.value === '›') v.textContent = '›';
-        else if (r.opens) { v.appendChild(document.createTextNode(r.value)); el('span', 'chev', v, '›'); }
-        else { el('span', 'chev', v, '‹'); v.appendChild(document.createTextNode(r.value)); el('span', 'chev', v, '›'); }
-      }
-      hover(row, Z.SETTINGS, i);
+      settingRow(items, r, i, false);
     }
     el('div', 'hint', box, tr('OK or the arrows change the value.'));
     updateFocus();
   }
 
-  function openSettings() {
+  function openSettings(category) {
+    settingsCategory = category === undefined ? 0 : category;
+    settingsPane = category === undefined ? 0 : 1;
     st.zone = Z.SETTINGS;
     st.row = 0;
     renderSettings();
@@ -930,7 +1049,7 @@
   function closeModes(pick) {
     setClass($('modepick'), 'open', false);
     if (!pick && Prefs.mode() !== modeBefore) { Prefs.set('mode', modeBefore); renderAll(); }
-    openSettings();
+    openSettings(settingsCategory);
     for (var i = 0; i < rowsNow.length; i++) if (rowsNow[i].modes) st.row = i;
     updateFocus();
   }
@@ -983,7 +1102,7 @@
       renderAll();
       Data.refresh();   // the picks' titles and genres come in the new language
     }
-    openSettings();
+    openSettings(settingsCategory);
     for (var i = 0; i < rowsNow.length; i++) if (rowsNow[i].language) st.row = i;
     updateFocus();
   }
@@ -1098,6 +1217,12 @@
         if (mapp) launcher(mapp.id, mapp.title)();
         return;
       case Z.SETTINGS:
+        if (Prefs.menuStyle() === 'categories' && settingsPane === 0) {
+          settingsPane = 1;
+          st.row = 0;
+          updateFocus();
+          return;
+        }
         if (rowsNow[st.row]) { rowsNow[st.row].step(1); if (st.zone === Z.SETTINGS) renderSettings(); }
         return;
       case Z.EDIT:
@@ -1122,11 +1247,16 @@
     var tiles = $('tiles').children, cardNodes = $('cards').children;
     switch (st.zone) {
       case Z.SHELF:
-        if (dx < 0 && st.shelf === 0) { st.zone = Z.SIDE; st.side = V.rail ? 3 : 1; break; }
-        if (dx) st.shelf = Math.max(0, Math.min(shelf.length - 1, st.shelf + dx));
-        else if (dy > 0) { openDrawer(); return; }
-        else if (dy < 0) {
-          if (cards.length) { st.zone = Z.CARDS; st.card = nearest(cardNodes, centerX(tiles[st.shelf])); }
+        var cols = V.cols || shelf.length || 1, srow = Math.floor(st.shelf / cols), rowEnd = Math.min(shelf.length - 1, srow * cols + cols - 1);
+        if (dx < 0 && st.shelf % cols === 0) { st.zone = Z.SIDE; st.side = V.rail ? 3 : 1; break; }
+        if (dx) st.shelf = Math.max(srow * cols, Math.min(rowEnd, st.shelf + dx));
+        else if (dy > 0) {
+          if (st.shelf + cols < shelf.length) st.shelf += cols;
+          else if (srow < Math.floor((shelf.length - 1) / cols)) st.shelf = shelf.length - 1;
+          else { openDrawer(); return; }
+        } else if (dy < 0) {
+          if (srow > 0) st.shelf -= cols;
+          else if (cards.length) { st.zone = Z.CARDS; st.card = nearest(cardNodes, centerX(tiles[st.shelf])); }
           else { st.zone = Z.TOP; st.top = st.tab; }
         }
         break;
@@ -1154,7 +1284,7 @@
         if (dx < 0 && st.card === 0 && V.rail) { st.zone = Z.SIDE; st.side = 0; break; }
         if (dx) st.card = Math.max(0, Math.min(cards.length, st.card + dx));
         else if (dy < 0) { st.zone = Z.TOP; st.top = st.tab; }
-        else if (shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(tiles, centerX(cardNodes[st.card])); }
+        else if (shelf.length) { st.zone = Z.SHELF; st.shelf = nearest(Array.prototype.slice.call(tiles, 0, V.cols || tiles.length), centerX(cardNodes[st.card])); }
         break;
       case Z.TOP:
         if (dx) {
@@ -1179,10 +1309,27 @@
         if (mg >= 0 && mg < moreList.length && (dx === 0 || Math.floor(mg / 4) === Math.floor(st.more / 4))) st.more = mg;
         break;
       case Z.SETTINGS:
-        if (dy) st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row + dy));
-        else if (dx && rowsNow[st.row]) {
-          var r = rowsNow[st.row];
-          if (r.value !== '›') { r.step(dx); if (st.zone === Z.SETTINGS) renderSettings(); }
+        if (Prefs.menuStyle() === 'categories') {
+          if (settingsPane === 0) {
+            if (dy) {
+              settingsCategory = Math.max(0, Math.min(settingSectionNames().length - 1, settingsCategory + dy));
+              st.row = 0;
+              renderSettings();
+              return;
+            }
+            if (dx > 0) { settingsPane = 1; st.row = 0; }
+          } else if (dy) st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row + dy));
+          else if (dx < 0) { settingsPane = 0; st.row = 0; }
+          else if (dx > 0 && rowsNow[st.row]) {
+            rowsNow[st.row].step(1);
+            if (st.zone === Z.SETTINGS) renderSettings();
+          }
+        } else {
+          if (dy) st.row = Math.max(0, Math.min(rowsNow.length - 1, st.row + dy));
+          else if (dx && rowsNow[st.row]) {
+            var r = rowsNow[st.row];
+            if (r.value !== '›') { r.step(dx); if (st.zone === Z.SETTINGS) renderSettings(); }
+          }
         }
         break;
       case Z.EDIT:
@@ -1200,7 +1347,13 @@
   }
 
   function back() {
-    if (st.zone === Z.EDIT) { setClass($('shelfedit'), 'open', false); openSettings(); st.row = rowsNow.length - 2; updateFocus(); return; }
+    if (st.zone === Z.EDIT) {
+      setClass($('shelfedit'), 'open', false);
+      openSettings(settingsCategory);
+      for (var i = 0; i < rowsNow.length; i++) if (rowsNow[i].label === tr('Shelf')) st.row = i;
+      updateFocus();
+      return;
+    }
     if (st.zone === Z.LANG) { closeLanguages(false); return; }
     if (st.zone === Z.MODEPICK) { closeModes(false); return; }
     if (sheetOpen()) { closeSheets(); return; }
@@ -1247,7 +1400,7 @@
   // MARK: - Night, clock, screensaver
 
   function checkNight() {
-    var now = Date.now(), night = V.dark || Data.isNight(now);
+    var now = Date.now(), night = V.dark || (!V.light && Data.isNight(now));
     // Afternoon: in the 3 hours before sunset the sky fades to night; from halfway the text and surfaces switch too.
     var ramp = 0;
     if (!night && Prefs.theme() === 'auto') {

@@ -219,5 +219,12 @@
  "{n} h ago": "{n} ч назад",
  "{n} min ago": "{n} мин назад",
  "{n} ms": "{n} мс",
- "← → to move · OK to drop · Back to cancel": "← → — переместить · OK — оставить · Назад — отмена"
+ "← → to move · OK to drop · Back to cancel": "← → — переместить · OK — оставить · Назад — отмена",
+ "Categories": "Категории",
+ "Menu style": "Стиль меню",
+ "Editorial cinema": "Киноистории",
+ "A large photo with its story beside it": "Большое изображение и история рядом",
+ "Warm colors and a relaxed app dock": "Тёплые цвета и спокойная панель приложений",
+ "A cinematic mission-control view": "Кинематографичный вид в стиле центра управления",
+ "Northern lights over a quiet night": "Северное сияние над тихой ночью"
 }

@@ -219,5 +219,12 @@
  "{n} h ago": "hace {n} h",
  "{n} min ago": "hace {n} min",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → para mover · OK para soltar · Atrás para cancelar"
+ "← → to move · OK to drop · Back to cancel": "← → para mover · OK para soltar · Atrás para cancelar",
+ "Categories": "Categorías",
+ "Menu style": "Estilo del menú",
+ "Editorial cinema": "Cine editorial",
+ "A large photo with its story beside it": "Una imagen grande con la historia a su lado",
+ "Warm colors and a relaxed app dock": "Colores cálidos y una barra de apps discreta",
+ "A cinematic mission-control view": "Una vista cinematográfica de centro de control",
+ "Northern lights over a quiet night": "Auroras boreales sobre una noche tranquila"
 }

@@ -219,5 +219,12 @@
  "{n} h ago": "{n} 小时前",
  "{n} min ago": "{n} 分钟前",
  "{n} ms": "{n} 毫秒",
- "← → to move · OK to drop · Back to cancel": "← → 移动 · OK 放置 · 返回 取消"
+ "← → to move · OK to drop · Back to cancel": "← → 移动 · OK 放置 · 返回 取消",
+ "Categories": "分类",
+ "Menu style": "菜单样式",
+ "Editorial cinema": "电影画报",
+ "A large photo with its story beside it": "大幅画面，故事呈现在一旁",
+ "Warm colors and a relaxed app dock": "温暖配色与简洁的应用栏",
+ "A cinematic mission-control view": "如任务控制中心般的电影感界面",
+ "Northern lights over a quiet night": "宁静夜空中的极光"
 }

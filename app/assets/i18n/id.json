@@ -219,5 +219,12 @@
  "{n} h ago": "{n} jam lalu",
  "{n} min ago": "{n} mnt lalu",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → pindahkan · OK letakkan · Kembali batalkan"
+ "← → to move · OK to drop · Back to cancel": "← → pindahkan · OK letakkan · Kembali batalkan",
+ "Categories": "Kategori",
+ "Menu style": "Gaya menu",
+ "Editorial cinema": "Sinema editorial",
+ "A large photo with its story beside it": "Gambar besar dengan kisahnya di samping",
+ "Warm colors and a relaxed app dock": "Warna hangat dan bilah aplikasi yang tenang",
+ "A cinematic mission-control view": "Tampilan sinematik ala pusat kendali",
+ "Northern lights over a quiet night": "Aurora di malam yang tenang"
 }

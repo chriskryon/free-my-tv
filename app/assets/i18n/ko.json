@@ -219,5 +219,12 @@
  "{n} h ago": "{n}시간 전",
  "{n} min ago": "{n}분 전",
  "{n} ms": "{n}ms",
- "← → to move · OK to drop · Back to cancel": "← → 이동 · OK 배치 · 뒤로 취소"
+ "← → to move · OK to drop · Back to cancel": "← → 이동 · OK 배치 · 뒤로 취소",
+ "Categories": "카테고리",
+ "Menu style": "메뉴 스타일",
+ "Editorial cinema": "에디토리얼 시네마",
+ "A large photo with its story beside it": "큰 이미지와 그 옆에 펼쳐지는 이야기",
+ "Warm colors and a relaxed app dock": "따뜻한 색감과 차분한 앱 독",
+ "A cinematic mission-control view": "관제실을 닮은 시네마틱 화면",
+ "Northern lights over a quiet night": "고요한 밤의 오로라"
 }

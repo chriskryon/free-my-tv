@@ -784,6 +784,27 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #settings .row .value .chev { margin: 0 7px; }
 #settings .toggle { top: 12px; right: 18px; }
 #settings .hint, #modepick .hint { padding: 16px 12px 0; font-size: 20px; color: #AAB9D0; }
+#settings.categorized .box { left: 960px; width: 960px; }
+#settings .category-layout { position: relative; height: 850px; }
+#settings .category-nav { position: absolute; left: 0; top: 14px; width: 260px; }
+#settings .category-row { position: relative; height: 92px; margin-bottom: 10px; border-radius: 20px; color: #BDCBDE; font-size: 28px; font-weight: 600; cursor: pointer; }
+#settings .category-icon { position: absolute; left: 14px; top: 19px; width: 54px; height: 54px; border-radius: 16px; background: #293447; color: #B8CEE9; }
+#settings .category-icon .sym { position: absolute; left: 13px; top: 13px; width: 28px; height: 28px; }
+#settings .category-label { position: absolute; left: 84px; right: 24px; top: 0; height: 92px; line-height: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#settings .category-chevron { position: absolute; right: 10px; top: 35px; width: 22px; height: 22px; opacity: 0; }
+#settings .category-row.selected { background: #252F40; color: #FFF; }
+#settings .category-row.selected .category-icon { background: #34517B; color: #FFF; }
+#settings .category-row.selected .category-chevron { opacity: 0.8; }
+#settings .category-row.focus { background: rgba(62, 145, 255, 0.34); box-shadow: inset 0 0 0 2px #8DBAFF; color: #FFF; }
+#settings .category-panel { position: absolute; left: 278px; top: 0; width: 618px; height: 830px; border-radius: 24px; background: #222A38; }
+#settings .category-heading { height: 76px; line-height: 76px; margin: 0 22px; font-size: 33px; font-weight: 700; border-bottom: 1px solid #405069; }
+#settings .option-list { height: 736px; margin: 8px 10px 0; }
+#settings.categorized .setting-items { padding: 0; background: none; }
+#settings .option-row { height: 76px; line-height: 76px; }
+#settings .option-row .row-label { max-width: 390px; }
+#settings .option-row.has-value .row-label { max-width: 300px; }
+#settings .option-row .value { max-width: 245px; }
+.text-l #settings .category-row { font-size: 31px; }
 .thumb { position: relative; display: block; width: 132px; height: 74px; border-radius: 14px; overflow: hidden; background: #E9EDF5; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
 .thumb span { position: absolute; border-radius: 4px; }
 /* default: a light screen, the hero pick and two small ones, the bar with a blue tile */
@@ -822,6 +843,38 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .t-calm .p2 { left: 52px; top: 52px; width: 28px; height: 4px; background: #3E91FF; }
 .t-calm .p3 { left: 8px; right: 8px; bottom: 6px; height: 9px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); }
 .t-calm .p4, .t-calm .p5 { display: none; }
+/* editorial cinema: one large still, a story column and a restrained dock */
+.t-editorial { background: #111821; }
+.t-editorial .p0 { left: 8px; top: 8px; width: 54px; height: 4px; background: #EAF2FC; }
+.t-editorial .p1 { left: 8px; top: 18px; width: 69px; height: 39px; border-radius: 5px; background: #526A80; }
+.t-editorial .p2 { left: 84px; top: 20px; width: 37px; height: 8px; background: #EAF2FC; }
+.t-editorial .p3 { left: 84px; top: 33px; width: 32px; height: 4px; background: #8297AB; box-shadow: 0 8px 0 #8297AB; }
+.t-editorial .p4 { left: 84px; top: 49px; width: 16px; height: 8px; border-radius: 2px; background: #526A80; box-shadow: 20px 0 0 #6F8294; }
+.t-editorial .p5 { left: 8px; right: 8px; bottom: 6px; height: 8px; border-radius: 4px; background: #263443; }
+/* Hoku: a purple channel grid, a text menu on the left. */
+.t-hoku { background: -webkit-linear-gradient(315deg, #4B1487, #170431); background: linear-gradient(135deg, #4B1487, #170431); }
+.t-hoku .p0 { left: 8px; top: 15px; width: 24px; height: 4px; background: #FFF; box-shadow: 0 10px 0 rgba(255, 255, 255, 0.45), 0 20px 0 rgba(255, 255, 255, 0.45), 0 30px 0 rgba(255, 255, 255, 0.45); }
+.t-hoku .p1 { left: 40px; top: 8px; width: 46px; height: 20px; border-radius: 3px; background: #8E5BD6; }
+.t-hoku .p2 { left: 90px; top: 8px; width: 16px; height: 20px; border-radius: 3px; background: #B58BEA; }
+.t-hoku .p3 { left: 110px; top: 8px; width: 16px; height: 20px; border-radius: 3px; background: #B58BEA; }
+.t-hoku .p4 { left: 40px; right: 6px; bottom: 6px; height: 31px; border-radius: 4px; background: rgba(255, 255, 255, 0.14); }
+.t-hoku .p5 { left: 43px; bottom: 25px; width: 15px; height: 8px; border-radius: 2px; background: #FFF; box-shadow: 17px 0 0 #E0CFF7, 34px 0 0 #E0CFF7, 51px 0 0 #E0CFF7, 68px 0 0 #E0CFF7, 0 11px 0 #E0CFF7, 17px 11px 0 #E0CFF7, 34px 11px 0 #E0CFF7; }
+/* Orbital: full-bleed still, white story and strict bottom rail. */
+.t-orbital { background: -webkit-linear-gradient(left, #080D17, #354858); background: linear-gradient(90deg, #080D17, #354858); }
+.t-orbital .p0 { left: 8px; top: 8px; width: 38px; height: 4px; background: #EFF6FC; }
+.t-orbital .p1 { left: 8px; top: 22px; width: 51px; height: 10px; background: #EFF6FC; }
+.t-orbital .p2 { left: 8px; top: 39px; width: 49px; height: 4px; background: #AABBCB; box-shadow: 0 7px 0 #AABBCB; }
+.t-orbital .p3 { left: 8px; bottom: 16px; width: 25px; height: 9px; background: #60798E; box-shadow: 30px 0 0 #60798E, 60px 0 0 #60798E; }
+.t-orbital .p4 { left: 7px; right: 7px; bottom: 4px; height: 7px; background: #101B29; }
+.t-orbital .p5 { right: 10px; top: 8px; width: 22px; height: 2px; background: #EFF6FC; }
+/* Aurora: northern lights, three tall frosted cards. */
+.t-aurora { background: -webkit-linear-gradient(top, #030B1A, #0A3A3E); background: linear-gradient(#030B1A, #0A3A3E); }
+.t-aurora .p0 { left: -14px; top: -20px; width: 60px; height: 80px; border-radius: 50%; background: -webkit-radial-gradient(center, ellipse closest-side, rgba(77, 255, 176, 0.75), rgba(77, 255, 176, 0)); background: radial-gradient(ellipse closest-side, rgba(77, 255, 176, 0.75), rgba(77, 255, 176, 0)); -webkit-transform: rotate(24deg); transform: rotate(24deg); }
+.t-aurora .p1 { right: -12px; top: -22px; width: 56px; height: 76px; border-radius: 50%; background: -webkit-radial-gradient(center, ellipse closest-side, rgba(154, 107, 255, 0.7), rgba(154, 107, 255, 0)); background: radial-gradient(ellipse closest-side, rgba(154, 107, 255, 0.7), rgba(154, 107, 255, 0)); -webkit-transform: rotate(20deg); transform: rotate(20deg); }
+.t-aurora .p2 { left: 10px; top: 20px; width: 34px; height: 28px; border-radius: 9px; background: rgba(255, 255, 255, 0.28); box-shadow: 40px 0 0 rgba(255, 255, 255, 0.2), 80px 0 0 rgba(255, 255, 255, 0.2); }
+.t-aurora .p3 { left: 10px; top: 52px; width: 22px; height: 3px; background: #8BF0D0; box-shadow: 40px 0 0 rgba(255, 255, 255, 0.4), 80px 0 0 rgba(255, 255, 255, 0.4); }
+.t-aurora .p4 { left: 8px; right: 8px; bottom: 5px; height: 11px; border-radius: 6px; background: rgba(255, 255, 255, 0.12); }
+.t-aurora .p5 { left: 14px; bottom: 8px; width: 9px; height: 5px; border-radius: 2px; background: #7CFFD6; box-shadow: 13px 0 0 rgba(255, 255, 255, 0.5), 26px 0 0 rgba(255, 255, 255, 0.5), 39px 0 0 rgba(255, 255, 255, 0.5); }
 
 /* Reduced motion (chosen, or automatic when the TV stays under 30 FPS): the ambient animations stop. */
 .reduce-motion #sky .glow { -webkit-animation: none; animation: none; }
@@ -857,10 +910,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #modepick .mode-caption { position: absolute; left: 456px; right: 24px; top: 48px; }
 #modepick .mode-name { font-size: 31px; font-weight: 700; line-height: 38px; white-space: normal; }
 #modepick .mode-desc { margin-top: 16px; font-size: 21px; font-weight: 500; line-height: 29px; color: #B6C5D8; }
-#modepick .list { height: 490px; }
-#modepick .row.choice { height: 90px; margin-bottom: 8px; padding: 0 58px 0 150px; border-radius: 20px; box-sizing: border-box; background: #252C3A; font-size: 27px; line-height: 90px; overflow: hidden; }
+#modepick .list { height: 500px; }
+#modepick .row.choice { height: 76px; margin-bottom: 7px; padding: 0 58px 0 126px; border-radius: 18px; box-sizing: border-box; background: #252C3A; font-size: 27px; line-height: 76px; overflow: hidden; }
 #modepick .row.choice.focus { background: rgba(62, 145, 255, 0.36); box-shadow: inset 0 0 0 2px #8DBAFF; }
-#modepick .row.choice .thumb { position: absolute; left: 18px; top: 14px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(0.84); transform: scale(0.84); }
+#modepick .row.choice .thumb { position: absolute; left: 18px; top: 13px; -webkit-transform-origin: 0 0; transform-origin: 0 0; -webkit-transform: scale(0.67); transform: scale(0.67); }
 #modepick .row.choice .mode-option-name { display: block; overflow: hidden; text-overflow: ellipsis; }
-#modepick .row.choice .tick { position: absolute; right: 20px; top: 29px; width: 32px; height: 32px; color: #8DBAFF; }
+#modepick .row.choice .tick { position: absolute; right: 20px; top: 22px; width: 32px; height: 32px; color: #8DBAFF; }
 .text-l #modepick .row.choice { font-size: 30px; }

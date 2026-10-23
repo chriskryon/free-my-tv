@@ -219,5 +219,12 @@
  "{n} h ago": "{n} h sitten",
  "{n} min ago": "{n} min sitten",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → siirrä · OK pudota · Takaisin peruuta"
+ "← → to move · OK to drop · Back to cancel": "← → siirrä · OK pudota · Takaisin peruuta",
+ "Categories": "Luokat",
+ "Menu style": "Valikon tyyli",
+ "Editorial cinema": "Elokuvatoimitus",
+ "A large photo with its story beside it": "Suuri kuva ja sen tarina vieressä",
+ "Warm colors and a relaxed app dock": "Lämpimät värit ja rauhallinen sovelluspalkki",
+ "A cinematic mission-control view": "Elokuvallinen näkymä ohjauskeskuksen tyyliin",
+ "Northern lights over a quiet night": "Revontulet hiljaisen yön yllä"
 }

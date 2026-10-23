@@ -219,5 +219,12 @@
  "{n} h ago": "před {n} h",
  "{n} min ago": "před {n} min",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → přesunout · OK umístit · Zpět zrušit"
+ "← → to move · OK to drop · Back to cancel": "← → přesunout · OK umístit · Zpět zrušit",
+ "Categories": "Kategorie",
+ "Menu style": "Styl nabídky",
+ "Editorial cinema": "Filmový magazín",
+ "A large photo with its story beside it": "Velký snímek a jeho příběh vedle něj",
+ "Warm colors and a relaxed app dock": "Teplé barvy a klidná lišta aplikací",
+ "A cinematic mission-control view": "Filmový pohled ve stylu řídicího střediska",
+ "Northern lights over a quiet night": "Polární záře nad klidnou nocí"
 }

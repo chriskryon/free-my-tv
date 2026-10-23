@@ -219,5 +219,12 @@
  "{n} h ago": "{n} ชม.ที่แล้ว",
  "{n} min ago": "{n} นาทีที่แล้ว",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → ย้าย · OK วาง · ย้อนกลับ ยกเลิก"
+ "← → to move · OK to drop · Back to cancel": "← → ย้าย · OK วาง · ย้อนกลับ ยกเลิก",
+ "Categories": "หมวดหมู่",
+ "Menu style": "รูปแบบเมนู",
+ "Editorial cinema": "ภาพยนตร์สไตล์บรรณาธิการ",
+ "A large photo with its story beside it": "ภาพขนาดใหญ่พร้อมเรื่องราวอยู่ด้านข้าง",
+ "Warm colors and a relaxed app dock": "โทนสีอบอุ่นและแถบแอปที่เรียบง่าย",
+ "A cinematic mission-control view": "มุมมองแบบภาพยนตร์สไตล์ศูนย์ควบคุม",
+ "Northern lights over a quiet night": "แสงเหนือในค่ำคืนอันเงียบสงบ"
 }

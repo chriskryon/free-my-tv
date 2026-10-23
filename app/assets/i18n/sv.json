@@ -219,5 +219,12 @@
  "{n} h ago": "för {n} h sedan",
  "{n} min ago": "för {n} min sedan",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → flytta · OK släpp · Tillbaka avbryt"
+ "← → to move · OK to drop · Back to cancel": "← → flytta · OK släpp · Tillbaka avbryt",
+ "Categories": "Kategorier",
+ "Menu style": "Menystil",
+ "Editorial cinema": "Redaktionell bio",
+ "A large photo with its story beside it": "En stor bild med berättelsen bredvid",
+ "Warm colors and a relaxed app dock": "Varma färger och en lugn appdocka",
+ "A cinematic mission-control view": "En filmisk vy som ett kontrollcenter",
+ "Northern lights over a quiet night": "Norrsken över en stilla natt"
 }

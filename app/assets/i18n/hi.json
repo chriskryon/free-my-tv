@@ -219,5 +219,12 @@
  "{n} h ago": "{n} घं पहले",
  "{n} min ago": "{n} मि पहले",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → खिसकाएँ · OK छोड़ें · वापस रद्द करें"
+ "← → to move · OK to drop · Back to cancel": "← → खिसकाएँ · OK छोड़ें · वापस रद्द करें",
+ "Categories": "श्रेणियाँ",
+ "Menu style": "मेनू शैली",
+ "Editorial cinema": "संपादकीय सिनेमा",
+ "A large photo with its story beside it": "एक बड़ी तस्वीर और उसके साथ उसकी कहानी",
+ "Warm colors and a relaxed app dock": "गर्म रंग और सहज ऐप डॉक",
+ "A cinematic mission-control view": "मिशन कंट्रोल जैसा सिनेमाई दृश्य",
+ "Northern lights over a quiet night": "शांत रात में उत्तरी रोशनी"
 }

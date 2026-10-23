@@ -219,5 +219,12 @@
  "{n} h ago": "acum {n} h",
  "{n} min ago": "acum {n} min",
  "{n} ms": "{n} ms",
- "← → to move · OK to drop · Back to cancel": "← → mută · OK plasează · Înapoi anulează"
+ "← → to move · OK to drop · Back to cancel": "← → mută · OK plasează · Înapoi anulează",
+ "Categories": "Categorii",
+ "Menu style": "Stilul meniului",
+ "Editorial cinema": "Cinema editorial",
+ "A large photo with its story beside it": "O imagine mare cu povestea alături",
+ "Warm colors and a relaxed app dock": "Culori calde și o bară de aplicații discretă",
+ "A cinematic mission-control view": "O perspectivă cinematografică de centru de comandă",
+ "Northern lights over a quiet night": "Aurora boreală într-o noapte liniștită"
 }
