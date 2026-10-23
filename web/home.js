@@ -537,7 +537,7 @@
 
   // MARK: - Performance: frames per second, memory and the screen's size, in the drawer and as a small chart by the clock
 
-  var perf = {fps: 0, frames: 0, last: 0, fpsHist: [], ref: null, mini: null};
+  var perf = {fps: 0, frames: 0, last: 0, fpsHist: [], ref: null, mini: null, low: 0, slow: false};
 
   function num(v, digits) {
     try { return v.toLocaleString(I18N.locale(), {minimumFractionDigits: digits, maximumFractionDigits: digits}); } catch (e) { return v.toFixed(digits); }
@@ -631,9 +631,19 @@
       perf.last = t;
       perf.fpsHist.push(perf.fps);
       if (perf.fpsHist.length > 30) perf.fpsHist.shift();
+      // Under 30 FPS for 10 seconds: the TV is struggling, so the ambient animations go off by themselves.
+      if (!perf.slow && !saverOn) {
+        if (perf.fps > 0 && perf.fps < 30) perf.low++; else perf.low = Math.max(0, perf.low - 1);
+        if (perf.low >= 10) { perf.slow = true; applyLook(); }
+      }
       updatePerf();
     }
     requestAnimationFrame(perfLoop);
+  }
+
+  function applyLook() {
+    setClass(body, 'reduce-motion', Prefs.reduce() || perf.slow);
+    setClass(body, 'text-l', Prefs.large());
   }
 
   function renderMini() {
@@ -748,14 +758,31 @@
 
   // MARK: - Home Settings
 
+  function modeDescs() {
+    return {'default': tr('Picks and the apps bar'), hero: tr('Full-screen photo with the synopsis'), focus: tr('A focus ring that glides'),
+      bar: tr('Side menu and names under the apps'), calm: tr('A big clock and little else')};
+  }
+
+  /** The five screen modes as choices (with a drawing each), then the theme, reduced motion and larger text. */
+  function screenRows(theme, auto) {
+    var names = modeNames(), descs = modeDescs(), out = [];
+    for (var i = 0; i < MODE_IDS.length; i++) {
+      (function (id, first) {
+        out.push({section: first ? tr('Screen mode') : undefined, label: names[id], desc: descs[id], choice: id, selected: Prefs.mode() === id,
+          step: function (d) { if (d >= 0) { Prefs.set('mode', id); renderAll(); } }});
+      })(MODE_IDS[i], i === 0);
+    }
+    out.push({section: tr('Screen'), label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
+      step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }});
+    out.push({label: tr('Reduce motion'), toggle: Prefs.reduce(), step: function () { Prefs.set('reduce', !Prefs.reduce()); applyLook(); }});
+    out.push({label: tr('Larger text'), toggle: Prefs.large(), step: function () { Prefs.set('large', !Prefs.large()); applyLook(); }});
+    return out;
+  }
+
   function settingRows() {
     var unit = Prefs.temperature(), theme = Prefs.theme();
     var auto = tr('Automatic'), picked = pickedLanguage();
     var rows = [
-      {section: tr('Screen'), label: tr('Screen mode'), value: modeNames()[Prefs.mode()], picker: true,
-        step: function (d) { cycle('mode', MODE_IDS, Prefs.mode(), d); renderAll(); }},
-      {label: tr('Theme'), value: theme === 'light' ? tr('Light') : theme === 'dark' ? tr('Dark') : auto,
-        step: function (d) { cycle('theme', ['auto', 'light', 'dark'], theme, d); checkNight(); }},
       {section: tr('Widgets'), label: tr('Weather widget'), toggle: Prefs.weather(),
         step: function () { Prefs.set('weather', !Prefs.weather()); renderPanels(); }},
       {label: tr('Performance widget'), toggle: Prefs.perf(),
@@ -767,6 +794,7 @@
       {label: tr('Quotes widget'), toggle: Prefs.quotes(),
         step: function () { Prefs.set('quotes', !Prefs.quotes()); Data.settingsChanged(); }}
     ];
+    rows = screenRows(theme, auto).concat(rows);
     var names = ['Bitcoin', 'Ethereum', 'Solana', tr('Dollar')];
     var count = !Prefs.quotes() ? 0 : Data.currency === 'BRL' ? 4 : 3;   // no coin rows while the widget is off
     for (var i = 0; i < count; i++) {
@@ -802,19 +830,12 @@
     for (var i = 0; i < rowsNow.length; i++) {
       var r = rowsNow[i];
       if (r.section) el('div', 'sect', holder, r.section);
-      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.picker ? ' picker' : ''), holder, r.label);
-      if (r.picker) {
-        el('span', 'value', row, r.value);
-        var thumbs = el('div', 'thumbs', row);
-        for (var m = 0; m < MODE_IDS.length; m++) {
-          var th = el('div', 'thumb t-' + MODE_IDS[m] + (MODE_IDS[m] === Prefs.mode() ? ' on' : ''), thumbs);
-          el('span', 'a', th);
-          el('span', 'b', th);
-          el('span', 'c', th);
-          (function (id) {
-            th.onclick = function (e) { Prefs.set('mode', id); renderAll(); if (e && e.stopPropagation) e.stopPropagation(); };
-          })(MODE_IDS[m]);
-        }
+      var row = el('div', 'row' + (r.dim ? ' dim' : '') + (r.choice ? ' choice' : ''), holder, r.label);
+      if (r.choice) {
+        var th = el('div', 'thumb t-' + r.choice, row);
+        for (var m = 0; m < 6; m++) el('span', 'p' + m, th);
+        el('div', 'desc', row, r.desc);
+        if (r.selected) sym('check', row).className += ' tick';
       } else if (r.toggle !== undefined) setClass(el('div', 'toggle', row), 'on', r.toggle);
       else {
         var v = el('span', 'value', row);
@@ -1146,7 +1167,9 @@
     if (!night && Prefs.theme() === 'auto') {
       var d = new Date(now), mins = d.getHours() * 60 + d.getMinutes(), w = Data.weather;
       var set = w && w.sunset ? new Date(w.sunset).getHours() * 60 + new Date(w.sunset).getMinutes() : 1080;
-      ramp = Math.max(0, Math.min(1, (mins - (set - 180)) / 180));
+      var rise = w && w.sunrise ? new Date(w.sunrise).getHours() * 60 + new Date(w.sunrise).getMinutes() : 360;
+      var eve = Math.max(0, Math.min(1, (mins - (set - 180)) / 180)), morn = Math.max(0, Math.min(1, 1 - (mins - rise) / 180));
+      ramp = Math.max(eve, morn);
     }
     setClass(body, 'night', night || ramp >= 0.5);
     var sky = $('sky');
@@ -1170,6 +1193,7 @@
     var clock = el('div', 'clock', s);
     el('div', 'time', clock);
     el('div', 'date', clock);
+    el('div', 'wx', clock);
     el('div', 'title', clock);
     var front = a;
     function next() {
@@ -1198,6 +1222,12 @@
     var d = new Date();
     clock.firstChild.textContent = formatDate('format|h:mm', d.getTime());
     clock.children[1].textContent = formatDate('format|EEEE, MMMM d', d.getTime());
+    var wx = clock.children[2], w = Data.weather;
+    wx.innerHTML = '';
+    if (w) {
+      sym(Data.symbol(w.code, w.isDay), wx);
+      wx.appendChild(document.createTextNode(Data.degrees(w.temp) + '   ' + Data.condition(w.code, w.isDay)));
+    }
   }
 
   function hideSaver() {
@@ -1232,6 +1262,7 @@
 
   function renderAll() {
     applyMode();
+    applyLook();
     renderMini();
     var hint = $('hint');
     if (!hint.firstChild) { sym('chevron_down', hint); el('span', '', hint, tr('Weather and inputs')); }

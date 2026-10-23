@@ -52,6 +52,8 @@ var Prefs = (function () {
     photos: function () { return pick('photos', 'hd'); },
     mode: function () { return pick('mode', 'default'); },
     perf: function () { return pick('perf', true); },
+    reduce: function () { return pick('reduce', false); },
+    large: function () { return pick('large', false); },
     coin: function (i) { var c = pick('coins', null); return c ? c[i] !== false : true; },
     shelf: function () { return pick('shelf', null); },
     set: function (name, value) { v[name] = value; save(); this.version++; },

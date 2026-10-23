@@ -95,3 +95,12 @@
 .m-calm.night #platter { background: rgba(255, 255, 255, 0.03); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05); }
 .m-calm.night .sidebtn { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.3); }
 .m-calm.night .sidebtn.focus { background: rgba(62, 145, 255, 0.3); color: #FFF; }
+
+/* Reduced motion and larger text, in the modes that animate or have their own type. */
+.reduce-motion.m-hero #hero .ph { -webkit-animation: none; animation: none; }
+.reduce-motion.m-focus #glide { -webkit-transition: opacity 0.2s; transition: opacity 0.2s; }
+.text-l.m-hero #hero .htitle { font-size: 86px; }
+.text-l.m-hero #hero .hmeta { font-size: 32px; }
+.text-l.m-hero #hero .hover { font-size: 30px; max-height: 84px; }
+.text-l.m-bar .tile .nm { font-size: 29px; }
+.text-l.m-calm #calmwx { font-size: 46px; }
